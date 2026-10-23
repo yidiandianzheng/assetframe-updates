@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="${0:A:h}"
 ROOT_DIR="${SCRIPT_DIR:h}"
 CLOUD_DIR="$ROOT_DIR/cloud/assetframe-online"
-APP_NAME="向量AI资产管家"
+APP_NAME="向量·素仓"
 BUILD_VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$SCRIPT_DIR/Info.plist")"
 VERSION_TAG="V$BUILD_VERSION"
 CACHE_ROOT="${ASSETFRAME_CACHE_ROOT:-$HOME/Library/Caches/AssetFrame}"

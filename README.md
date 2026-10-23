@@ -7,13 +7,14 @@
 1. 阅读本文件及 [AGENTS.md](AGENTS.md)，确定修改对象及验证方法。
 2. 桌面产品状态以 [macOS 功能状态](macos/FEATURE_STATUS.md) 和对应安装/验证记录为依据；文件名、目录新旧和打包存在均不代表已安装或验收。
 3. 本次搬迁结果、逐文件摘要及旧→新映射见 [迁移记录](迁移记录/2026-10-22/README.md)。本轮未调整业务逻辑、正式安装版或生产数据。
+4. 同事优化协作、逐文件「采纳/不采纳」与回退（回调）见 [变更管理](变更管理/README.md)；私有协作文库为 `yidiandianzheng/assetframe-src`，只含源码、脚本、文档与变更管理，验证证据、迁移记录、交付包和缓存只保留本机。
 
 ## 两款桌面产品共用源码
 
 | 产品 | 产品身份 | 数据根 | 构建与打包边界 |
 | --- | --- | --- | --- |
-| 向量AI资产管家 | `AFProductKind=assets`，`com.yidiandian.assetframe` | `~/Library/Application Support/AssetFrame/` | `macos/Info.plist` 及通用打包脚本当前对应此产品 |
-| 向量漫剧工作台 | `AFProductKind=story`，`com.yidiandian.manjuworkbench` | `~/Library/Application Support/ManjuWorkbench/` | 共用二进制，由包内产品身份决定；历史双产品打包脚本固定版本，不能当通用入口重跑 |
+| 向量·素仓 | `AFProductKind=assets`，`com.yidiandian.assetframe` | `~/Library/Application Support/AssetFrame/` | `macos/Info.plist` 及通用打包脚本当前对应此产品 |
+| 向量·剧坊 | `AFProductKind=story`，`com.yidiandian.manjuworkbench` | `~/Library/Application Support/ManjuWorkbench/` | 共用二进制，由包内产品身份决定；历史双产品打包脚本固定版本，不能当通用入口重跑 |
 
 产品路由的实现以 `macos/Sources/AssetFrame/AppProduct.swift` 为准。`Package.swift` 定义单一可执行目标 `AssetFrame`；直接运行未打包二进制默认解析为 assets，不要当作漫剧产品测试。
 
@@ -59,13 +60,13 @@ Web 依赖目录当前不完整，`vinext` 入口目标缺失，重新构建未�
 
 ## 打包、数据与恢复边界
 
-- `macos/package-app.sh` 当前只生成资产管家 App/ZIP，会修改交付输出；`run-release-gate.sh` 还会打包及启动隔离候选，不能当作纯静态检查。
+- `macos/package-app.sh` 当前只生成向量·素仓 App/ZIP，会修改交付输出；`run-release-gate.sh` 还会打包及启动隔离候选，不能当作纯静态检查。
 - 双产品历史实现见 `macos/ProductValidation/20261018_双软件拆分/package-products.py`；含固定版本、QA 根和结果写回，保留作证据，未整理成通用发布入口。
 - `release-github.sh`、`release-online.sh` 依赖旧缓存布局，和当前通用打包输出存在既有不一致。发布尚未验证，不应直接执行；搬迁兼容链接不能证明发布有效。
 - `dist-macos` 与 `macos/.build` 现在是指向本项目内部交付/缓存的链接。`软件交付/`、`开发缓存/`、`历史资料/` 保存软件包、可重建文件及历史；其中的源码快照均非活跃源码。
 - 正式 App 留在 `/Applications/`；生产库登记、SQLite、钥匙串、原图片音视频及创作项目保持原位。开发目录备份不能替代这些数据的备份。应用的 SSD 素材/预览路径是运行配置，不能因迁移源码而批量替换。
 - 测试应用必须使用该软件支持的 `/tmp/assetframe-qa.*` 隔离根，勿用真实生产库验证写入、导入或删除。
-- 原 `.git` 仅有残留目录，无法作为有效仓库；原样保存在 `历史资料/旧Git残留/`。新本地仓库没有旧提交历史，也未提交或推送；逐文件迁移摘要提供本轮初始对照。
+- 原 `.git` 仅有残留目录，无法作为有效仓库；原样保存在 `历史资料/旧Git残留/`。新本地仓库于 2026-10-23 建立基线提交并推送到私有协作文库 `yidiandianzheng/assetframe-src`（不含验证证据、交付包、缓存与用户数据）；提交与推送仍须有相应授权。
 - 回退必须先核对迁移后改动，按迁移记录恢复映射；不使用旧源码或安装前数据库覆盖后来产生的工作。
 
 ---

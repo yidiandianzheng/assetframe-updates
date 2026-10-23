@@ -6,7 +6,7 @@ enum AppProduct: String, Sendable {
     case assets, story
     static var current: Self { resolve(Bundle.main.object(forInfoDictionaryKey: "AFProductKind") as? String) }
     static func resolve(_ value: String?) -> Self { value == "story" ? .story : .assets }
-    var title: String { self == .assets ? "向量 · AI资产管家" : "向量 · 漫剧工作台" }
+    var title: String { self == .assets ? "向量·素仓" : "向量·剧坊" }
     var supportDirectory: String { self == .assets ? "AssetFrame" : "ManjuWorkbench" }
     var applicationSupportRoot: URL {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent(supportDirectory)

@@ -20,7 +20,7 @@ struct ProjectWorkspaceView: View {
         HSplitView {
             VStack(alignment: .leading, spacing: 12) {
                 if standalone {
-                    Label("漫剧工作台", systemImage: "book.closed").font(.title3.bold())
+                    Label("向量·剧坊", systemImage: "book.closed").font(.title3.bold())
                 } else {
                     Button { editGuard.request { showLibraryPanel = true } } label: {
                         Label(session.descriptor?.name ?? "资源库", systemImage: "externaldrive")

@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="${0:A:h}"
 BUILD_VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$SCRIPT_DIR/Info.plist")"
-ZIP_PATH="${1:-${SCRIPT_DIR:h}/dist-macos/向量AI资产管家-V${BUILD_VERSION}-macOS.zip}"
+ZIP_PATH="${1:-${SCRIPT_DIR:h}/dist-macos/向量·素仓-V${BUILD_VERSION}-macOS.zip}"
 
 if [[ ! -f "$ZIP_PATH" ]]; then
     echo "发布包不存在：$ZIP_PATH" >&2

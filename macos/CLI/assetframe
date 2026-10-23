@@ -20,7 +20,7 @@ def parser():
     common.add_argument('--endpoint', type=Path, default=Path.home() / 'Library/Application Support/AssetFrame/CLI/endpoint.json', help='连接信息文件；隔离调试时显式指定')
     common.add_argument('--json', action='store_true', help='紧凑JSON输出，便于脚本解析')
     common.add_argument('--timeout', type=float, default=8, help='请求超时秒数，默认8')
-    root = argparse.ArgumentParser(description='向量AI资产管家 CLI：先打开桌面应用，支持本机查询、预览、播放和诊断。')
+    root = argparse.ArgumentParser(description='向量·素仓 CLI：先打开桌面应用，支持本机查询、预览、播放和诊断。')
     root.add_argument('--version', action='version', version='AssetFrame CLI 1 (protocol 1)')
     subs = root.add_subparsers(dest='action', required=True)
     for name in ['status', 'capabilities', 'libraries', 'undo', 'redo', 'pause-import', 'resume-import', 'cache-status', 'release-preview-memory']:

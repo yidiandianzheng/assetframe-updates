@@ -1,3 +1,9 @@
+## V261023.4（品牌更新：向量·素仓 / 向量·剧坊，邀请测试已发布，未安装）
+
+两款桌面产品更名换标：资产管理 App → **向量·素仓**（绿色仓盒图标），漫剧创作 App → **向量·剧坊**（蓝绿胶片图标）；同步替换 App 图标、窗口标题、帮助/设置文案与交付包名。仅改显示层，`com.yidiandian.assetframe` / `com.yidiandian.manjuworkbench`、`AFProductKind`、数据根（AssetFrame / ManjuWorkbench）与 CLI 端点均保持不变，现有素材库直接沿用；累计第107版。
+
+本轮包含此前未安装的 V261023.3「更新日志精简」内容（移除主窗口顶部更新日志条，改为“帮助 → 更新日志…”）。向量·素仓 V261023.4 已完成 SDK 26.5 Release 构建、打包签名与隔离启动核验，作为邀请测试包发布到 GitHub `yidiandianzheng/assetframe-updates`（ZIP + Sparkle appcast）；未替换本机正式安装版。向量·剧坊本轮只更新源码名称与图标，未打包。验证范围见[验证记录](ProductValidation/20261023_品牌更新beta发布/README.md)。
+
 ## V261023.3（更新日志精简候选，未安装）
 
 移除主窗口顶部常驻更新日志条、展开内容与未读角标，顶部恢复为纯工作区；保留“更新日志”独立窗口，入口改为“帮助 → 更新日志…”，两款产品共用。条目数据仍在 `Sources/AssetFrame/UpdateLog.swift`，完整版本历史与验证范围仍以本文件为准。候选阶段完成 SDK 26.5 Release 构建，并在 `/tmp/assetframe-qa.*` 隔离根启动、CLI 回读 `product=assets`、`error=null`；未替换正式安装版，菜单与窗口的真实交互尚未人工验收。见[验证记录](ProductValidation/20261023_更新日志精简/README.md)。

@@ -239,7 +239,7 @@ struct OptimizationNotesView: View {
 
     private func copyForAI(_ note: OptimizationNote) {
         let text = """
-        【向量时刻资产·优化建议】
+        【向量·素仓·优化建议】
         项目：\(note.projectName)
         界面：\(note.viewName)
         记录版本：\(note.version)

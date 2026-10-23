@@ -26,14 +26,14 @@ enum UpdateLog {
     /// 新 → 旧。顺序即展示顺序，不依赖版本号字符串比较。
     static let entries: [UpdateLogEntry] = [
         .init(
-            version: "V261023.3",
+            version: "V261023.4",
             date: "2026-10-23",
             stage: .candidate,
-            summary: "更新日志精简",
+            summary: "品牌更新与 beta 邀请测试",
             highlights: [
-                "移除主窗口顶部常驻更新日志条、展开内容与未读角标。",
-                "更新日志改为按需从“帮助 → 更新日志…”打开独立窗口查看。",
-                "完整版本历史与验证范围仍以 macos/CHANGELOG.md 为准。"
+                "两款产品更名换标：资产管家 → 向量·素仓，漫剧工作台 → 向量·剧坊。",
+                "仅调整显示名称与图标，bundle ID、数据根和 CLI 端点保持不变，素材库沿用。",
+                "本版为邀请测试包，尚未替换本机正式安装版；剧坊本轮未重新打包。"
             ]
         ),
         .init(

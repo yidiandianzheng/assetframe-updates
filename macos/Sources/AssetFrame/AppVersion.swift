@@ -24,6 +24,8 @@ enum AppVersion {
         "261022.1": 104,
         "261023.1": 105,
         "261023.2": 106,
+        // 261023.3 仅为未安装候选，内容并入 261023.4；本版为品牌更新后的首个交付版本。
+        "261023.4": 107,
     ]
 
     // Distinct documented builds, including candidates, oldest first.

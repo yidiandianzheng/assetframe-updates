@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="${0:A:h}"
 BUILD_VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$SCRIPT_DIR/Info.plist")"
-ZIP_PATH="${SCRIPT_DIR:h}/dist-macos/向量AI资产管家-V${BUILD_VERSION}-macOS.zip"
+ZIP_PATH="${SCRIPT_DIR:h}/dist-macos/向量·素仓-V${BUILD_VERSION}-macOS.zip"
 QA_CHECKLIST="ProductValidation/V${BUILD_VERSION}_隔离QA验收清单.md"
 AUTOMATED=0
 
