@@ -1,14 +1,17 @@
-# 资产管理（图文）App · 开发与 AI 接手入口
+# 向量·素仓 / 向量·剧坊 · 开发与协作入口
 
-软件开发的唯一实体目录：`/Volumes/SSD-1TB/06-工具与开发/资产管理（图文）App/`。原 Obsidian 项目目录与已迁出的软件资料目录保留兼容链接；编辑本目录即可，勿另外复制一套活跃源码。
+> 本仓库只有一个：两个 macOS 桌面产品的共享源码、打包/发布脚本、协作文档，以及最新安装包的发布记录。
+> 最新版安装包：<https://github.com/yidiandianzheng/assetframe-updates/releases/latest>（源码与安装包都在同一个仓库；不含用户数据、密钥或生产素材）。
+
+软件开发的唯一实体目录：本仓库根目录。原 Obsidian 项目目录与已迁出的软件资料目录保留兼容链接；编辑本目录即可，勿另外复制一套活跃源码。
 
 ## 从哪里开始
 
 1. 阅读本文件及 [AGENTS.md](AGENTS.md)，确定修改对象及验证方法。
 2. 桌面产品状态以 [macOS 功能状态](macos/FEATURE_STATUS.md) 和对应安装/验证记录为依据；文件名、目录新旧和打包存在均不代表已安装或验收。
 3. 本次搬迁结果、逐文件摘要及旧→新映射见 [迁移记录](迁移记录/2026-10-22/README.md)。本轮未调整业务逻辑、正式安装版或生产数据。
-4. 同事优化协作、逐文件「采纳/不采纳」与回退（回调）见 [变更管理](变更管理/README.md)；私有协作文库为 `yidiandianzheng/assetframe-src`，只含源码、脚本、文档与变更管理，验证证据、迁移记录、交付包和缓存只保留本机。
-5. 邀请测试安装包发布在 GitHub 更新仓库 `yidiandianzheng/assetframe-updates`：向量·素仓 V261023.4 为当前 beta；本机正式安装版未替换。见 [验证记录](macos/ProductValidation/20261023_品牌更新beta发布/README.md)。
+4. 同事优化协作、逐文件「采纳/不采纳」与回退（回调）见 [变更管理](变更管理/README.md)；源码与最新安装包统一放在 `yidiandianzheng/assetframe-updates` 一个仓库，验证证据、迁移记录、交付包和缓存只保留本机。
+5. 最新版安装包发布在本仓库 Releases：向量·素仓 V261023.4；本机正式安装版未替换。见 [验证记录](macos/ProductValidation/20261023_品牌更新beta发布/README.md)。
 
 ## 两款桌面产品共用源码
 
@@ -63,7 +66,7 @@ Web 依赖目录当前不完整，`vinext` 入口目标缺失，重新构建未�
 
 - `macos/package-app.sh` 当前只生成向量·素仓 App/ZIP，会修改交付输出；`run-release-gate.sh` 还会打包及启动隔离候选，不能当作纯静态检查。
 - 双产品历史实现见 `macos/ProductValidation/20261018_双软件拆分/package-products.py`；含固定版本、QA 根和结果写回，保留作证据，未整理成通用发布入口。
-- `release-github.sh` 已于 2026-10-23 打通并完成一次 beta 发布验证（V261023.4，仓库 `yidiandianzheng/assetframe-updates`，ZIP + Sparkle appcast + 公开下载回验）；`release-online.sh` 仍依赖旧缓存布局、未验证，不应直接执行。
+- `release-github.sh` 已于 2026-10-23 打通并完成一次发布验证（V261023.4，仓库 `yidiandianzheng/assetframe-updates`，ZIP + Sparkle appcast + 公开下载回验）；`release-online.sh` 仍依赖旧缓存布局、未验证，不应直接执行。
 - `dist-macos` 与 `macos/.build` 现在是指向本项目内部交付/缓存的链接。`软件交付/`、`开发缓存/`、`历史资料/` 保存软件包、可重建文件及历史；其中的源码快照均非活跃源码。
 - 正式 App 留在 `/Applications/`；生产库登记、SQLite、钥匙串、原图片音视频及创作项目保持原位。开发目录备份不能替代这些数据的备份。应用的 SSD 素材/预览路径是运行配置，不能因迁移源码而批量替换。
 - 测试应用必须使用该软件支持的 `/tmp/assetframe-qa.*` 隔离根，勿用真实生产库验证写入、导入或删除。

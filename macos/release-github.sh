@@ -75,7 +75,7 @@ if [[ "$RELEASE_MODE" == "production" ]]; then
         || fail "钥匙串中没有指定的 Developer ID 签名身份。"
 else
     SIGN_IDENTITY="-"
-    echo "邀请测试模式：安装包使用临时签名；首次安装可能需要在系统设置中手动允许。"
+    echo "签名模式：安装包使用临时签名；首次安装可能需要在系统设置中手动允许。"
 fi
 
 if [[ "${ASSETFRAME_SKIP_SELF_TESTS:-0}" == "1" ]]; then
@@ -171,7 +171,7 @@ import sys
 path = sys.argv[1]
 with open(path, encoding="utf-8") as handle:
     text = handle.read()
-text = re.sub(r"<title>[^<]*</title>", "<title>向量·素仓（邀请测试）</title>", text, count=1)
+text = re.sub(r"<title>[^<]*</title>", "<title>向量·素仓</title>", text, count=1)
 with open(path, "w", encoding="utf-8") as handle:
     handle.write(text)
 PY
@@ -181,12 +181,12 @@ grep -q 'sparkle:edSignature=' "$RELEASE_DIR/appcast.xml" \
     || fail "appcast 缺少 Sparkle EdDSA 签名。"
 grep -Fq "$VERSION_BASE_URL$RELEASE_ARCHIVE" "$RELEASE_DIR/appcast.xml" \
     || fail "appcast 下载地址不正确。"
-grep -Fq "向量·素仓（邀请测试）" "$RELEASE_DIR/appcast.xml" \
+grep -Fq "向量·素仓" "$RELEASE_DIR/appcast.xml" \
     || fail "appcast 频道名未更新。"
 
 RELEASE_BODY="$RELEASE_DIR/release-body.md"
 {
-    echo "邀请测试版 macOS 安装包：**$APP_NAME $VERSION_TAG**。"
+    echo "最新版 macOS 安装包：**$APP_NAME $VERSION_TAG**。"
     echo
     echo "首次安装：解压 ZIP，将「$APP_NAME.app」拖入“应用程序”。旧版「向量AI资产管家」请先退出并移除旧 App；产品标识与数据根未变，现有素材库会自动沿用。未办理 Apple 公证前，macOS 可能要求在“系统设置 → 隐私与安全性”中允许打开。"
     echo
@@ -196,7 +196,7 @@ RELEASE_BODY="$RELEASE_DIR/release-body.md"
 # 先创建草稿并上传全部资产，最后公开；latest/appcast.xml 不会提前指向半成品。
 gh release create "$VERSION_TAG" \
     --repo "$GITHUB_REPOSITORY" \
-    --title "$APP_NAME（邀请测试） $VERSION_TAG" \
+    --title "$APP_NAME $VERSION_TAG" \
     --notes-file "$RELEASE_BODY" \
     --draft
 gh release upload "$VERSION_TAG" \

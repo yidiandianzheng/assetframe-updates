@@ -1,6 +1,6 @@
-## 2026-10-23 品牌更新与 beta 邀请测试（候选，未安装）
+## 2026-10-23 品牌更新与最新版发布（未安装）
 
-两款桌面产品更名换标：资产管家 → **向量·素仓**、漫剧工作台 → **向量·剧坊**；只改显示名称、图标与交付包名，bundle ID、`AFProductKind`、数据根和 CLI 端点不变。向量·素仓 V261023.4 完成 SDK 26.5 Release 构建、打包 ad-hoc 签名、ZIP 解包验签、隔离启动与 CLI 回读（`V261023.4` / `assets` / `error=null`），已发布 GitHub 邀请测试版 <https://github.com/yidiandianzheng/assetframe-updates/releases/tag/V261023.4>（ZIP + Sparkle appcast，公开侧下载与签名回验通过）；本机正式安装版未替换，向量·剧坊未打包。全量 `run-self-tests.sh` 存在既有 `LibrarySessionSelfTest` 编译失败（测试源清单过期，基线同样失败，与本轮无关），本轮验证范围为 CLI-only 自测、Release 构建、隔离启动、CLI 回读与下载回验。详见[验证记录](ProductValidation/20261023_品牌更新beta发布/README.md)。
+两款桌面产品更名换标：资产管家 → **向量·素仓**、漫剧工作台 → **向量·剧坊**；只改显示名称、图标与交付包名，bundle ID、`AFProductKind`、数据根和 CLI 端点不变。向量·素仓 V261023.4 完成 SDK 26.5 Release 构建、打包 ad-hoc 签名、ZIP 解包验签、隔离启动与 CLI 回读（`V261023.4` / `assets` / `error=null`），已发布 GitHub 最新版 <https://github.com/yidiandianzheng/assetframe-updates/releases/tag/V261023.4>（ZIP + Sparkle appcast，公开侧下载与签名回验通过）；本机正式安装版未替换，向量·剧坊未打包。全量 `run-self-tests.sh` 存在既有 `LibrarySessionSelfTest` 编译失败（测试源清单过期，基线同样失败，与本轮无关），本轮验证范围为 CLI-only 自测、Release 构建、隔离启动、CLI 回读与下载回验。详见[验证记录](ProductValidation/20261023_品牌更新beta发布/README.md)。
 
 ## 2026-10-23 更新日志精简（隔离候选，未安装）
 

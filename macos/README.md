@@ -1,4 +1,4 @@
-> 2026-10-23 品牌更新版 **V261023.4（向量·素仓）** 已发布邀请测试：<https://github.com/yidiandianzheng/assetframe-updates/releases/tag/V261023.4>；本机正式安装版未替换，向量·剧坊未打包。验证范围见[记录](ProductValidation/20261023_品牌更新beta发布/README.md)。
+> 2026-10-23 品牌更新版 **V261023.4（向量·素仓）** 已发布最新版：<https://github.com/yidiandianzheng/assetframe-updates/releases/tag/V261023.4>；本机正式安装版未替换，向量·剧坊未打包。验证范围见[记录](ProductValidation/20261023_品牌更新beta发布/README.md)。
 
 > 2026-10-22 软件资料已迁入 SSD 开发目录。双产品源码地图、当前构建检查入口和迁移状态见 [项目维护入口](../README.md) 与 [迁移记录](../迁移记录/2026-10-22/README.md)。以下版本条目保留当时状态；通用 package-app.sh 只生成向量·素仓，双产品历史脚本不是通用发布入口。
 

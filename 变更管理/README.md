@@ -1,6 +1,6 @@
 # 变更管理（同事优化 · 逐文件采纳 · 可回退）
 
-本目录是给**负责人和同事协作改代码**用的轻量流程工具：同事在私有源码仓库的 `change/<变更ID>` 分支提交优化；负责人在 `main` 上**逐文件决定采纳/不采纳**；采纳后可随时回退（“回调”）。
+本目录是给**负责人和同事协作改代码**用的轻量流程工具：同事在项目仓库的 `change/<变更ID>` 分支提交优化；负责人在 `main` 上**逐文件决定采纳/不采纳**；采纳后可随时回退（“回调”）。
 
 > 一句话原则：**同事只推 `change/` 分支，负责人只在 `main` 上审核采纳；任何推送、打包、发布都由人手动确认。**
 
@@ -48,7 +48,7 @@
 ## 3. 环境要求
 
 - macOS（本机已验证 macOS + Apple Git 2.54 + Python 3.9）。
-- `git` 可用；私有源码仓库 `origin` 已配置（`yidiandianzheng/assetframe-src`）。
+- `git` 可用；项目仓库 `origin` 已配置（`yidiandianzheng/assetframe-updates`，源码与安装包同一个仓库）。
 - `python3`（3.8+，只用标准库，无需安装任何依赖）。
 - 涉及 `.swift` 改动的审核需要 Swift 工具链（Xcode / Command Line Tools）；若无工具链，请在负责人确认后使用 `--no-build` 并自行完成构建验证。
 - 脚本**不联网、不自动 push、不自动打包/发布**；`git fetch / pull / push` 一律由人手动执行。
@@ -57,11 +57,11 @@
 
 ## 4. 首次接入（同事）
 
-### 4.1 克隆私有仓库并配置身份
+### 4.1 克隆仓库并配置身份
 
 ```sh
-git clone https://github.com/yidiandianzheng/assetframe-src.git
-cd assetframe-src
+git clone https://github.com/yidiandianzheng/assetframe-updates.git
+cd assetframe-updates
 git config user.name "你的姓名"
 git config user.email "你的邮箱"
 git switch main
