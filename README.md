@@ -62,7 +62,7 @@ Web 依赖目录当前不完整，`vinext` 入口目标缺失，重新构建未�
 
 - `macos/package-app.sh` 当前只生成向量·素仓 App/ZIP，会修改交付输出；`run-release-gate.sh` 还会打包及启动隔离候选，不能当作纯静态检查。
 - 双产品历史实现见 `macos/ProductValidation/20261018_双软件拆分/package-products.py`；含固定版本、QA 根和结果写回，保留作证据，未整理成通用发布入口。
-- `release-github.sh`、`release-online.sh` 依赖旧缓存布局，和当前通用打包输出存在既有不一致。发布尚未验证，不应直接执行；搬迁兼容链接不能证明发布有效。
+- `release-github.sh` 已于 2026-10-23 打通并完成一次 beta 发布验证（V261023.4，仓库 `yidiandianzheng/assetframe-updates`，ZIP + Sparkle appcast + 公开下载回验）；`release-online.sh` 仍依赖旧缓存布局、未验证，不应直接执行。
 - `dist-macos` 与 `macos/.build` 现在是指向本项目内部交付/缓存的链接。`软件交付/`、`开发缓存/`、`历史资料/` 保存软件包、可重建文件及历史；其中的源码快照均非活跃源码。
 - 正式 App 留在 `/Applications/`；生产库登记、SQLite、钥匙串、原图片音视频及创作项目保持原位。开发目录备份不能替代这些数据的备份。应用的 SSD 素材/预览路径是运行配置，不能因迁移源码而批量替换。
 - 测试应用必须使用该软件支持的 `/tmp/assetframe-qa.*` 隔离根，勿用真实生产库验证写入、导入或删除。
