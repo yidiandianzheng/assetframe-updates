@@ -216,7 +216,7 @@ def main():
         return 0 if response['ok'] else 3
     except (OSError, ValueError, KeyError, TypeError) as error:
         # Exception text contains no token. Discovery files are never printed.
-        response = {'protocolVersion': 1, 'ok': False, 'error': {'code': 'connection_failed', 'message': '请先打开资产管家，或检查隔离endpoint路径：' + str(error)}}
+        response = {'protocolVersion': 1, 'ok': False, 'error': {'code': 'connection_failed', 'message': '请先打开向量·素仓，或检查隔离endpoint路径：' + str(error)}}
         print(json.dumps(response, ensure_ascii=False), file=sys.stderr)
         return 4
 

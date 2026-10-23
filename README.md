@@ -8,6 +8,7 @@
 2. 桌面产品状态以 [macOS 功能状态](macos/FEATURE_STATUS.md) 和对应安装/验证记录为依据；文件名、目录新旧和打包存在均不代表已安装或验收。
 3. 本次搬迁结果、逐文件摘要及旧→新映射见 [迁移记录](迁移记录/2026-10-22/README.md)。本轮未调整业务逻辑、正式安装版或生产数据。
 4. 同事优化协作、逐文件「采纳/不采纳」与回退（回调）见 [变更管理](变更管理/README.md)；私有协作文库为 `yidiandianzheng/assetframe-src`，只含源码、脚本、文档与变更管理，验证证据、迁移记录、交付包和缓存只保留本机。
+5. 邀请测试安装包发布在 GitHub 更新仓库 `yidiandianzheng/assetframe-updates`：向量·素仓 V261023.4 为当前 beta；本机正式安装版未替换。见 [验证记录](macos/ProductValidation/20261023_品牌更新beta发布/README.md)。
 
 ## 两款桌面产品共用源码
 

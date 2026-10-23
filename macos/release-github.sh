@@ -135,6 +135,21 @@ awk -v version="$VERSION_TAG" '
 ' "$SCRIPT_DIR/CHANGELOG.md" > "$RELEASE_DIR/$RELEASE_NOTES"
 [[ -s "$RELEASE_DIR/$RELEASE_NOTES" ]] || fail "缺少 $VERSION_TAG 更新说明。"
 
+# 公开 Release 只有安装包与说明，不能保留指向未发布目录（ProductValidation 等）的
+# 相对 Markdown 链接；生成说明时统一降级为纯文本，避免公开页面出现 404 链接。
+python3 - "$RELEASE_DIR/$RELEASE_NOTES" <<'PY'
+import re
+import sys
+
+path = sys.argv[1]
+with open(path, encoding="utf-8") as handle:
+    text = handle.read()
+text = re.sub(r"\[([^\]]+)\]\((?!https?://)[^)]+\)", r"\1", text)
+text = text.replace("。。", "。")
+with open(path, "w", encoding="utf-8") as handle:
+    handle.write(text)
+PY
+
 # 复用当前公开 appcast，保留最多三个历史版本；首次发布时不存在是正常情况。
 curl -fsSL "$FEED_URL" -o "$RELEASE_DIR/appcast.xml" 2>/dev/null || true
 GENERATE_ARGS=(
