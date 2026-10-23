@@ -1,0 +1,68 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/.vinext/
+/out/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+next-env.d.ts
+/dist/
+/.wrangler/
+/outputs/
+/work/
+
+# Migration: generated outputs, dependencies, archives and local caches
+**/node_modules/
+/.build/
+/macos/.build
+/macos/.build-*/
+/dist-macos
+/dist-macos 2/
+/output/
+/软件交付/
+/开发缓存/
+/历史资料/
+/macos/ProductValidation/**/node_modules/
+# 协作文库范围：验证证据、迁移记录与工具状态只留本机，不进私有源码仓库
+/macos/ProductValidation/
+/迁移记录/
+/.workbuddy/
+# Local verification / user-specific tool state
+/.orchestrator/
+# Binary deliverables and QA data are retained on disk, not in new Git history
+*.app/
+*.zip
+*.dmg
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

@@ -1,0 +1,225 @@
+#!/usr/bin/python3
+"""AssetFrame CLI v1: authenticated local desktop commands; standard library only."""
+import argparse
+import json
+import os
+import socket
+import stat
+import sys
+import uuid
+import time
+import math
+import subprocess
+from pathlib import Path
+
+MAX_RESPONSE = 8 * 1024 * 1024
+
+
+def parser():
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument('--endpoint', type=Path, default=Path.home() / 'Library/Application Support/AssetFrame/CLI/endpoint.json', help='连接信息文件；隔离调试时显式指定')
+    common.add_argument('--json', action='store_true', help='紧凑JSON输出，便于脚本解析')
+    common.add_argument('--timeout', type=float, default=8, help='请求超时秒数，默认8')
+    root = argparse.ArgumentParser(description='向量AI资产管家 CLI：先打开桌面应用，支持本机查询、预览、播放和诊断。')
+    root.add_argument('--version', action='version', version='AssetFrame CLI 1 (protocol 1)')
+    subs = root.add_subparsers(dest='action', required=True)
+    for name in ['status', 'capabilities', 'libraries', 'undo', 'redo', 'pause-import', 'resume-import', 'cache-status', 'release-preview-memory']:
+        subs.add_parser(name, parents=[common])
+    diag = subs.add_parser('diagnostics', parents=[common])
+    diag.add_argument('--output', type=Path, help='将诊断结果另存为本地JSON文件')
+    ls = subs.add_parser('list', parents=[common], help='查询当前资源库，独立于界面筛选')
+    ls.add_argument('--query', default='')
+    ls.add_argument('--kind', choices=['图片', '视频', '音频', '字体', '文档', '工程文件', '链接', '其他'])
+    ls.add_argument('--limit', type=int, default=50)
+    ls.add_argument('--offset', type=int, default=0)
+    ls.add_argument('--include-deleted', action='store_true')
+    for name in ['show', 'focus', 'preview', 'open-library']:
+        sub = subs.add_parser(name, parents=[common])
+        sub.add_argument('id', help='素材ID；focus/preview要求素材在当前界面筛选结果中')
+    sub = subs.add_parser('search', parents=[common], help='修改桌面端当前范围内的搜索文字')
+    sub.add_argument('query', help='空字符串清空搜索')
+    subs.add_parser('exit-preview', parents=[common])
+    playback = subs.add_parser('playback')
+    actions = playback.add_subparsers(dest='playback_action', required=True)
+    for name in ['status', 'play', 'pause', 'seek']:
+        sub = actions.add_parser(name, parents=[common])
+        if name == 'seek': sub.add_argument('seconds', help='定位秒数，须在当前媒体时长内')
+    measure = subs.add_parser('measure', parents=[common], help='在隔离QA库回放固定操作并记录请求及就绪时间')
+    measure.add_argument('--scenario', type=Path, required=True)
+    measure.add_argument('--output', type=Path, required=True)
+    measure.add_argument('--repeat', type=int, default=3)
+    return root
+
+
+def request_for(args):
+    names = {'list': 'materials.list', 'show': 'materials.show', 'focus': 'browse.focus', 'preview': 'browse.preview', 'search': 'browse.search', 'exit-preview': 'browse.exit', 'open-library': 'libraries.open', 'undo': 'edit.undo', 'redo': 'edit.redo', 'pause-import': 'import.pause', 'resume-import': 'import.resume', 'cache-status': 'cache.status', 'release-preview-memory': 'cache.release-memory'}
+    command = names.get(args.action, args.action)
+    arguments = {}
+    if args.action == 'list':
+        arguments = {'query': args.query, 'limit': str(args.limit), 'offset': str(args.offset), 'includeDeleted': str(args.include_deleted).lower()}
+        if args.kind: arguments['kind'] = args.kind
+    elif args.action in ['show', 'focus', 'preview', 'open-library']: arguments['id'] = args.id
+    elif args.action == 'search': arguments['query'] = args.query
+    elif args.action == 'playback':
+        command = 'playback.' + args.playback_action
+        if args.playback_action == 'seek': arguments['seconds'] = args.seconds
+    return command, arguments
+
+
+def load_endpoint(path):
+    # Never send a discovery token to a remote host or follow a token symlink.
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+    try:
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) & 0o077:
+            raise ValueError('连接信息必须是当前用户拥有的私有普通文件（0600）')
+        if info.st_size > 16384: raise ValueError('连接信息文件过大')
+        with os.fdopen(fd, 'r', encoding='utf-8', closefd=False) as stream: endpoint = json.load(stream)
+    finally: os.close(fd)
+    if endpoint.get('host') != '127.0.0.1' or endpoint.get('protocolVersion') != 1:
+        raise ValueError('仅支持协议1的本机127.0.0.1端口')
+    if type(endpoint.get('port')) is not int or not 1 <= endpoint['port'] <= 65535:
+        raise ValueError('连接端口无效')
+    if not isinstance(endpoint.get('token'), str) or not endpoint['token']:
+        raise ValueError('连接信息缺少凭据')
+    return endpoint
+
+
+def execute(args):
+    if not 0 < args.timeout <= 60: raise ValueError('timeout必须在0到60秒之间')
+    endpoint = load_endpoint(args.endpoint)
+    command, arguments = request_for(args)
+    request = {'protocolVersion': 1, 'id': str(uuid.uuid4()), 'token': endpoint['token'], 'command': command, 'arguments': arguments}
+    wire = json.dumps(request, ensure_ascii=False, allow_nan=False).encode('utf-8') + b'\n'
+    if len(wire) > 65536: raise ValueError('请求超过64KB')
+    with socket.create_connection((endpoint['host'], endpoint['port']), timeout=args.timeout) as connection:
+        connection.sendall(wire)
+        received = bytearray()
+        while b'\n' not in received:
+            block = connection.recv(65536)
+            if not block: raise ValueError('服务连接结束但没有完整响应')
+            received.extend(block)
+            if len(received) > MAX_RESPONSE: raise ValueError('响应超过8MB')
+        response = json.loads(bytes(received).split(b'\n', 1)[0])
+    if response.get('id') != request['id'] or response.get('protocolVersion') != 1:
+        raise ValueError('响应ID或协议版本不匹配')
+    if type(response.get('ok')) is not bool: raise ValueError('响应缺少状态')
+    return response
+
+
+
+def validate_scenario(path):
+    if path.stat().st_size > 65536: raise ValueError('场景文件超过64KB')
+    value = json.loads(path.read_text(encoding='utf-8'))
+    if not isinstance(value, dict) or set(value) - {'name', 'steps'}: raise ValueError('场景仅接受name和steps')
+    steps = value.get('steps')
+    if not isinstance(steps, list) or not 1 <= len(steps) <= 60: raise ValueError('场景需要1到60步')
+    allowed = {'status': set(), 'search': {'query'}, 'preview': {'id', 'waitForMedia'},
+               'focus': {'id'}, 'exit-preview': set(), 'seek': {'seconds'}}
+    for step in steps:
+        if not isinstance(step, dict) or step.get('command') not in allowed: raise ValueError('场景包含不支持的操作')
+        if set(step) - {'command'} - allowed[step['command']]: raise ValueError('场景操作有未知参数')
+        for field in ['query', 'id']:
+            if field in allowed[step['command']] and (not isinstance(step.get(field), str) or len(step[field]) > 4096): raise ValueError('场景文字或ID无效')
+        if 'waitForMedia' in step and type(step['waitForMedia']) is not bool: raise ValueError('waitForMedia必须为布尔值')
+        if step['command'] == 'seek':
+            if type(step.get('seconds')) not in [int, float] or not math.isfinite(step['seconds']) or step['seconds'] < 0: raise ValueError('定位秒数无效')
+    return value
+
+
+def run_measure(args):
+    if not 1 <= args.repeat <= 20 or not 0 < args.timeout <= 30: raise ValueError('重复次数为1到20，timeout须在0到30秒之间')
+    scenario = validate_scenario(args.scenario)
+    # Interactive replay is isolated: production imports, edits and library opens
+    # are absent from this language. Validate every step before any operation.
+    qa_root = args.endpoint.resolve().parent.parent
+    if qa_root.parent != Path('/tmp').resolve() or not qa_root.name.startswith('assetframe-qa.'):
+        raise ValueError('操作回放仅支持/tmp/assetframe-qa.*中的隔离endpoint')
+    load_endpoint(args.endpoint)
+    def call(*words):
+        nested = parser().parse_args([*words, '--endpoint', str(args.endpoint), '--timeout', str(args.timeout), '--json'])
+        result = execute(nested)
+        if not result['ok']: raise ValueError('操作未完成：' + str(result.get('error', {}).get('code', 'unknown')))
+        return result['result']
+    initial = call('status')
+    identity = tuple(initial.get(k) for k in ['pid', 'libraryID', 'appVersion'])
+    if not all(identity) or not Path(initial.get('libraryPath', '/')).resolve().is_relative_to(qa_root):
+        raise ValueError('当前库未处于指定隔离QA根目录')
+    def check(state):
+        if tuple(state.get(k) for k in ['pid', 'libraryID', 'appVersion']) != identity: raise ValueError('测量期间进程、资源库或版本发生变化')
+        if state.get('error') or state.get('store', {}).get('persistenceError'): raise ValueError('应用返回错误，测量终止')
+    def settled(step, state):
+        if state.get('busy') or state.get('store', {}).get('loading') or state.get('workspace', {}).get('queryPending'): return False
+        browse, workspace = state.get('browse', {}), state.get('workspace', {})
+        command = step['command']
+        if command == 'search' and browse.get('search') != step['query']: return False
+        if command in ['preview', 'focus'] and browse.get('focused') != step['id']: return False
+        if command == 'preview' and workspace.get('preview') is not True: return False
+        if command == 'exit-preview' and workspace.get('preview') is not False: return False
+        if step.get('waitForMedia') and state.get('playback', {}).get('ready') is not True: return False
+        if command == 'seek':
+            playback = state.get('playback', {})
+            if playback.get('seeking') is not False or abs(playback.get('seconds', -1) - step['seconds']) > 0.15: return False
+        return all(v == 0 for v in state.get('previewPipeline', {}).values())
+    report = {'schemaVersion': 1, 'runID': str(uuid.uuid4()), 'scenario': scenario, 'repeat': args.repeat,
+              'identity': dict(zip(['pid', 'libraryID', 'appVersion'], identity)), 'samples': [],
+              'completionScope': 'CLI acknowledgement plus app query/media/queue state; excludes screen FPS and pixel-presentation timing', 'passed': False}
+    fd = os.open(args.output, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+    with os.fdopen(fd, 'w', encoding='utf-8') as output:
+        try:
+            for repetition in range(args.repeat):
+                for position, step in enumerate(scenario['steps']):
+                    check(call('status'))
+                    words = [step['command']]
+                    if step['command'] == 'seek': words = ['playback', 'seek', str(step['seconds'])]
+                    elif step['command'] in ['focus', 'preview']: words += [step['id']]
+                    elif step['command'] == 'search': words += [step['query']]
+                    started = time.perf_counter(); call(*words); accepted = time.perf_counter()
+                    deadline = started + args.timeout
+                    while True:
+                        state = call('status'); check(state)
+                        if settled(step, state): break
+                        if time.perf_counter() > deadline: raise ValueError('界面或媒体未在期限内就绪')
+                        time.sleep(0.025)
+                    finished = time.perf_counter()
+                    rss = None
+                    if sys.platform == 'darwin':
+                        try: rss = int(subprocess.check_output(['ps', '-p', str(identity[0]), '-o', 'rss='], text=True, timeout=2).strip())
+                        except (ValueError, OSError, subprocess.SubprocessError): pass
+                    report['samples'].append({'repeat': repetition, 'step': position, 'command': step['command'],
+                        'request_ms': (accepted-started)*1000, 'settle_ms': (finished-accepted)*1000,
+                        'total_ms': (finished-started)*1000, 'visibleCount': state.get('workspace', {}).get('visibleCount'),
+                        'rss_kib': rss, 'previewPipeline': state.get('previewPipeline'), 'searchIndex': state.get('workspace', {}).get('searchIndex')})
+            report['passed'] = True
+        except Exception as error:
+            report['failure'] = str(error)
+            raise
+        finally:
+            json.dump(report, output, ensure_ascii=False, indent=2, allow_nan=False); output.write('\n')
+    aggregates = {}
+    for command in sorted({s['command'] for s in report['samples']}):
+        values = sorted(s['total_ms'] for s in report['samples'] if s['command'] == command)
+        aggregates[command] = {'samples': len(values), 'p50_ms': values[(len(values)-1)//2], 'p95_ms': values[math.ceil(len(values)*0.95)-1]}
+    return {'protocolVersion': 1, 'ok': True, 'result': {'reportPath': str(args.output), 'passed': True, 'aggregates': aggregates}}
+
+def main():
+    args = parser().parse_args()
+    try:
+        response = run_measure(args) if args.action == 'measure' else execute(args)
+        if args.action == 'diagnostics' and args.output and response['ok']:
+            # Exclusive creation prevents accidental overwrite of an existing asset.
+            fd = os.open(args.output, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+            with os.fdopen(fd, 'w', encoding='utf-8') as output:
+                json.dump(response, output, ensure_ascii=False, indent=2, allow_nan=False)
+                output.write('\n')
+        print(json.dumps(response, ensure_ascii=False, indent=None if args.json else 2, allow_nan=False))
+        return 0 if response['ok'] else 3
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        # Exception text contains no token. Discovery files are never printed.
+        response = {'protocolVersion': 1, 'ok': False, 'error': {'code': 'connection_failed', 'message': '请先打开资产管家，或检查隔离endpoint路径：' + str(error)}}
+        print(json.dumps(response, ensure_ascii=False), file=sys.stderr)
+        return 4
+
+
+if __name__ == '__main__':
+    sys.exit(main())

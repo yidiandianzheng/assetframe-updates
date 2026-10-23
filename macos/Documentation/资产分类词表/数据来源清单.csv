@@ -1,0 +1,438 @@
+﻿来源路径,域,字符数
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜图示/光影色卡/第1集_父女同框_电影冷暖色卡_实际提示词_v01.md,drama,3694
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜图示/第1集_24宫格/生成提示词_v01.md,drama,1671
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜图示/第1集_24宫格/背篓修订提示词_v02.md,drama,452
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜图示/第1集_25宫分镜图生成提示词候选_v01.md,drama,1271
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜图示/光影方案预览/方案1_生成提示词.md,drama,612
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜图示/光影方案预览/方案6_生成提示词.md,drama,624
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜图示/光影方案预览/方案2_生成提示词.md,drama,1122
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜图示/光影方案预览/方案3_生成提示词.md,drama,613
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜图示/第1集_25宫分镜图生成提示词候选_v02.md,drama,1417
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜图示/第1集_25宫分镜图生成提示词候选_v03.md,drama,1414
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/画面_陶怀仁赠针_师徒交接_候选_v01_提示词.md,drama,3272
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第006集/定边城城内街市大景_设定核对后提示词_v02.md,drama,1903
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_崇仁医馆_确认门面参考生成_纯正面大景_候选_v04_实际提示词.json,drama,839
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_济安堂_前堂验药柜台_纯文生图_候选_v01_提示词.md,drama,1297
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_粮铺_柜台与涨价牌_纯文生图_候选_v01_实际提示词.json,drama,1024
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_永和药堂_二层封闭窗墙_纯正面大景_候选_v03_实际提示词.json,drama,810
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_崇仁医馆_阔气门头_纯正面大景_候选_v03_实际提示词.json,drama,620
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_济安堂_门面纯正面大景_候选_v01_实际提示词.json,drama,1078
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_粮铺外街道_富户驴车_纯文生图_候选_v02_实际提示词.json,drama,806
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_粮铺外街道_富户驴车_纯文生图_提示词候选_v02.md,drama,899
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_济安堂_前堂验药柜台_纯文生图_候选_v01_实际提示词.json,drama,1260
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_粮铺外街道_富户酒肉马车_纯文生图_候选_v01_提示词.md,drama,917
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_崇仁医馆_柜台与入口_候选_v01_实际提示词.json,drama,482
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_粮铺_柜台与涨价牌_纯文生图_候选_v02_提示词.md,drama,820
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_崇仁医馆_小门入内_纯文生图正面大景_候选_v07_提示词.md,drama,1059
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_崇仁医馆_阔气门头与柜台_候选_v02_实际提示词.json,drama,701
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_粮铺外街道_富户酒肉马车_纯文生图_候选_v01_实际提示词.json,drama,879
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_永和药堂_门前纯正面大景_候选_v01_实际提示词.json,drama,753
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_崇仁医馆_小门入内_纯文生图正面大景_候选_v07_实际提示词.json,drama,1023
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_崇仁医馆_纯文生图_正面大景_候选_v05_重写提示词.md,drama,1179
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_济安堂_院落树冠_纯正面大景_候选_v02_实际提示词.json,drama,1060
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_济安堂_院落树冠_纯正面大景_候选_v02_提示词.md,drama,1095
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_粮铺_柜台与涨价牌_纯文生图_候选_v01_提示词.md,drama,1060
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_永和药堂_豪华二层楼_纯正面大景_候选_v02_实际提示词.json,drama,989
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_崇仁医馆_纯文生图_正面大景_候选_v05_实际提示词.json,drama,1089
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第007集/场景_粮铺_柜台与涨价牌_纯文生图_候选_v02_实际提示词.json,drama,786
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第016集/场景_返屯土路_日间主场景_候选_v01_实际提示词.txt,drama,784
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第016集/场景_返屯土路旁树后_日间空场_候选_v01_实际提示词.txt,drama,725
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/定边城整体/场景_定边城城外45度城门与市口_候选_v01_实际提示词.txt,drama,1080
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/定边城整体/场景_定边城城外道路望城_候选_v01_实际提示词.txt,drama,995
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/定边城整体/场景_定边城城内反看城门_候选_v01_实际提示词.txt,drama,1180
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/定边城整体/场景_定边城全城高空斜俯瞰_候选_v01_实际提示词.txt,drama,1215
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/定边城整体/场景_定边城门洞内向城内看_候选_v01_实际提示词.txt,drama,1128
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/定边城整体/场景_定边城城门纯正面_候选_v01_实际提示词.txt,drama,986
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第003集/青石屯近坡猎场_九宫参考_提示词与核对_候选_v01.md,drama,1644
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第003集/青石屯近坡猎场_生成提示词_候选_v01.md,drama,911
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第009集/场景_城门外街道_远观逼债空场_候选_v01_实际提示词.txt,drama,670
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/场景资产/候选/第009集/场景_返屯官道与军营岔路_日间空场_候选_v01_实际提示词.txt,drama,678
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜/第001集/历史版本/第1集_Wan3.0_LibTV执行提示词_v06.md,drama,182
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜/第001集/独立候选/第1集_v14修复底稿_Wan3_逐组执行提示词候选_v04.md,drama,169695
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜/第001集/独立候选/第1集_v14修复底稿_Wan3_逐组执行提示词候选_v01.md,drama,80044
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜/第001集/独立候选/第1集_屋内堵门版_Wan3.0执行提示词候选_v14.md,drama,32201
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜/第001集/独立候选/第1集_v14修复底稿_Wan3_逐组执行提示词候选_v02.md,drama,117517
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜/第001集/独立候选/第1集_v14修复底稿_Wan3_逐组执行提示词候选_v03.md,drama,162753
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜/第001集/生产执行/第1集_画面风格与光影提示词.md,drama,2923
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜/第001集/图示与预演/第1集_36宫格_纯色卡版候选_v02_出图提示词.md,drama,6558
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜/第001集/图示与预演/第1集_36宫格_16比9分镜图_实际出图提示词_v01.md,drama,4613
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/分镜/第009集/图示与预演/第09集_32宫格_16比9_候选_v01_提示词.md,drama,10922
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/第007集/人物_崇仁伙计_瘦弱奸诈_四视图_候选_v03_实际提示词.json,drama,600
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/第007集/人物_买粮人_基础四视图_候选_v01_实际提示词.json,drama,4443
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/第007集/人物_崇仁伙计_基础四视图_候选_v01_实际提示词.json,drama,4499
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/第007集/人物_永和伙计_基础四视图_候选_v01_实际提示词.json,drama,4606
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/第007集/人物_崇仁伙计_奸诈油滑_四视图_候选_v02_实际提示词.json,drama,593
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/第004集/刘三旺_街溜子重新设计_提示词_候选_v04.md,drama,2288
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/第004集/刘三旺_街溜子强化_返修说明与提示词_v03.md,drama,1716
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/11_Q31-C2D_普通乡邻v03_实际提示词.txt,drama,1486
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/14_Q32-F_猎户父亲_实际提示词.txt,drama,2131
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/06_Q31-S1_男童生_实际提示词.txt,drama,1411
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/16_Q32-S1_分组v04_实际提示词.txt,drama,1434
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/15_Q32-M_普通乡邻v03_实际提示词.txt,drama,2275
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/14_Q32-F_普通乡邻v03_实际提示词.txt,drama,2283
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/08_Q31-D2_外形记忆点简洁返修_实际提示词.txt,drama,120
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/10_Q31-UA2_分组v04_实际提示词.txt,drama,2417
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/16_Q32-S1_儿童少年中性整理_实际提示词.txt,drama,692
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/02_Q31-GM_童生祖母_实际提示词.txt,drama,2063
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/13_Q32-GM_分组v04_实际提示词.txt,drama,2224
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/08_Q31-D2_儿童少年中性整理_实际提示词.txt,drama,708
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/07_Q31-S2_儿童少年中性整理_实际提示词.txt,drama,690
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/05_Q31-D1_本次实际生成提示词.txt,drama,2248
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/17_Q32-D1_普通乡邻v03_实际提示词.txt,drama,1461
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/03_Q31-F_普通乡邻v03_实际提示词.txt,drama,2286
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/01_Q31-GF_童生祖父_实际提示词.txt,drama,2074
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/10_Q31-UA2_二叔妻子（二嫂）_实际提示词.txt,drama,2229
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/07_Q31-S2_普通乡邻v03_实际提示词.txt,drama,1428
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/18_Q32-D2_分组v04_实际提示词.txt,drama,1448
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/02_Q31-GM_普通乡邻v03_实际提示词.txt,drama,2206
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/11_Q31-C2D_外形记忆点简洁返修_实际提示词.txt,drama,137
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/07_Q31-S2_分组v04_实际提示词.txt,drama,1526
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/01_Q31-GF_普通乡邻v03_实际提示词.txt,drama,2259
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/06_Q31-S1_普通乡邻v03_实际提示词.txt,drama,1477
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/01_Q31-GF_分组v04_实际提示词.txt,drama,2388
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/05_Q31-D1_分组v04_实际提示词.txt,drama,2427
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/03_Q31-F_本次实际生成提示词.txt,drama,2246
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/08_Q31-D2_童生妹妹_实际提示词.txt,drama,1384
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/11_Q31-C2D_儿童少年中性整理_实际提示词.txt,drama,719
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/06_Q31-S1_本次实际生成提示词.txt,drama,1553
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/18_Q32-D2_猎户小女儿_实际提示词.txt,drama,1400
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/01_Q31-GF_返修实际提示词_v02.txt,drama,2319
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/08_Q31-D2_外形记忆点返修_实际提示词.txt,drama,456
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/18_Q32-D2_外形记忆点返修_实际提示词.txt,drama,496
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/11_Q31-C2D_外形记忆点返修_实际提示词.txt,drama,484
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/06_Q31-S1_分组v04_实际提示词.txt,drama,1569
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/07_Q31-S2_童生弟弟_实际提示词.txt,drama,1375
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/03_Q31-F_分组v04_实际提示词.txt,drama,2398
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/11_Q31-C2D_儿童中性整理_实际提示词.txt,drama,572
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/17_Q32-D1_小穗_中性简洁实际提示词.txt,drama,476
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/03_Q31-F_童生父亲_实际提示词.txt,drama,2104
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/11_Q31-C2D_分组v04_实际提示词.txt,drama,1572
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/17_Q32-D1_猎户大女儿_实际提示词.txt,drama,1409
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/17_Q32-D1_外形记忆点返修_实际提示词.txt,drama,467
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/11_Q31-C2D_二叔小女儿_实际提示词.txt,drama,1460
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/04_Q31-M_童生母亲_实际提示词.txt,drama,2080
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/17_Q32-D1_左眼下小痣定位返修_实际提示词.txt,drama,176
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/09_Q31-U2_童生二叔_实际提示词.txt,drama,2195
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/04_Q31-M_本次实际生成提示词.txt,drama,2222
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/10_Q31-UA2_普通乡邻v03_实际提示词.txt,drama,2300
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/02_Q31-GM_本次实际生成提示词.txt,drama,2205
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/08_Q31-D2_分组v04_实际提示词.txt,drama,1548
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/12_Q32-GF_猎户祖父_实际提示词.txt,drama,2102
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/07_Q31-S2_外形记忆点返修_实际提示词.txt,drama,456
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/02_Q31-GM_分组v04_实际提示词.txt,drama,2313
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/04_Q31-M_普通乡邻v03_实际提示词.txt,drama,2259
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/12_Q32-GF_分组v04_实际提示词.txt,drama,2236
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/09_Q31-U2_分组v04_实际提示词.txt,drama,2444
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/16_Q32-S1_外形记忆点返修_实际提示词.txt,drama,461
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/06_Q31-S1_外形记忆点返修_实际提示词.txt,drama,461
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/09_Q31-U2_普通乡邻v03_实际提示词.txt,drama,2299
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/05_Q31-D1_童生姐姐_实际提示词.txt,drama,2106
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/15_Q32-M_猎户母亲_实际提示词.txt,drama,2105
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/17_Q32-D1_儿童少年中性整理_实际提示词.txt,drama,710
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/18_Q32-D2_儿童少年中性整理_实际提示词.txt,drama,699
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/13_Q32-GM_猎户祖母_实际提示词.txt,drama,2078
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/05_Q31-D1_普通乡邻v03_实际提示词.txt,drama,2282
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/16_Q32-S1_猎户哥哥_实际提示词.txt,drama,1391
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/06_Q31-S1_儿童少年中性整理_实际提示词.txt,drama,743
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/04_Q31-M_分组v04_实际提示词.txt,drama,2417
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物资产/候选/两户家庭_20261018/08_Q31-D2_普通乡邻v03_实际提示词.txt,drama,1436
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物/配角与群像/两户家庭/两户家庭_15人人物资产说明书与四宫格提示词_候选_v01.md,drama,50406
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物/配角与群像/两户家庭/两户家庭_18人人物资产说明书与四宫格提示词_候选_v02.md,drama,61509
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物/配角与群像/两户家庭/两户家庭_18人人物资产说明书与四宫格提示词_普通乡邻修订_候选_v03.md,drama,66538
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物/配角与群像/两户家庭/两户家庭_18人人物资产说明书与四宫格提示词_童生家反派与二房受压_候选_v04.md,drama,70583
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物/配角与群像/隔壁摊主/孙有财_凶相胖壮屠户_纯文生图提示词_候选_v02.md,drama,3160
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/人物/配角与群像/隔壁摊主/孙有财_胖壮屠户_人物资产提示词_候选_v01.md,drama,1367
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第008集/第08集_缺失资产静态提示词包_候选_v01.md,drama,13670
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第1集/粮罐与两只碗_破损白底_提示词与核对_v02.md,drama,5152
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第1集/第1集道具资产_生成说明与提示词_v01.md,drama,4135
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第1集/旧背篓_提示词与核对_候选_v01.md,drama,2588
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第1集/旧猎具套装_优化提示词与核对_候选_v01.md,drama,3924
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/道具_陶怀仁赠针套装_细布卷光素针六视图_候选_v03_提示词与核对.md,drama,5280
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第017集/第17集_人物资产说明书与韩家堂屋提示词_候选_v01.md,drama,20662
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/道具_陶怀仁赠针套装_靛青云纹锦布多视图_候选_v05_提示词与核对.md,drama,4252
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第005集/第05集_缺失资产提示词包_候选_v01.md,drama,22438
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第005集/第05集_范家场景与书写印具_资产提示词_候选_v01.md,drama,2813
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第005集/第05集_待补图像与范守信声线_提示词候选_v01.md,drama,2216
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第006集/第06集_待补四项资产_提示词候选_v01.md,drama,3526
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/道具_陶怀仁赠针套装_布卷六视图与特写_候选_v02_提示词与核对.md,drama,4690
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第007集/道具_十二斤家粮袋_纯文生图_候选_v01_提示词.md,drama,739
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第007集/第07集_缺失资产静态提示词包_候选_v01.md,drama,50232
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第007集/道具_收药小杆秤_纯文生图_候选_v01_实际提示词.json,drama,685
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第007集/道具_收药小杆秤_纯文生图_候选_v01_提示词.md,drama,718
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第007集/道具_十二斤家粮袋_纯文生图_候选_v01_实际提示词.json,drama,703
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第004集/植物_远志_土中生长态_提示词_候选_v01.md,drama,571
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第004集/植物_黄芪_土中生长态_提示词_候选_v01.md,drama,577
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第004集/第04集_资产独立提示词与生成记录_候选_v01.md,drama,8953
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第004集/路引与屯印_重生成提示词与核对_候选_v04.md,drama,1097
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第015集/第15集_缺失资产静态提示词包_候选_v01.md,drama,12608
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/道具_陶怀仁赠针套装_木匣收纳_候选_v01_提示词.md,drama,929
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第012集/第12集_场景与道具资产说明书及生成提示词_候选_v01.md,drama,25732
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第011集/第11集_人物资产说明书与缺图提示词_候选_v01.md,drama,6639
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/道具_陶怀仁赠针套装_参考九针形制多视图_候选_v04_提示词与核对.md,drama,8127
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第003集/灰褐野兔_生成提示词_候选_v01.md,drama,979
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/道具_经手人契纸_正面繁体毛笔_候选_v02_实际提示词.txt,drama,687
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/人物_柳小禾父亲_基础四宫格_候选_v01_实际提示词.txt,drama,4855
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/人物_柳小禾_基础四宫格_候选_v01_实际提示词.txt,drama,4869
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/人物_军车车夫_基础四宫格_候选_v01_实际提示词.txt,drama,4894
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/人物_路旁幼子_基础四宫格_候选_v01_实际提示词.txt,drama,3358
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/人物_押运军卒_基础四宫格_候选_v01_实际提示词.txt,drama,5048
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/道具_军运木车_装载状态_候选_v01_实际提示词.txt,drama,885
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/道具_经手人契纸_正面繁体毛笔_提示词_候选_v02.md,drama,1142
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/人物_经手人_基础四宫格_候选_v01_实际提示词.txt,drama,4913
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/道具_军车侧绑箭束_候选_v01_实际提示词.txt,drama,581
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/人物_路旁妇人_基础四宫格_候选_v01_实际提示词.txt,drama,5019
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/道具_柳小禾布活_三件素布缝活_候选_v01_实际提示词.txt,drama,602
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/第09集_缺失资产静态提示词包_候选_v01.md,drama,25211
+/Volumes/SSD-1TB/02-AI创作/女儿和老爹穿越古代/道具资产/候选/第009集/道具_经手人契纸_素面纸背_候选_v01_实际提示词.txt,drama,633
+/Volumes/SSD-1TB/04-客户与拍摄/Codex客户储存/木兰姐/ppt/岁三窖茶会_原稿25页优化_ppt169_20261017/images/image_prompts.md,other,5457
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/03_参考素材库/Ai元启录/熵乱归序/AI打戏视频提示词导出包.md,other,2290
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/03_参考素材库/微表情l5/visual_expression_study/malaqingsun-l4-l5-2026-08-12/prompt-grammar-candidates.md,other,967
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/流放镇北后我把废城修成仙城/99_归档交接/归档/0712_旧退婚开局与外部素材/第001集_S级人物资产图统一出图提示词_0709版本1.0.md,other,1574
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/流放镇北后我把废城修成仙城/99_归档交接/归档/0712_旧退婚开局与外部素材/第001集_喝水呛死也算穿越_人物资产提示词_0708版本1.0.md,other,10463
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/流放镇北后我把废城修成仙城/99_归档交接/归档/0712_旧退婚开局与外部素材/第001集_顾家阵营反差人物资产提示词_0710版本2.0.md,other,4959
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/流放镇北后我把废城修成仙城/99_归档交接/归档/0712_旧退婚开局与外部素材/第001集_喝水呛死也算穿越_场景资产提示词_0708版本1.0.md,other,7500
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/流放镇北后我把废城修成仙城/04_AI制作资产/人物资产提示词/候选_十宗罪魔庭_十位罪君完整人物提示词_0724版本2.0.md,other,15900
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/流放镇北后我把废城修成仙城/04_AI制作资产/00_资产总控/第001-003集_人物资产详细提示词_0712版本2.0.md,other,6742
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/流放镇北后我把废城修成仙城/04_AI制作资产/第002集_盾不是坏的_资产提示词_0718版本1.0.md,other,9392
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/流放镇北后我把废城修成仙城/04_AI制作资产/场景资产提示词/第001集_罪名写在手上_场景资产提示词_0712版本1.0.md,other,5206
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/流放镇北后我把废城修成仙城/04_AI制作资产/分镜图/第001集_场1-3_大胆构图竖屏镜头组提示词_0716版本1.0.md,other,14401
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/流放镇北后我把废城修成仙城/04_AI制作资产/分镜图/分镜提示词_素材参考排版学习卡_0716版本1.0.md,other,1340
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/西方领主游戏/04_分镜/学习卡_S01_方言光影与去重复提示词_v01.md,other,1118
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/西方领主游戏/04_分镜/合并收回_原副本_2026-10-09/第001集_前15秒_指挥官登场_SSS对F级_横屏完整分镜与视频提示词_候选_v0.3.md,other,9556
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/西方领主游戏/04_分镜/合并收回_原副本_2026-10-09/第001集_前15秒_方案3_横屏完整镜头组与视频提示词候选_v0.2.md,other,9635
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/西方领主游戏/04_分镜/合并收回_原副本_2026-10-09/第001集_前15秒_觉醒官登场_SSS对F级_横屏完整分镜与视频提示词_候选_v0.4.md,other,10252
+/Volumes/SSD-1TB/03-素材库/Codex创作媒体库/01_项目媒体/西方领主游戏/04_分镜/合并收回_原副本_2026-10-09/第001集_前15秒_觉醒官登场_SSS对F级_横屏完整分镜与视频提示词_候选_v0.5.md,other,12205
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/04_参考素材与研究/茶叶产品提取与摄影美化_通用提示词_v01.md,tea,2998
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/五款茶_红黑纸盒对比_2026-10-09_v01/生成提示词.txt,tea,3738
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_泡袋设计候选_2026-10-09_v01/方案A_生成提示词.txt,tea,2791
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_参考学习三方案_2026-10-09_v01/方案1_生成提示词.txt,tea,2253
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_参考学习三方案_2026-10-09_v01/方案3_生成提示词.txt,tea,2376
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_参考学习三方案_2026-10-09_v01/方案2_生成提示词.txt,tea,2251
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_泡袋设计候选_2026-10-09_v02/生成提示词.txt,tea,3179
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/海南侧排_v03_修改说明与提示词.md,tea,2381
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/七款黄橙色对比_2026-10-11/黄橙色候选_说明与提示词.md,tea,2032
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/七款三套配色对比/三套配色_说明与提示词.md,tea,6167
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/彩色Logo与规格_v04_使用说明与提示词.md,tea,3292
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/设计说明与生成提示词.md,tea,3508
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/五泡30元内_三套配色对比_2026-10-11/三套配色_说明与提示词.md,tea,5202
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/奶白正面_2026-10-11/奶白候选_说明与提示词.md,tea,1976
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/正背红色与小字_v09-v10_修改说明与提示词.md,tea,2522
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/三款字体对比/三款字体对比_说明与提示词.md,tea,4363
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/右侧单列文案_v11_修改说明与提示词.md,tea,1321
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/大字强化_v02_修改说明与提示词.md,tea,2737
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/红正面米侧边_v07_修改说明与提示词.md,tea,2904
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/红茶行书_v12_修改说明与提示词.md,tea,1858
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/七款正面对比_思源宋体/七款正面对比_说明与提示词.md,tea,3626
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/背面小字与冲泡温度_v08_修改说明与提示词.md,tea,1697
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/七款茶褐棕对比_2026-10-11/茶褐棕候选_说明与提示词.md,tea,1846
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/小Logo与侧背面_v05-v06_修改说明与提示词.md,tea,4812
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_三方案对比_2026-10-09_v01/生成提示词.txt,tea,3437
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/五款茶_三档统一配色_2026-10-09_v01/生成提示词.txt,tea,2915
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/香万家Logo/2026-10-03_新增三方案_v05/生成提示词.txt,tea,3899
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/香万家Logo/2026-10-03_黑白候选_v01/生成提示词.txt,tea,2531
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/香万家Logo/2026-10-03_参考图优化三方案_v04/生成提示词.txt,tea,4231
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/香万家Logo/2026-10-03_Brandkit三方向_v03/B_生成提示词.txt,tea,3132
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/香万家Logo/2026-10-10_01字标组合预览_v01/选用记录与生成提示词.md,tea,3135
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/香万家Logo/2026-10-10_01字标独立提取_v01/提取记录与提示词.md,tea,1568
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/香万家Logo/2026-10-10_两款独立纯文生图_v01/提示词与检查记录.md,tea,7109
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/香万家Logo/2026-10-10_C款独立提炼修复_v01/修复说明与提示词.md,tea,2325
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/99_归档与重复/旧登记文件/2026-10-10_香萬家低清规范图停用/2026-10-10_标准Logo规范图_v01/生成提示词与使用说明.md,tea,3939
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/03_专属资产/02_待确认/生成提示词_v01.md,tea,2973
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/03_专属资产/02_待确认/街边场景_实际生成提示词_v01.md,tea,1995
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/03_专属资产/02_待确认/12宫格分镜_实际生成提示词_v01.md,tea,192
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/03_专属资产/02_待确认/干茶零售与茶头_实际生成提示词_v01.md,tea,3200
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/03_专属资产/02_待确认/12宫格干茶零售修正版_实际生成提示词_v02.md,tea,1700
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/镜头组2_prompt.txt,tea,2429
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/镜头组5_prompt.txt,tea,1840
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/镜头组3_prompt.txt,tea,1553
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/执行提示词清理/group1_after.txt,tea,2422
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/执行提示词清理/group6_after.txt,tea,2310
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/执行提示词清理/技能修改/修改前/references/asset-mapping-and-preflight.md,tea,8339
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/执行提示词清理/技能修改/修改前/references/input-purpose-and-shot-binding.md,tea,2505
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/执行提示词清理/技能修改/修改前/references/production-rules.md,tea,11382
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/执行提示词清理/技能修改/修改前/SKILL.md,tea,7924
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/执行提示词清理/group5_after.txt,tea,1654
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/执行提示词清理/group3_after.txt,tea,1364
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/执行提示词清理/装配检查_处理清单与解决方案.md,tea,1884
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/执行提示词清理/group4_after.txt,tea,1896
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/执行提示词清理/group2_after.txt,tea,2235
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/镜头组6_prompt.txt,tea,2496
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/镜头组1_prompt.txt,tea,2608
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/茶铺规矩_AI猫立规矩二创/04_LibTV装配/2026-10-08_Wan3.0/镜头组4_prompt.txt,tea,2082
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/黄橙色红茶四面_2026-10-11/v02_参考款式修改说明与提示词.md,tea,2688
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/黄橙色红茶四面_2026-10-11/设计说明与提示词.md,tea,3066
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/黄橙色红茶四面_2026-10-11/v04_小Logo排版说明与提示词.md,tea,1914
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/黄橙色红茶四面_2026-10-11/v05_白底重新生成说明与提示词.md,tea,5356
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/海南红茶_引流款情绪包装_2026-10-10_v01/黄橙色红茶四面_2026-10-11/v07_外形回调说明与提示词.md,tea,4287
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/岁三窖品鉴会_2026-10-13/03_专属资产/02_待确认/10_海报/生成提示词_v01.txt,tea,2828
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/岁三窖品鉴会_2026-10-13/03_专属资产/02_待确认/10_海报/生成提示词_v02.txt,tea,618
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/01_人物/奶茶人_候选/历史/木兰姐与女性奶茶人_仅提示词稿_历史_20261015.md,tea,1816
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/01_人物/奶茶人_候选/历史/木兰姐与女性奶茶人_长提示词与分镜稿_历史_20261015.md,tea,5449
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/01_人物/奶茶人_候选/木兰姐与女性奶茶人_视频生视频提示词_候选_v01.md,tea,7300
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/01_人物/奶茶人_候选/证据/LibTV装配_20261015_165649/实际执行提示词.txt,tea,385
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/乌龙茶_同系列泡袋_2026-10-13_v01/心事泡不开_三种更飘逸字形与排版对比_v32/三方案生成提示词.md,tea,3951
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/乌龙茶_同系列泡袋_2026-10-13_v01/心事泡不开_就先放一放_底框不越界候选_v31/毛笔字换句生成提示词.md,tea,1391
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/乌龙茶_同系列泡袋_2026-10-13_v01/最新手动稿_字体与排版三方案_v37/新毛笔字生成提示词.md,tea,729
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/乌龙茶_同系列泡袋_2026-10-13_v01/正面下沿_粗笔飞白_参考字体优化_v27/毛笔字生成提示词与过程.md,tea,2775
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/乌龙茶_同系列泡袋_2026-10-13_v01/正面底框填满_不跨侧面_粗笔飞白候选_v30/毛笔字重排生成提示词.md,tea,1695
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/乌龙茶_同系列泡袋_2026-10-13_v01/毛笔字三方向_立体对比候选_v01/三方向说明与生成提示词.md,tea,4710
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/乌龙茶_同系列泡袋_2026-10-13_v01/立体产品与四款系列效果_v42/两张立体效果图_生成提示词.md,tea,6991
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/乌龙茶_同系列泡袋_2026-10-13_v01/红框底部_大笔势粗犷毛笔字_位置纠正候选_v29/毛笔字生成提示词.md,tea,1906
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/乌龙茶_同系列泡袋_2026-10-13_v01/背面底部_不想营业就给自己泡茶_v40/背面字稿生成提示词.md,tea,1576
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/03_专属资产/2026-10-14_电商来源/02_候选资产/人物/2026-10-15_四宫格保真高清修复_v01/本轮实际提示词与检查说明.md,tea,4415
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/03_专属资产/2026-10-14_电商来源/02_候选资产/人物/2026-10-15_四宫格局部细节修复_v02/同尺寸修复对照与实际提示词.md,tea,5805
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/03_专属资产/2026-10-14_电商来源/02_候选资产/人物/2026-10-15_本轮上传图高清修复_v01/人物四宫格_实际提示词与检查_v01.md,tea,2228
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/03_专属资产/2026-10-14_电商来源/02_候选资产/人物/2026-10-15_本轮上传图高清修复_v01/标准人物资产四视图_提示词与检查_v02.md,tea,3951
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/03_专属资产/六大茶类_补充资产清单与逐张生图提示词_候选_v01.md,tea,12622
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组一｜V1｜两种乌龙与六条路｜待生成_prompt.md,tea,2723
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组一｜V2｜两种乌龙与六条路｜待生成_prompt.md,tea,3151
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组一｜V3｜两种乌龙与六条路｜待生成_prompt.md,tea,3204
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组一｜V4｜六路原料与工艺预览｜待生成_prompt.md,tea,3330
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组一｜V5｜六路原料与工艺预览｜待生成_prompt.md,tea,3485
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组七｜V1｜黑茶渥堆与转化｜待生成_prompt.md,tea,2141
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组七｜V2｜黑茶渥堆与转化｜待生成_prompt.md,tea,2416
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组七｜V3｜黑茶渥堆与转化｜待生成_prompt.md,tea,2473
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组七｜V4｜黑茶湿堆与条件管理｜待生成_prompt.md,tea,2826
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组七｜V5｜黑茶湿堆与条件管理｜待生成_prompt.md,tea,3064
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组三｜V1｜黄茶湿热转化｜待生成_prompt.md,tea,1882
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组三｜V2｜黄茶湿热转化｜待生成_prompt.md,tea,2187
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组三｜V3｜黄茶湿热转化｜待生成_prompt.md,tea,2207
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组三｜V4｜黄茶纸包闷黄｜待生成_prompt.md,tea,2496
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组三｜V5｜黄茶纸包闷黄｜待生成_prompt.md,tea,2677
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组二｜V1｜绿茶杀青与整形｜待生成_prompt.md,tea,2007
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组二｜V2｜绿茶杀青与整形｜待生成_prompt.md,tea,2324
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组二｜V3｜绿茶杀青与整形｜待生成_prompt.md,tea,2358
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组二｜V4｜绿茶杀青与干燥｜待生成_prompt.md,tea,2438
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组二｜V5｜绿茶杀青与干燥｜待生成_prompt.md,tea,2598
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组五｜V1｜乌龙做青后杀青｜待生成_prompt.md,tea,2245
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组五｜V2｜乌龙做青后杀青｜待生成_prompt.md,tea,2563
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组五｜V3｜乌龙做青后杀青｜待生成_prompt.md,tea,2578
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组五｜V4｜乌龙摇静交替后杀青｜待生成_prompt.md,tea,2861
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组五｜V5｜乌龙摇静交替后杀青｜待生成_prompt.md,tea,3062
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组八｜V1｜木兰姐边走边说｜待生成_prompt.md,tea,3514
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组八｜V2｜木兰姐边走边说｜待生成_prompt.md,tea,3494
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组八｜V3｜木兰姐边走边说｜待生成_prompt.md,tea,3485
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组八｜V4｜木兰姐膝上行走互动｜待生成_prompt.md,tea,3346
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组八｜V5｜木兰姐膝上行走互动｜待生成_prompt.md,tea,3525
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组六｜V1｜红茶揉捻与氧化｜待生成_prompt.md,tea,2084
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组六｜V2｜红茶揉捻与氧化｜待生成_prompt.md,tea,2353
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组六｜V3｜红茶揉捻与氧化｜待生成_prompt.md,tea,2369
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组六｜V4｜红茶滚揉与氧化｜待生成_prompt.md,tea,2633
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组六｜V5｜红茶滚揉与氧化｜待生成_prompt.md,tea,2839
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组四｜V1｜白茶萎凋与干燥｜待生成_prompt.md,tea,1971
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组四｜V2｜白茶萎凋与干燥｜待生成_prompt.md,tea,2352
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组四｜V3｜白茶萎凋与干燥｜待生成_prompt.md,tea,2380
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组四｜V4｜白茶失水与干燥｜待生成_prompt.md,tea,2522
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组四｜V5｜白茶失水与干燥｜待生成_prompt.md,tea,2707
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/01_人物/奶茶人_候选/证据/新参考视频V4_20261015/V4_实际执行提示词.txt,tea,639
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/01_人物/奶茶人_候选/证据/转头返修_20261015/V3_实际执行提示词.txt,tea,782
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/01_公共资产库/02_待确认/04_产品/茶叶盲盒_两泡装_2026-10-15_候选01/设计说明与生成提示词_v02.md,tea,1922
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/03_专属资产/02_待确认/首尾帧逐镜/镜头01/尾帧_实际提示词_v01.txt,tea,2494
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/03_专属资产/02_待确认/首尾帧逐镜/镜头01/首帧_实际提示词_v01.txt,tea,2604
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组一｜V6｜六路原料与工艺预览｜待生成_prompt.md,tea,3557
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组一｜V7｜双茶固定与连续入工艺｜待生成_prompt.md,tea,4016
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组七｜V6｜黑茶渥堆与连续释理｜待生成_prompt.md,tea,3374
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组三｜V6｜黄茶推包透视与黄变｜待生成_prompt.md,tea,3481
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组二｜V6｜绿茶工位连续展示｜待生成_prompt.md,tea,3011
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组五｜V6｜乌龙工艺与固定双茶｜待生成_prompt.md,tea,3478
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组八｜V6｜木兰姐膝上行走互动｜待生成_prompt.md,tea,3597
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组八｜V7｜固定六茶与行走揭示｜待生成_prompt.md,tea,3950
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组六｜V6｜红茶滚揉与连续释理｜待生成_prompt.md,tea,3198
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/镜头组四｜V6｜白茶薄摊与连续释理｜待生成_prompt.md,tea,3080
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v15_首组装配/首组执行提示词.txt,tea,3166
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v18_首组声音补接/首组执行提示词.txt,tea,3284
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v19_首组摇筛过镜/首组执行提示词.txt,tea,4158
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v20_逐组首尾帧装配/镜头组02/执行提示词.txt,tea,3101
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v21_首组外形反差/首组执行提示词.txt,tea,4007
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v22_V14实际末帧接续/镜头组02/执行提示词.txt,tea,3109
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/04_资产/第一批基础资产_候选_v01/第一批基础资产_提示词_v01.md,tea,4101
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/04_资产/第二批茶态与叶面接点_候选_v01/第二批_完整提示词_v01.md,tea,5437
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/05_分镜预演/竖屏12格效果预览_v01/竖屏12格预览_完整提示词_v01.md,tea,3238
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/05_分镜预演/竖屏12格效果预览_v01/竖屏12格预览_实际调用提示词_v01.md,tea,2813
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/07_LibTV装配/装配_v01/执行提示词/G01.txt,tea,2070
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/07_LibTV装配/装配_v01/执行提示词/G02.txt,tea,1855
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/07_LibTV装配/装配_v01/执行提示词/G03.txt,tea,2154
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/07_LibTV装配/装配_v01/执行提示词/G04.txt,tea,1893
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/07_LibTV装配/装配_v01/执行提示词/G05.txt,tea,2020
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/07_LibTV装配/装配_v01/文字接入生成节点_20261019/提示词/G01.txt,tea,4196
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/07_LibTV装配/装配_v01/文字接入生成节点_20261019/提示词/G02.txt,tea,3753
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/07_LibTV装配/装配_v01/文字接入生成节点_20261019/提示词/G03.txt,tea,4446
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/07_LibTV装配/装配_v01/文字接入生成节点_20261019/提示词/G04.txt,tea,4227
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/乌龙茶一镜到底/07_LibTV装配/装配_v01/文字接入生成节点_20261019/提示词/G05.txt,tea,3846
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v23_确认茶叶资产重装配/镜头组02/执行提示词.txt,tea,3176
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v25_镜头组二单画幅返修/镜头组02/执行提示词.txt,tea,3746
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v26_独立补镜与第三组/补镜02A/执行提示词.txt,tea,1326
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v26_独立补镜与第三组/补镜02A/提示词模板.txt,tea,1245
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v26_独立补镜与第三组/镜头组03/执行提示词.txt,tea,3331
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v26_第四组实际接续/执行提示词.txt,tea,4051
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v28_第五组实际接续/执行提示词.txt,tea,4209
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v29_第六组实际接续/执行提示词.txt,tea,4296
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v30_第七组实际接续/执行提示词.txt,tea,3421
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/02_内容项目/木兰姐讲茶_六大茶类/04_制作/LibTV/方案一_v32_第八组实际接续/执行提示词.txt,tea,3159
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/05_产品项目/岁三窖/02_图片素材/年迹款_多视角与朋友圈_20261018/侧面比例返修_v02_提示词.txt,tea,1425
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/05_产品项目/岁三窖/02_图片素材/年迹款_多视角与朋友圈_20261018/摄影修复_v02_提示词.txt,tea,855
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/02_商业内容/中茶木兰姐/05_产品项目/岁三窖/02_图片素材/统一产品图_2026-10-21/产品图01_白底_候选_v01_提示词.txt,tea,1581
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/策划候选/第001集_BGM分类生成提示词包_v01.md,drama,4493
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/策划候选/短剧改编/镜头组十一_人情与责任_AI视频提示词丰富版_候选V1.md,drama,3493
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S09_prompt.txt,drama,1364
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S15_prompt.txt,drama,1837
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S04_prompt.txt,drama,1392
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S01_prompt.txt,drama,2861
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S10_prompt.txt,drama,1632
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S17_prompt.txt,drama,2220
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S06_prompt.txt,drama,1590
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S03_prompt.txt,drama,1594
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S12_prompt.txt,drama,1801
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S11_prompt.txt,drama,1660
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S08_prompt.txt,drama,1881
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S14_prompt.txt,drama,1723
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S05_prompt.txt,drama,1552
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S02_prompt.txt,drama,2103
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S13_prompt.txt,drama,1594
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S16_prompt.txt,drama,1668
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_逐镜二次引用装配/S07_prompt.txt,drama,2085
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S09_prompt.txt,drama,1417
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S15_prompt.txt,drama,1926
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S04_prompt.txt,drama,1355
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S01_prompt.txt,drama,2591
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S10_prompt.txt,drama,1584
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S17_prompt.txt,drama,2200
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S06_prompt.txt,drama,1580
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S03_prompt.txt,drama,1601
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S12_prompt.txt,drama,1889
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S11_prompt.txt,drama,1621
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S08_prompt.txt,drama,1814
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S14_prompt.txt,drama,1637
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S05_prompt.txt,drama,1623
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S02_prompt.txt,drama,1980
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S13_prompt.txt,drama,1665
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S16_prompt.txt,drama,1676
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/交付/第001集_LibTV_V9_全部镜头组装配/S07_prompt.txt,drama,2018
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/资产/场景/SC-010_陈家村_全村地图_纯文生图提示词_候选_v01.md,drama,2703
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/资产/场景/SC-001_陈家三房农舍_布局提示词_两睡屋独立灶房_候选_v07.md,drama,625
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/资产/场景/SC-010-EXT-002_陈家村村西公共水井环境_纯文生图提示词_候选_v01.md,drama,2740
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/资产/场景/SC-010_陈家村_全村地图_纯文生图提示词_候选_v02.md,drama,3806
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/资产/场景/SC-001_陈家三房农舍_高机位院落布局提示词_候选_v09.md,drama,1214
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/财源广进/资产/场景/SC-010_陈家村_全村地图_纯文生图提示词_候选_v03.md,drama,2516
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v7/prompts/S06.txt,drama,1898
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v7/prompts/S07.txt,drama,1921
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v7/prompts/S05.txt,drama,2659
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v7/prompts/S04.txt,drama,1055
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v7/prompts/S00.txt,drama,848
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v7/prompts/S01.txt,drama,2322
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v7/prompts/S03.txt,drama,1863
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v7/prompts/S02.txt,drama,1819
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S06.txt,drama,1607
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S04.v52.txt,drama,1054
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S07.txt,drama,2123
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S05.txt,drama,2136
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S04.txt,drama,973
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S00.txt,drama,772
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S01.txt,drama,2241
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S03.txt,drama,1782
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S02.txt,drama,1819
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S07.v52.txt,drama,2204
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S03.v52.txt,drama,1863
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S00.v52.txt,drama,853
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v6/prompts/S01.v52.txt,drama,2322
+/Users/zheng/Library/Mobile Documents/iCloud~md~obsidian/Documents/Codex工作区/01_进行中内容项目/01_短剧IP/种田剧情（古代）/tmp/ep002-v8/prompts/S06.txt,drama,2172

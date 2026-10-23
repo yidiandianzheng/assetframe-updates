@@ -1,0 +1,28 @@
+name = "assetframe-online"
+main = "src/worker.mjs"
+compatibility_date = "2026-07-01"
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "assetframe-feedback"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+[[r2_buckets]]
+binding = "UPDATES_R2"
+bucket_name = "assetframe-updates"
+
+[[r2_buckets]]
+binding = "FEEDBACK_R2"
+bucket_name = "assetframe-feedback"
+
+[vars]
+FEISHU_APP_TOKEN = "REPLACE_WITH_BITABLE_APP_TOKEN"
+FEISHU_TABLE_ID = "REPLACE_WITH_TABLE_ID"
+
+# 用 `wrangler secret put` 保存以下变量，禁止写入本文件：
+# FEISHU_APP_ID
+# FEISHU_APP_SECRET
+# RATE_LIMIT_HMAC_SECRET
