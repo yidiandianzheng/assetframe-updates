@@ -59,6 +59,17 @@ next-env.d.ts
 /.workbuddy/
 # Local verification / user-specific tool state
 /.orchestrator/
+/.workbuddy-ai/
+# Python caches (离线分类脚本等)
+__pycache__/
+*.pyc
+# 图库分类：脚本/规则/映射表仍可提交，输出与预览为生成物
+/图库分类/输出/
+/图库分类/预览.html
+# 根目录物料：用户数据、临时预览图与战略资料，不进协作文库
+/assetframe-library.json
+/ecom_preview.png
+/*.pdf
 # Binary deliverables and QA data are retained on disk, not in new Git history
 *.app/
 *.zip
