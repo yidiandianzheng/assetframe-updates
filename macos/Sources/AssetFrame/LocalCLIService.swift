@@ -19,6 +19,7 @@ final class LocalCLIService: ObservableObject {
         "edit.undo": [], "edit.redo": [], "import.pause": [], "import.resume": [],
         "materials.list": ["query", "kind", "limit", "offset", "includeDeleted"],
         "materials.show": ["id"], "browse.status": [], "browse.search": ["query"],
+        "classification.backfill": [],
         "browse.focus": ["id"], "browse.preview": ["id"], "browse.exit": [],
         "playback.status": [], "playback.play": [], "playback.pause": [], "playback.seek": ["seconds"]
     ]
@@ -102,6 +103,10 @@ final class LocalCLIService: ObservableObject {
         if command == "playback.status" { return playbackState() }
         if command == "playback.pause" { MaterialPlaybackController.shared.pause(); return playbackState() }
         let store = try readyStore(session)
+        if command == "classification.backfill" {
+            let updated = await store.backfillGalleryClassification()
+            return .object(["updated": .number(Double(updated)), "canUndo": .bool(store.canUndoEdit)])
+        }
         if command == "cache.status" {
             guard let id = session.descriptor?.id else { throw CLIError(code: "library_not_ready", message: "资源库尚未就绪") }
             let root = try SSDPreviewCache.libraryRoot(id)

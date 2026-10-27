@@ -27,7 +27,13 @@ struct LibraryDisplayOptions: Codable, Equatable, Sendable {
     /// Eagle-style gallery policy: cards always use a lightweight thumbnail.
     /// Screen-sized previews are reserved for the focused preview experience.
     var galleryPreviewMaximumDimension: Double { min(512, previewMaximumDimension) }
-    var captionHeight: Double { (showName ? 18 : 0) + (showSummary ? 18 : 0) }
+    /// 画册卡片在名称/摘要两行之外，再固定留出分类徽标行的高度
+    /// （徽标行 13pt + 卡片内间距 8pt），否则徽标会挤占缩略图或压到名称上。
+    /// 仅参与单元格高度计算，不写入持久化数据。
+    static let classificationBadgeLineHeight = 21.0
+    var captionHeight: Double {
+        (showName ? 18 : 0) + (showSummary ? 18 : 0) + Self.classificationBadgeLineHeight
+    }
     /// Values which alter the contents of a currently visible gallery card.
     /// NativeMaterialGallery reuses visible AppKit items, so these must change
     /// its action context even when the material IDs themselves do not.

@@ -180,6 +180,9 @@ struct UnifiedMaterialBrowser: View {
     @State private var showIntelligence = false
     @State private var showTagging = false
     @State private var filters = false
+    /// 分类管理面板：入口在左侧栏「当前分类」，面板本身仍在筛选栏下方展开。
+    /// 跨启动保留展开状态，避免每次打开都要重新点。
+    @AppStorage("assetClassificationPanelExpanded") private var classificationPanelExpanded = false
     @State private var batchTag = ""
     @State private var presetName = ""
     private var feedback: Bool { session.browse.regionMarkers ?? false }
@@ -282,6 +285,7 @@ struct UnifiedMaterialBrowser: View {
         loadingContent
         .onReceive(NotificationCenter.default.publisher(for: .toggleAssetSidebar)) { _ in displayBinding.showSidebar.wrappedValue.toggle() }
         .onReceive(NotificationCenter.default.publisher(for: .undoMaterialEdit)) { _ in editGuard.request { Task { _ = await store.undoEdit() } } }
+        .onReceive(NotificationCenter.default.publisher(for: .backfillGalleryClassification)) { _ in editGuard.request { Task { _ = await store.backfillGalleryClassification() } } }
         .onReceive(NotificationCenter.default.publisher(for: .redoMaterialEdit)) { _ in editGuard.request { Task { _ = await store.undoEdit(redo: true) } } }
         .onReceive(NotificationCenter.default.publisher(for: .toggleAssetInspector)) { _ in displayBinding.showInspector.wrappedValue.toggle() }
         .onReceive(NotificationCenter.default.publisher(for: .previewSelectedAsset)) { _ in if focused != nil { preview.toggle() } }
@@ -492,6 +496,8 @@ struct UnifiedMaterialBrowser: View {
     private var sidebar: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 6) {
+                classificationEntry
+                Divider()
                 scopeButton("全部素材", "all", "tray.full")
                 scopeButton("未分类", "unclassified", "folder.badge.questionmark")
                 scopeButton("未标签", "untagged", "tag")
@@ -522,6 +528,34 @@ struct UnifiedMaterialBrowser: View {
         }
     }
 
+    /// 左侧栏「当前分类」入口：点击展开/收起分类管理面板（品牌 / 产品线 / 茶类 / 用途…）。
+    /// 只做入口与状态展示，筛选逻辑仍由 MaterialFilterToolbar 负责，避免两套口径。
+    private var classificationEntry: some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.15)) { classificationPanelExpanded.toggle() }
+        } label: {
+            HStack(spacing: 6) {
+                Label("当前分类", systemImage: "square.grid.2x2")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                if let count = session.browse.filter.classificationFilters?
+                    .values.reduce(0, { $0 + $1.count }), count > 0 {
+                    Text("\(count)")
+                        .font(.caption2.monospacedDigit())
+                        .padding(.horizontal, 6).padding(.vertical, 1)
+                        .background(Color.accentColor.opacity(0.18), in: Capsule())
+                        .foregroundStyle(Color.accentColor)
+                }
+                Image(systemName: classificationPanelExpanded ? "chevron.up" : "chevron.down")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(6)
+            .background(classificationPanelExpanded ? Color.accentColor.opacity(0.12) : .clear,
+                        in: RoundedRectangle(cornerRadius: 5))
+        }
+        .buttonStyle(.plain)
+        .help(classificationPanelExpanded ? "收起分类管理面板" : "展开品牌 / 产品线 / 茶类 / 用途等分类筛选")
+    }
     private func scopeButton(_ name: String, _ scope: String, _ icon: String) -> some View {
         Button { changeBrowseScope(scope) } label: {
             Label(name, systemImage: icon).frame(maxWidth: .infinity, alignment: .leading).padding(6)
@@ -543,8 +577,9 @@ struct UnifiedMaterialBrowser: View {
     }
     private var center: some View {
         VStack(spacing: 0) {
-            MaterialFilterToolbar(filter: guarded($session.browse.filter), materials: store.materials, revision: store.revision, formatCounts: formatCounts,
-                                  folders: store.organization.folders, showsMore: filters, onMore: { filters.toggle() }, tagging: store.tagging)
+            MaterialFilterToolbar(filter: guarded($session.browse.filter), materials: store.materials, revision: store.revision, resultCount: records.count, formatCounts: formatCounts,
+                                  folders: store.organization.folders, showsMore: filters, onMore: { filters.toggle() }, tagging: store.tagging,
+                                  classificationPanelExpanded: $classificationPanelExpanded)
             if filters { filterBar }
             Divider()
             if checkingSources {
@@ -969,6 +1004,72 @@ struct UnifiedMaterialBrowser: View {
                         "note": .string("操作已提交，界面与媒体加载可能尚未完成；请查询status确认")])
     }
 
+    /// 卡片徽标：品牌 / 茶类 / 产品线 / 机位 / 验收，按此优先级取实际有值的维度。
+    /// 只取有值的项，缺失的维度不占位；完整内容放在悬停提示里，不静默省略。
+    private func classificationBadges(_ m: MaterialRecord) -> [(label: String, value: String)] {
+        guard let classification = m.classification else { return [] }
+        let dimensions = [("brand", "品牌"), ("tea_type", "茶类"), ("product_line", "产品线"), ("shot", "机位"), ("acceptance", "验收")]
+        return dimensions.compactMap { dimension, name in
+            classification.terms(for: dimension).first.map { (label: name, value: $0) }
+        }
+    }
+
+    private func badgeTint(_ label: String) -> Color {
+        switch label {
+        case "品牌": return .accentColor
+        case "茶类": return .orange
+        case "产品线": return .blue
+        case "机位": return .purple
+        case "验收": return .green
+        default: return .secondary
+        }
+    }
+
+    /// 分类徽标行：图片下方独立单行，最多显示实际放得下的两枚，其余收成“+N”。
+    /// 完整内容始终在悬停提示里；极窄卡片退化为一个紧凑图标，避免中文被挤成竖排。
+    @ViewBuilder private func classificationBadgeLine(_ badges: [(label: String, value: String)]) -> some View {
+        if badges.isEmpty {
+            Color.clear.frame(height: 13)
+        } else {
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 3) {
+                    badgeTag(badges[0])
+                    if badges.count > 1 { badgeTag(badges[1]) }
+                    if badges.count > 2 { badgeOverflowTag(badges.count - 2) }
+                    Spacer(minLength: 0)
+                }
+                HStack(spacing: 3) {
+                    badgeTag(badges[0])
+                    if badges.count > 1 { badgeOverflowTag(badges.count - 1) }
+                    Spacer(minLength: 0)
+                }
+                Label("分类", systemImage: "square.grid.2x2")
+                    .labelStyle(.iconOnly)
+                    .font(.system(size: 9))
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(height: 13)
+            .help(badges.map { "\($0.label)：\($0.value)" }.joined(separator: " · "))
+        }
+    }
+
+    private func badgeTag(_ badge: (label: String, value: String)) -> some View {
+        Text(badge.value)
+            .font(.system(size: 9, weight: .medium))
+            .lineLimit(1)
+            .truncationMode(.tail)
+            .padding(.horizontal, 4).padding(.vertical, 1)
+            .background(badgeTint(badge.label).opacity(0.16), in: Capsule())
+            .foregroundStyle(badgeTint(badge.label))
+    }
+
+    private func badgeOverflowTag(_ count: Int) -> some View {
+        Text("+\(count)")
+            .font(.system(size: 9, weight: .medium))
+            .foregroundStyle(.secondary)
+    }
+
     private func card(_ m: MaterialRecord) -> some View {
         VStack(spacing: 4) {
             MaterialThumbnailView(
@@ -983,6 +1084,8 @@ struct UnifiedMaterialBrowser: View {
                         if display.showNoteCount, !m.note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { Label("1", systemImage: "text.bubble").help("1 条素材备注") }
                     }.font(.caption2).padding(3).background(.thinMaterial, in: RoundedRectangle(cornerRadius: 4))
                 }
+            // 分类徽标放到图片下方的独立单行，图片本体不再被遮挡。
+            classificationBadgeLine(classificationBadges(m))
             if display.showName { Text(displayName(m)).lineLimit(1).font(.caption) }
             if display.showSummary { Text(summaryText(m)).lineLimit(1).font(.caption).foregroundStyle(.secondary) }
         }.padding(4).background(session.browse.selected.contains(m.id) ? Color.accentColor.opacity(0.22) : .clear)

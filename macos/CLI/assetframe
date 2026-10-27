@@ -38,6 +38,7 @@ def parser():
         sub.add_argument('id', help='素材ID；focus/preview要求素材在当前界面筛选结果中')
     sub = subs.add_parser('search', parents=[common], help='修改桌面端当前范围内的搜索文字')
     sub.add_argument('query', help='空字符串清空搜索')
+    subs.add_parser('backfill', parents=[common], help='按命名给尚未分类的图片补分类；已手工分类的不动')
     subs.add_parser('exit-preview', parents=[common])
     playback = subs.add_parser('playback')
     actions = playback.add_subparsers(dest='playback_action', required=True)
@@ -52,7 +53,7 @@ def parser():
 
 
 def request_for(args):
-    names = {'list': 'materials.list', 'show': 'materials.show', 'focus': 'browse.focus', 'preview': 'browse.preview', 'search': 'browse.search', 'exit-preview': 'browse.exit', 'open-library': 'libraries.open', 'undo': 'edit.undo', 'redo': 'edit.redo', 'pause-import': 'import.pause', 'resume-import': 'import.resume', 'cache-status': 'cache.status', 'release-preview-memory': 'cache.release-memory'}
+    names = {'list': 'materials.list', 'show': 'materials.show', 'focus': 'browse.focus', 'preview': 'browse.preview', 'search': 'browse.search', 'exit-preview': 'browse.exit', 'open-library': 'libraries.open', 'undo': 'edit.undo', 'redo': 'edit.redo', 'pause-import': 'import.pause', 'resume-import': 'import.resume', 'cache-status': 'cache.status', 'release-preview-memory': 'cache.release-memory', 'backfill': 'classification.backfill'}
     command = names.get(args.action, args.action)
     arguments = {}
     if args.action == 'list':

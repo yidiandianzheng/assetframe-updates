@@ -254,6 +254,49 @@ final class GlobalMaterialStore: ObservableObject {
             body(&value); snapshot.organization = value
         }.value
     }
+
+    /// 按当前命名规则补全图片分类：补「缺失的维度」，并允许用规则结果替换「设计素材」这个占位默认值。
+    ///
+    /// 导入时已经自动分类，这个入口用于两种历史情况：改动前入库、还没有分类的素材；
+    /// 以及词表/规则升级后，给已有分类补上缺的那几维、或把占位值换成真正的命中值。
+    /// 手工选过的值不会被覆盖——只有空维度或恰好等于占位默认值的维度才会被改写。走 `mutate`，进撤销栈、可回退。
+    @discardableResult
+    func backfillGalleryClassification() async -> Int {
+        var updates: [String: MaterialClassification] = [:]
+        for record in materials {
+            guard record.kind == .image, let path = record.sourcePath else { continue }
+            let auto = GalleryAutoClassifier.classify(
+                path: path,
+                filename: record.originalFilename,
+                pixelWidth: record.mediaMetadata?.pixelWidth ?? 0,
+                pixelHeight: record.mediaMetadata?.pixelHeight ?? 0
+            )
+            guard !auto.isEmpty else { continue }
+            var merged = record.classification ?? MaterialClassification()
+            var changed = false
+            for (dimension, terms) in auto.values {
+                let existing = merged.terms(for: dimension)
+                let isPlaceholder = existing == GalleryAutoClassifier.placeholderTerms
+                    && terms != GalleryAutoClassifier.placeholderTerms
+                guard existing.isEmpty || isPlaceholder else { continue }
+                merged.set(terms, for: dimension)
+                changed = true
+            }
+            if changed { updates[record.id] = merged }
+        }
+        guard !updates.isEmpty else {
+            toast = "没有需要补分类的图片"
+            return 0
+        }
+        await mutate("已按命名补全 \(updates.count) 张图片的分类") { snapshot in
+            for index in snapshot.materials.indices {
+                if let merged = updates[snapshot.materials[index].id] {
+                    snapshot.materials[index].classification = merged
+                }
+            }
+        }.value
+        return updates.count
+    }
     func committedLibrary() async throws -> MaterialSnapshot {
         let result = await saveNow(); try result.get(); return snapshot
     }
@@ -1251,6 +1294,12 @@ final class GlobalMaterialStore: ObservableObject {
             metadata = await mediaMetadata(for: url, type: type, kind: kind)
             if kind == .image { SSDPreviewCache.warmThumbnail(path: url.path, size: Int64(before.fileSize ?? 0), modified: before.contentModificationDate) }
         }
+        // 图库分类：导入即按命名规则归入品牌/茶类/产品线/机位/验收，人工可在检查器里改。
+        // 只对图片生效，避免给视频、音频、文档写入与画面无关的品牌标签。
+        let autoClassification = kind == .image
+            ? GalleryAutoClassifier.classification(path: url.path, filename: url.lastPathComponent,
+                                                   pixelWidth: metadata?.pixelWidth ?? 0, pixelHeight: metadata?.pixelHeight ?? 0)
+            : nil
         return MaterialRecord(
             id: UUID().uuidString,
             kind: kind,
@@ -1267,7 +1316,8 @@ final class GlobalMaterialStore: ObservableObject {
             createdAt: .now,
             tags: [],
             rating: 0,
-            note: ""
+            note: "",
+            classification: autoClassification
         )
     }
 
