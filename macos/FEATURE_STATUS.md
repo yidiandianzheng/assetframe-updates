@@ -1,3 +1,25 @@
+## V261023.6（分类区域布局修复，2026-10-25 已安装并启动核验）
+
+按用户截图反馈修复分类区域：横向溢出、左侧裁切、控件遮挡与缩略图徽标遮图。品牌卡片改紧凑胶囊（`全部` 与其它维度同款，0 张品牌照常列出）；产品线独立成行，已选品牌时列出全部产品线（不再 `prefix(6)`），无品牌限定时用折叠菜单承载全部，旧选择不在当前集合仍显示；茶类 / 用途 / 验收状态 / 整理状态分行对齐；图类型 / 比例 / 机位收进「更多筛选」按内容宽度换行；新增「收起」与已选条件条（逐个移除 + 结果数 + 清除），删条件不再强制展开。画册分类徽标移到图片下方独立单行（`ViewThatFits` 三档 +「+N」），`LibrarySession.captionHeight` 加 21pt 留位。版本与更新日志按用户要求补齐：`CHANGELOG.md`、`UpdateLog.entries`、`AppVersion.documentedOrdinals` 三处登记 V261023.6 / 累计第 109 版。
+
+验证：SDK 26.5 Release 构建通过，`codesign --verify --deep --strict` 通过；900×900 与 2560×1316 实机截图对比，各行左侧标签与「全部」完整可见、无横向溢出，徽标不遮图。安装：替换 `/Applications/向量·素仓.app`，旧版 V261023.5 备份在 `Application Support/AssetFrame/InstallBackups/V261023.6-install-d42f0b1`；启动回读 `appVersion=V261023.6`、`buildLabel=V261023.6 · 累计第109版`、`product=assets`、`recordCount=7762`、`error=null`。**未做**：点击类交互（多选 / 清除 / 预览 / 更新日志窗口）、1100 与 1440 两个宽度、剧坊打包；未改生产库、未提交、未发布。见[修复说明](../交接记录/分类区域修复_2026-10-24/修复说明.md)、[安装记录](ProductValidation/20261025_分类布局修复安装/README.md)。
+
+## V261023.5（分类管理面板 + 双产品安装，2026-10-24 已安装并启动核验）
+
+按用户「都安装最新版本，旧版可以删除」的要求，把 10-24 的分类面板与自动分类候选升为 V261023.5 并同版安装两款产品：向量·素仓与向量·剧坊由同一份 SDK 26.5 Release 构建产出（`Build complete!`，166 秒），ad-hoc 签名与 ZIP 解包验签通过；替换 `/Applications` 内旧品牌应用（向量AI资产管家 V261023.2、向量漫剧工作台 V261018.1），旧应用备份到 `Application Support/AssetFrame/InstallBackups/V261023.5-install-d42f0b1` 后移除。启动回读：素仓 `appVersion=V261023.5`、`buildLabel=V261023.5 · 累计第108版`、`product=assets`、`libraryName=香万家木兰`、`recordCount=7762`、`visibleCount=2565`、`error=null`；剧坊 `product=story`、`appVersion=V261023.5`、`error=null`，数据根仍为 `ManjuWorkbench`。两个生产库（7,762 / 10,718 条）安装前后一致、`quick_check=ok`。安装细节：`~/.local/bin/assetframe` 原是指向旧 App 的符号链接，已改指新 App；安装包与便利 App 在 `软件交付/正式版-V261023.5`。**未做**：分类面板真实点击与品牌卡片交互、剧坊实际创作流程均未人工验收；未提交、未推送、未发布 GitHub。见[安装记录](ProductValidation/20261024_双产品安装/README.md)。
+
+## 2026-10-24 分类管理面板与用途规则（候选，已随 V261023.5 安装）
+
+按用户提供的同事界面截图，把「品牌卡片 + 产品线胶囊 + 茶类 / 用途 行」这套电商分类管理做进筛选栏：`MaterialFilterToolbar` 新增「分类」展开按钮，点开是分类面板——品牌卡片（品牌名 + 茶类汇总「乌龙茶·红茶 N 张」+ 产品线胶囊，点胶囊直接切产品线筛选）、茶类行、用途行，底部「更多维度」菜单（图类型 / 比例 / 产品线 / 状态 / 机位）；面板每个选项都带当前库实时数量，品牌即使 0 张也按词表列出。原「分类」二级菜单保留并改名「全部分类」。同时把 `usagePriority` 扩充为 定稿/补图/已确认/候选/参考 → 详情页/短视频封面/商品主图/社媒海报，`backfillGalleryClassification` 允许用规则结果替换占位默认值「设计素材」（手工值仍不覆盖）。
+
+验证：SDK 26.5 Release 构建通过；替换 `/tmp/assetframe-preview/向量·素仓.app` 二进制并补 `@executable_path/../Frameworks` rpath、ad-hoc 重签后隔离启动，CLI `backfill` 返回 `updated: 241`。生产库（香万家木兰）分类现状：品牌 岁三窖 893 / 香万家 293 / 茶盈航 140；茶类 乌龙茶 488 / 红茶 94 / 绿茶 15 / 白茶 4 / 黑茶 3 / 黄茶 2；用途 设计素材 234 / 候选 178 / 参考 60 / 已确认 3；图类型 PPT 页面 764 / 包装设计稿 333 / 视频抽帧 141 / 实拍照片 138 / 对比图 89 / 透明素材 48；比例 其他 815 / 矢量 500 / 16:9 354 / 9:16 332。**未做**：正式 App 未替换、面板真实点击与布局未人工验收、产品图 342 张（乌龙茶同系列泡袋 + 铁观音茶罐）品牌为空属数据缺口、用途仍以设计素材为主（该库绝大多数是过程稿）、营销历史引用未核验。
+
+## 2026-10-24 图库分类写入 App（候选，已随 V261023.5 安装）
+
+分类从离线脚本接进桌面端逻辑：词表升到 0.2（15 维 232 词），新增 `brand` 品牌、`tea_type` 茶类、`product_line` 产品线、`acceptance` 验收状态四个维度，并补 4 个机位词（高机位斜侧面／斜侧面／顶部俯视／底部）。新增 `GalleryAutoClassifier` 规则引擎（文件名 > 产品线 > 目录名，排除「中茶木兰姐」等项目容器名），导入图片时在 `GlobalMaterialStore.record` 写入 `classification`，与手工分类共用同一套词表、筛选、CSV、CLI 与撤销；另加「资产 → 按命名补全图片分类」给历史图片补分类，只动未分类记录、可撤销。
+
+验证：SDK 26.5 Release 构建通过（`Build complete!`，`EXIT=0`）。规则一致性用同一份 2565 条真实路径分别跑 Python 引擎与 Swift 引擎，产品图 473 条样本上品牌/茶类/产品线/机位/验收五项 473/473 一致。分类覆盖（香万家木兰库）：产品图 475 张，茶类识别 99.2%，品牌识别 47.8%（较改前 21.7% 提升，来自产品线回填品牌）。**未做**：未安装、未替换正式 App、未对生产库执行补全、未做界面徽标与筛选布局（由图库界面智能体负责）、营销历史引用未核验。详见[图库分类说明](../图库分类/README.md)。
+
 ## 2026-10-23 品牌更新与最新版发布（未安装）
 
 两款桌面产品更名换标：资产管家 → **向量·素仓**、漫剧工作台 → **向量·剧坊**；只改显示名称、图标与交付包名，bundle ID、`AFProductKind`、数据根和 CLI 端点不变。向量·素仓 V261023.4 完成 SDK 26.5 Release 构建、打包 ad-hoc 签名、ZIP 解包验签、隔离启动与 CLI 回读（`V261023.4` / `assets` / `error=null`），已发布 GitHub 最新版 <https://github.com/yidiandianzheng/assetframe-updates/releases/tag/V261023.4>（ZIP + Sparkle appcast，公开侧下载与签名回验通过）；本机正式安装版未替换，向量·剧坊未打包。全量 `run-self-tests.sh` 存在既有 `LibrarySessionSelfTest` 编译失败（测试源清单过期，基线同样失败，与本轮无关），本轮验证范围为 CLI-only 自测、Release 构建、隔离启动、CLI 回读与下载回验。详见[验证记录](ProductValidation/20261023_品牌更新beta发布/README.md)。

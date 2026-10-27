@@ -1,3 +1,17 @@
+## V261023.6（分类区域布局修复，已安装，累计第109版）
+
+按用户截图反馈，先修分类区域的横向溢出、左侧裁切、控件遮挡与缩略图徽标遮图，再整理层级。品牌从 176pt 固定宽卡片改为紧凑胶囊（名称 + 数量 + 选中态，「全部」与其它维度同款，0 张品牌照常列出）；产品线拆成独立一行，已选品牌时列出该品牌全部产品线（不再只显示前六项），没有品牌限定时用折叠菜单承载全部，旧选择不在当前品牌集合里仍保留显示；茶类、用途、验收状态、整理状态分行对齐；图类型 / 比例 / 机位收进「更多筛选」，按内容宽度换行，不再把五个原生下拉框拉满整行。面板新增「收起」与已选条件条（逐个移除 + 结果数 + 清除），收起后条件条仍在，也不再因为分类条件变化强制展开。画册卡片的分类徽标从缩略图左下角移到图片下方独立单行，最多两枚 +「+N」，极窄卡片退化为紧凑图标，图片本体不再被遮挡；`captionHeight` 相应加 21pt 给这一行留位。
+
+验证：SDK 26.5 Release 构建通过（`Build complete!`），候选 ad-hoc 签名与 `codesign --verify --deep --strict` 通过；900×900 窄窗口与 2560×1316 大窗口实机截图对比，分类各行左侧标签与「全部」完整可见、无横向溢出，徽标落在图片下方。本版已按用户要求安装：替换 `/Applications/向量·素仓.app`（旧版 V261023.5 备份在 `Application Support/AssetFrame/InstallBackups/V261023.6-install-d42f0b1`），启动回读 `appVersion=V261023.6`、`buildLabel=V261023.6 · 累计第109版`、`product=assets`、`libraryName=香万家木兰`、`recordCount=7762`、`error=null`。本机无辅助功能权限，点击类验收（多选 / 清除 / 预览 / 更新日志菜单）与 1100、1440 两个宽度未执行；剧坊本轮未打包。未改生产库、未提交、未发布。详见[修复说明](../交接记录/分类区域修复_2026-10-24/修复说明.md)与[安装记录](ProductValidation/20261025_分类布局修复安装/README.md)。
+
+## V261023.5（分类管理面板与双产品安装，累计第108版）
+
+画册筛选栏新增「分类」展开面板：品牌卡片（品牌名 + 茶类汇总「乌龙茶·红茶 N 张」+ 产品线胶囊，点胶囊直接切产品线筛选）、茶类行、用途行，底部「更多维度」菜单（图类型 / 比例 / 产品线 / 状态 / 机位）；每个选项带当前库实时数量，词表里的品牌即使 0 张也列出；原「分类」二级菜单保留并改名「全部分类」。图库自动分类规则（文件名 > 产品线 > 目录名）接入导入流程与「资产 → 按命名补全图片分类」，只补空维度、可用撤销回退；分类词表升到 15 维 232 词（新增品牌 / 茶类 / 产品线 / 验收状态与四个机位词）。
+
+两款产品同版打包安装：向量·素仓与向量·剧坊由同一份 SDK 26.5 Release 构建产出，ad-hoc 签名与解包验签通过；替换 `/Applications` 内旧品牌应用（向量AI资产管家 V261023.2、向量漫剧工作台 V261018.1），旧应用备份后移除。bundle ID、`AFProductKind`、数据根（AssetFrame / ManjuWorkbench）与 CLI 端点保持不变，现有素材库直接沿用。
+
+验证：SDK 26.5 Release 构建通过（`Build complete!`，166 秒），两个 App 与 ZIP 均通过 `codesign --verify --deep --strict`。安装后启动回读：素仓 `appVersion=V261023.5`、`buildLabel=V261023.5 · 累计第108版`、`product=assets`、`libraryName=香万家木兰`、`recordCount=7762`、`visibleCount=2565`、`error=null`；剧坊 `product=story`、`appVersion=V261023.5`、`error=null`，数据根仍为 `Application Support/ManjuWorkbench`。两个生产库（香万家木兰 7,762 条、新资源库 10,718 条）安装前后条数一致、`PRAGMA quick_check=ok`。旧版备份在 `Application Support/AssetFrame/InstallBackups/V261023.5-install-d42f0b1`。安装时发现 `~/.local/bin/assetframe` 是指向旧 App 内的符号链接，已改指 `/Applications/向量·素仓.app`。未验收：分类面板的真实点击与品牌卡片交互、剧坊实际创作流程。详见[安装记录](ProductValidation/20261024_双产品安装/README.md)。
+
 ## V261023.4（品牌更新：向量·素仓 / 向量·剧坊，最新版已发布，未安装）
 
 两款桌面产品更名换标：资产管理 App → **向量·素仓**（绿色仓盒图标），漫剧创作 App → **向量·剧坊**（蓝绿胶片图标）；同步替换 App 图标、窗口标题、帮助/设置文案与交付包名。仅改显示层，`com.yidiandian.assetframe` / `com.yidiandian.manjuworkbench`、`AFProductKind`、数据根（AssetFrame / ManjuWorkbench）与 CLI 端点均保持不变，现有素材库直接沿用；累计第107版。
