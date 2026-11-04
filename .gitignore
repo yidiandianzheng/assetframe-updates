@@ -55,6 +55,7 @@ next-env.d.ts
 /macos/ProductValidation/**/node_modules/
 # 协作文库范围：验证证据、迁移记录与工具状态只留本机，不进私有源码仓库
 /macos/ProductValidation/
+/交接记录/
 /迁移记录/
 /.workbuddy/
 # Local verification / user-specific tool state
