@@ -26,7 +26,11 @@ import Foundation
             let scoped = ClassificationVocabulary.terms(in: dimension.id)
             precondition(!scoped.isEmpty, "维度没有词条：\(dimension.id)")
             precondition(scoped.allSatisfy { $0.dimension == dimension.id }, "词条维度错位：\(dimension.id)")
-            precondition(scoped.allSatisfy { !$0.canonical.isEmpty && !$0.aliases.isEmpty }, "词条缺少标准词或别名：\(dimension.id)")
+            // 别名允许为空：品牌名和画幅比这类专有词只有一种写法（如「茶盈航」「16:9」），
+            // 匹配走 [canonical] + aliases，标准词本身就能命中；真正要保证的是标准词非空、别名里没有空串。
+            precondition(scoped.allSatisfy { term in
+                !term.canonical.isEmpty && term.aliases.allSatisfy { alias in !alias.isEmpty }
+            }, "词条标准词为空或别名里有空串：\(dimension.id)")
         }
         precondition(ClassificationVocabulary.recommendedCount > 0)
     }
