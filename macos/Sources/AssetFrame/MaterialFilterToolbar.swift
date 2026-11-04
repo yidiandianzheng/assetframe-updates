@@ -63,6 +63,11 @@ struct MaterialFilterToolbar: View {
     /// 品牌 → 产品线 → 数量；品牌卡片下面的产品线胶囊。
     @State private var brandLineCounts: [String: [String: Int]] = [:]
     @State private var brandOrder: [String] = []
+    /// 分类面板默认收起；展开/收起是用户选择，跨启动保留。
+    /// 不再因为“有分类条件”自动强制展开（删除单个条件也不会把面板弹开）。
+    var showClassificationPanel = false
+    var classificationOnly = false
+    var onClassificationCollapse: () -> Void = {}
     let formatCounts: [String: Int]
     let folders: [LocalFolderSource]
     @State private var showFormats = false
@@ -70,21 +75,18 @@ struct MaterialFilterToolbar: View {
     var showsMore = false
     let onMore: () -> Void
     var tagging: MaterialTaggingState = .init()
-    /// 分类面板由外部（左侧栏「当前分类」入口）控制展开/收起。
-    /// 这里不再自己持有 @AppStorage，避免出现两个开关状态互相打架。
-    @Binding var classificationPanelExpanded: Bool
     static let colors = ["红色", "橙色", "黄色", "绿色", "蓝色", "紫色", "灰色"]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            toolbarRow
+            if !classificationOnly { toolbarRow }
             // 已选条件条：收起面板后仍然可见，能逐个移除、看到结果数并清除。
-            if classificationFilterCount > 0 {
+            if classificationOnly && classificationFilterCount > 0 {
                 Divider()
                 conditionsBar
                     .padding(.horizontal, 10).padding(.vertical, 6)
             }
-            if classificationPanelExpanded {
+            if classificationOnly && showClassificationPanel {
                 Divider()
                 classificationPanel
                     .padding(.horizontal, 10).padding(.vertical, 8)
@@ -171,15 +173,6 @@ struct MaterialFilterToolbar: View {
             ForEach(tags, id: \.self) { tag in Toggle(tag, isOn: selected(tag, keyPath: \.requiredTags)) }
         }
         .foregroundStyle((filter.requiredTags ?? []).isEmpty ? Color.primary : Color.accentColor)
-        // 分类管理面板入口已移到左侧栏「当前分类」；这里只保留按维度展开的「全部分类」菜单。
-        Menu("全部分类", systemImage: "square.grid.3x3") {
-            Button("不限分类") { filter.classificationFilters = nil }
-            Text("维度之间同时满足；同维度多选任一即可")
-            ForEach(ClassificationVocabulary.dimensions) { dimension in
-                Menu(dimension.name) { facetItems(dimension.id, dimension.name) }
-            }
-        }
-        .foregroundStyle(classificationFilterCount == 0 ? Color.primary : Color.accentColor)
         Menu(title("文件夹", filter.folderPaths?.count ?? 0), systemImage: "folder") {
             Button("不限文件夹") { filter.folderPaths = nil }
             Text("包含子文件夹；多个目录满足任一即可")
@@ -291,15 +284,21 @@ struct MaterialFilterToolbar: View {
     private var classificationPanel: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
-                Label("分类筛选", systemImage: "square.grid.2x2").font(.caption).bold()
+                Menu("全部维度", systemImage: "square.grid.3x3") {
+                    Button("不限分类") { filter.classificationFilters = nil }
+                    ForEach(ClassificationVocabulary.dimensions) { dimension in
+                        Menu(dimension.name) { facetItems(dimension.id, dimension.name) }
+                    }
+                }.fixedSize()
                 Text("同维度多选任一，跨维度同时满足").font(.caption2).foregroundStyle(.tertiary).lineLimit(1)
                 Spacer(minLength: 0)
-                Button { classificationPanelExpanded = false } label: {
+                Button(action: onClassificationCollapse) {
                     Label("收起", systemImage: "chevron.up").font(.caption)
                 }
                 .buttonStyle(.borderless)
                 .help("收起分类面板；已选条件仍显示在工具栏下方")
             }
+            classificationRow("资产类型") { pillOptions("asset_type") }
             classificationRow("品牌") { brandOptions }
             classificationRow("产品线") { productLineOptions }
             classificationRow("茶类") { pillOptions("tea_type") }
@@ -539,7 +538,7 @@ struct MaterialFilterToolbar: View {
     }
 
     private var conditionChips: [ConditionChip] {
-        let order = ["brand", "product_line", "tea_type", "usage", "acceptance", "organize_status", "asset_kind", "ratio", "shot"]
+        let order = ["asset_type", "brand", "product_line", "tea_type", "usage", "acceptance", "organize_status", "asset_kind", "ratio", "shot"]
         let values = filter.classificationFilters ?? [:]
         var chips: [ConditionChip] = []
         for dimension in order {
@@ -595,8 +594,6 @@ struct MaterialFilterToolbar: View {
     private var classificationFilterCount: Int {
         (filter.classificationFilters ?? [:]).values.reduce(0) { $0 + $1.count }
     }
-    /// 左侧栏「当前分类」入口要显示已选数量；由浏览器层读取，避免复制一套计数口径。
-    var activeClassificationCount: Int { classificationFilterCount }
     private func classificationNames(_ dimension: String) -> [String] {
         let saved = materials.lazy.flatMap { $0.classification?.terms(for: dimension) ?? [] }
         // 词表里的标准选项始终可选：即使当前库还没有该值，也能先按电商分类口径筛。

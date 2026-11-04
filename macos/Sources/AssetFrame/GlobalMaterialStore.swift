@@ -255,14 +255,16 @@ final class GlobalMaterialStore: ObservableObject {
         }.value
     }
 
-    /// 按当前命名规则补全图片分类：补「缺失的维度」，并允许用规则结果替换「设计素材」这个占位默认值。
+    /// 按当前命名规则补全图片分类：补「缺失的维度」，允许用规则结果替换「设计素材」这个占位默认值，
+    /// 并纠正 `GalleryAutoClassifier.correctableTerms` 里登记的旧版自动误判。
     ///
     /// 导入时已经自动分类，这个入口用于两种历史情况：改动前入库、还没有分类的素材；
     /// 以及词表/规则升级后，给已有分类补上缺的那几维、或把占位值换成真正的命中值。
-    /// 手工选过的值不会被覆盖——只有空维度或恰好等于占位默认值的维度才会被改写。走 `mutate`，进撤销栈、可回退。
+    /// 手工选过的值不会被覆盖——只有空维度、恰好等于占位默认值的维度，或旧版规则自己写下的误判值才会被改写。走 `mutate`，进撤销栈、可回退。
     @discardableResult
     func backfillGalleryClassification() async -> Int {
         var updates: [String: MaterialClassification] = [:]
+        var corrections = 0
         for record in materials {
             guard record.kind == .image, let path = record.sourcePath else { continue }
             let auto = GalleryAutoClassifier.classify(
@@ -278,7 +280,10 @@ final class GlobalMaterialStore: ObservableObject {
                 let existing = merged.terms(for: dimension)
                 let isPlaceholder = existing == GalleryAutoClassifier.placeholderTerms
                     && terms != GalleryAutoClassifier.placeholderTerms
-                guard existing.isEmpty || isPlaceholder else { continue }
+                let correctsKnownMislabel = existing == (GalleryAutoClassifier.correctableTerms[dimension] ?? [])
+                    && !terms.isEmpty && terms != existing
+                guard existing.isEmpty || isPlaceholder || correctsKnownMislabel else { continue }
+                if correctsKnownMislabel { corrections += 1 }
                 merged.set(terms, for: dimension)
                 changed = true
             }
@@ -288,7 +293,7 @@ final class GlobalMaterialStore: ObservableObject {
             toast = "没有需要补分类的图片"
             return 0
         }
-        await mutate("已按命名补全 \(updates.count) 张图片的分类") { snapshot in
+        await mutate("已按命名补全 \(updates.count) 张图片的分类" + (corrections > 0 ? "，纠正 \(corrections) 处旧版误判" : "")) { snapshot in
             for index in snapshot.materials.indices {
                 if let merged = updates[snapshot.materials[index].id] {
                     snapshot.materials[index].classification = merged
@@ -445,7 +450,7 @@ final class GlobalMaterialStore: ObservableObject {
                 }
                 try await database.commit(after, previous: before)
                 commitRevision &+= 1
-                apply(after, changesQuery: after.materials != before.materials || after.tagging?.terms != before.tagging?.terms)
+                apply(after, changesQuery: after.materials != before.materials || after.tagging?.terms != before.tagging?.terms || after.tagging?.projectClassifications != before.tagging?.projectClassifications)
                 if let message { toast = message }
                 return .success(())
             } catch { return .failure(error) }

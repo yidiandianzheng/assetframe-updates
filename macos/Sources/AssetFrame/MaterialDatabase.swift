@@ -112,7 +112,7 @@ final class MaterialDatabase: @unchecked Sendable {
                   (history.undo + history.redo).reduce(0, { $0 + $1.estimatedBytes }) <= 20 * 1024 * 1024 else { throw error("整理历史格式或大小不合法") }
         }
         if let value = snapshot.tagging {
-            for ids in [value.terms.map(\.id), value.sources.map(\.id), value.bindings.map(\.id), value.proposals.map(\.id), value.jobs.map(\.id)] {
+            for ids in [(value.projectClassifications ?? []).map(\.id), value.terms.map(\.id), value.sources.map(\.id), value.bindings.map(\.id), value.proposals.map(\.id), value.jobs.map(\.id)] {
                 guard Set(ids).count == ids.count else { throw error("标签整理记录含重复标识") }
             }
             guard value.terms.allSatisfy({ !$0.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }),
@@ -146,9 +146,22 @@ final class MaterialDatabase: @unchecked Sendable {
     }
 
     private func taggingRows(db: OpaquePointer) throws -> MaterialTaggingState? {
-        let value = MaterialTaggingState(terms: try rows("tagging_terms", db: db), sources: try rows("tagging_sources", db: db),
+        var value = MaterialTaggingState(terms: try rows("tagging_terms", db: db), sources: try rows("tagging_sources", db: db),
             bindings: try rows("tagging_bindings", db: db), proposals: try rows("tagging_proposals", db: db), jobs: try rows("tagging_jobs", db: db))
+        if try tableExists("tagging_project_classifications", db: db) {
+            value.projectClassifications = try rows("tagging_project_classifications", db: db)
+        }
         return value.isEmpty ? nil : value
+    }
+
+    private func tableExists(_ name: String, db: OpaquePointer) throws -> Bool {
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(db, "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", -1, &statement, nil) == SQLITE_OK else { throw Self.error("无法读取配置表状态") }
+        defer { sqlite3_finalize(statement) }
+        sqlite3_bind_text(statement, 1, name, -1, unsafeBitCast(-1, to: sqlite3_destructor_type.self))
+        let code = sqlite3_step(statement)
+        guard code == SQLITE_ROW || code == SQLITE_DONE else { throw Self.error("配置表状态读取失败") }
+        return code == SQLITE_ROW
     }
 
     private func rows<T: Decodable>(_ table: String, db: OpaquePointer) throws -> [T] {
@@ -183,6 +196,12 @@ final class MaterialDatabase: @unchecked Sendable {
             try sync(nextTags.bindings, old: oldTags.bindings, table: "tagging_bindings", db: db)
             try sync(nextTags.proposals, old: oldTags.proposals, table: "tagging_proposals", db: db)
             try sync(nextTags.jobs, old: oldTags.jobs, table: "tagging_jobs", db: db)
+            // Additive storage is created only by an explicit profile save, never by opening an old library.
+            let hasProjectProfiles = try tableExists("tagging_project_classifications", db: db)
+            if !(nextTags.projectClassifications ?? []).isEmpty || !(oldTags.projectClassifications ?? []).isEmpty || hasProjectProfiles {
+                try execute("CREATE TABLE IF NOT EXISTS tagging_project_classifications(id TEXT PRIMARY KEY, payload BLOB NOT NULL)", db: db)
+                try sync(nextTags.projectClassifications ?? [], old: oldTags.projectClassifications ?? [], table: "tagging_project_classifications", db: db)
+            }
             try execute("COMMIT", db: db)
             #if ASSETFRAME_SELF_TEST
             transactionCheckpoint?("committed")

@@ -180,9 +180,8 @@ struct UnifiedMaterialBrowser: View {
     @State private var showIntelligence = false
     @State private var showTagging = false
     @State private var filters = false
-    /// 分类管理面板：入口在左侧栏「当前分类」，面板本身仍在筛选栏下方展开。
-    /// 跨启动保留展开状态，避免每次打开都要重新点。
-    @AppStorage("assetClassificationPanelExpanded") private var classificationPanelExpanded = false
+    @State private var classificationCounts: [String: [String: Int]] = [:]
+    @State private var showProjectClassificationManager = false
     @State private var batchTag = ""
     @State private var presetName = ""
     private var feedback: Bool { session.browse.regionMarkers ?? false }
@@ -232,13 +231,13 @@ struct UnifiedMaterialBrowser: View {
         var facet = session.browse.filter; facet.formats = []
         let order = session.browse.sortOrder ?? MaterialSortOrder()
         let dataRevision = store.browseQueryRevision(scope: session.browse.scope, sortField: order.field)
-        return "sources:\(sourceStatusRevision)|\(dataRevision)|\(session.browse.scope)|\(session.browse.search)|\(String(describing: facet))|\(display.includeSubfolders)"
+        return "formats:\(session.browse.filter.formats.sorted())|pcat:\(session.browse.projectClassificationID ?? "")|\(store.tagging.projectClassifications?.hashValue ?? 0)|sources:\(sourceStatusRevision)|\(dataRevision)|\(session.browse.scope)|\(session.browse.search)|\(String(describing: facet))|\(display.includeSubfolders)"
     }
     /// User navigation changes start at the first matching item. Store revisions
     /// stay out of this key so imports and background metadata do not jump the gallery.
     private var galleryNavigationIdentity: String {
         let order = session.browse.sortOrder ?? MaterialSortOrder()
-        return "\(session.browse.scope)|\(session.browse.search)|\(LibraryScrollAnchor.filterIdentity(session.browse.filter))|subfolders:\(display.includeSubfolders)|\(order.field.rawValue)|\(order.ascending)|\(order.randomSeed ?? 0)"
+        return "pcat:\(session.browse.projectClassificationID ?? "")|\(activeClassification?.selected.hashValue ?? 0)|\(session.browse.scope)|\(session.browse.search)|\(LibraryScrollAnchor.filterIdentity(session.browse.filter))|subfolders:\(display.includeSubfolders)|\(order.field.rawValue)|\(order.ascending)|\(order.randomSeed ?? 0)"
     }
     private var galleryCardContextIdentity: String {
         "\(session.descriptor?.id ?? "")|\(store.canWrite)|refresh:\(galleryRefreshIdentity)|source-status:\(sourceStatusRevision)|\(display.galleryCardPresentationIdentity)"
@@ -277,6 +276,14 @@ struct UnifiedMaterialBrowser: View {
         .onChange(of: store.isImporting) { old, active in
             if old && !active { linkedFolderReadRequest &+= 1 }
         }
+        .sheet(isPresented: $showProjectClassificationManager) {
+            ProjectClassificationManager(store: store, activeProfileID: classificationProfileID,
+                onClose: { showProjectClassificationManager = false }, registeredProjects: classificationRegisteredProjects, linkedFolders: store.organization.folders)
+        }
+        .onChange(of: store.tagging.projectClassifications?.map(\.id)) { _, ids in
+            if let id = session.browse.projectClassificationID, !(ids ?? []).contains(id) { session.browse.projectClassificationID = nil }
+        }
+        .task(id: classificationProfileID.wrappedValue) { await checkClassificationSources() }
         .task(id: queryKey) { await query() }
         .task(id: presentationKey) { await sortAndFilter() }
         .task(id: preview ? session.browse.focused : nil) { await prefetchNeighbors() }
@@ -496,8 +503,6 @@ struct UnifiedMaterialBrowser: View {
     private var sidebar: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 6) {
-                classificationEntry
-                Divider()
                 scopeButton("全部素材", "all", "tray.full")
                 scopeButton("未分类", "unclassified", "folder.badge.questionmark")
                 scopeButton("未标签", "untagged", "tag")
@@ -528,33 +533,23 @@ struct UnifiedMaterialBrowser: View {
         }
     }
 
-    /// 左侧栏「当前分类」入口：点击展开/收起分类管理面板（品牌 / 产品线 / 茶类 / 用途…）。
-    /// 只做入口与状态展示，筛选逻辑仍由 MaterialFilterToolbar 负责，避免两套口径。
-    private var classificationEntry: some View {
-        Button {
-            withAnimation(.easeInOut(duration: 0.15)) { classificationPanelExpanded.toggle() }
-        } label: {
-            HStack(spacing: 6) {
-                Label("当前分类", systemImage: "square.grid.2x2")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                if let count = session.browse.filter.classificationFilters?
-                    .values.reduce(0, { $0 + $1.count }), count > 0 {
-                    Text("\(count)")
-                        .font(.caption2.monospacedDigit())
-                        .padding(.horizontal, 6).padding(.vertical, 1)
-                        .background(Color.accentColor.opacity(0.18), in: Capsule())
-                        .foregroundStyle(Color.accentColor)
-                }
-                Image(systemName: classificationPanelExpanded ? "chevron.up" : "chevron.down")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(6)
-            .background(classificationPanelExpanded ? Color.accentColor.opacity(0.12) : .clear,
-                        in: RoundedRectangle(cornerRadius: 5))
-        }
-        .buttonStyle(.plain)
-        .help(classificationPanelExpanded ? "收起分类管理面板" : "展开品牌 / 产品线 / 茶类 / 用途等分类筛选")
+    private var classificationRegisteredProjects: [CharacterLibraryRegistry.Project] {
+        guard let root = session.root,
+              let data = try? Data(contentsOf: root.appendingPathComponent("character-library.json")),
+              let registry = try? JSONDecoder().decode(CharacterLibraryRegistry.self, from: data),
+              (try? registry.validate()) != nil else { return [] }
+        return registry.projects
+    }
+    private var activeClassification: ProjectClassificationProfile? {
+        store.tagging.projectClassifications?.first { $0.id == session.browse.projectClassificationID }
+    }
+    private var classificationExpanded: Binding<Bool> {
+        Binding(get: { session.browse.globalClassificationExpanded ?? false },
+                set: { session.browse.globalClassificationExpanded = $0 })
+    }
+    private var classificationProfileID: Binding<String?> {
+        Binding(get: { session.browse.projectClassificationID },
+                set: { value in editGuard.request { session.browse.projectClassificationID = value } })
     }
     private func scopeButton(_ name: String, _ scope: String, _ icon: String) -> some View {
         Button { changeBrowseScope(scope) } label: {
@@ -578,9 +573,19 @@ struct UnifiedMaterialBrowser: View {
     private var center: some View {
         VStack(spacing: 0) {
             MaterialFilterToolbar(filter: guarded($session.browse.filter), materials: store.materials, revision: store.revision, resultCount: records.count, formatCounts: formatCounts,
-                                  folders: store.organization.folders, showsMore: filters, onMore: { filters.toggle() }, tagging: store.tagging,
-                                  classificationPanelExpanded: $classificationPanelExpanded)
+                                  folders: store.organization.folders, showsMore: filters, onMore: { filters.toggle() }, tagging: store.tagging)
             if filters { filterBar }
+            Divider()
+            ProjectClassificationBar(store: store, profileID: classificationProfileID,
+                globalExpanded: classificationExpanded, counts: classificationCounts,
+                resultCount: records.count, onManage: { showProjectClassificationManager = true })
+            if activeClassification == nil {
+                MaterialFilterToolbar(filter: guarded($session.browse.filter), materials: store.materials,
+                    revision: store.revision, resultCount: records.count,
+                    showClassificationPanel: classificationExpanded.wrappedValue, classificationOnly: true,
+                    onClassificationCollapse: { classificationExpanded.wrappedValue = false },
+                    formatCounts: formatCounts, folders: store.organization.folders, onMore: {}, tagging: store.tagging)
+            }
             Divider()
             if checkingSources {
                 ProgressView("正在检查原文件…").controlSize(.small).padding(8)
@@ -1197,9 +1202,28 @@ struct UnifiedMaterialBrowser: View {
             }
             await withTaskCancellationHandler { await worker.value } onCancel: { worker.cancel() }
     }
+    private func checkClassificationSources() async {
+        guard let profile = activeClassification else { return }
+        let warning = await Task.detached(priority: .utility) { () -> String? in
+            for source in profile.sources {
+                guard ProjectClassificationParser.isWithin(source.path, roots: profile.roots),
+                      let current = try? ProjectClassificationParser.fingerprint(source.path), current == source.fingerprint else {
+                    return "索引已变化或暂不可读，继续使用上次采用的分类。请在管理索引中刷新并核对。"
+                }
+            }
+            return nil
+        }.value
+        guard !Task.isCancelled, activeClassification?.id == profile.id, activeClassification?.issue != warning else { return }
+        try? await store.changeTagging { state, _ in
+            guard let index = state.projectClassifications?.firstIndex(where: { $0.id == profile.id }),
+                  state.projectClassifications?[index].sources == profile.sources else { return }
+            state.projectClassifications?[index].issue = warning
+        }
+    }
     private func query() async {
         let state = session.browse, items = store.materials, links = store.links, organization = store.organization, tagging = store.tagging
         let statusSnapshot = sourceStatuses
+        let classificationProfile = activeClassification
         let token = session.switchToken, requestKey = queryKey
         let cache = textSearchCache
         let indexKey = MaterialTextSearchCache.Key(libraryGeneration: token.uuidString, queryRevision: store.queryRevision,
@@ -1249,13 +1273,20 @@ struct UnifiedMaterialBrowser: View {
                 folders: organization.folders, sorted: false, searchIndex: prepared.index, tagging: tagging, isCancelled: { Task.isCancelled }
             )
             let originals = Dictionary(uniqueKeysWithValues: candidates.map { ($0.id, $0) })
-            let items = hits.compactMap { originals[$0.id] }
-            return (items, GlobalMaterialStore.formatCounts(in: items), statuses, missingCount, prepared.diagnostics)
+            let baseItems = hits.compactMap { originals[$0.id] }
+            let allowed = classificationProfile?.matchingIDs(materials: searchable)
+            let items = allowed.map { ids in baseItems.filter { ids.contains($0.id) } } ?? baseItems
+            let countItems = state.filter.formats.isEmpty ? baseItems : baseItems.filter {
+                state.filter.formats.contains(($0.originalFilename as NSString).pathExtension.lowercased())
+            }
+            let projectCounts = classificationProfile?.evaluation(materials: countItems).counts ?? [:]
+            return (items, GlobalMaterialStore.formatCounts(in: items), statuses, missingCount, prepared.diagnostics, projectCounts)
         }
         let result = await withTaskCancellationHandler { await worker.value } onCancel: { worker.cancel() }
         guard !Task.isCancelled, token == session.switchToken, requestKey == queryKey, generation == queryGeneration else { return }
         candidateQueryKey = requestKey
         textSearchDiagnostics = result.4
+        classificationCounts = result.5
         sourceStatuses = result.2
         missingSourceCount = result.3
         formatCandidates = result.0

@@ -17,8 +17,33 @@ enum GalleryAutoClassifier {
 
     /// 项目 / 库容器名：出现在每条路径里，不参与品牌判定。
     /// 不排除的话，路径里的「中茶木兰姐」会让整库都命中「中茶」。
+    /// `04-客户与拍摄` 同属此类：它带「拍摄」二字，曾把整棵客户树下的 AI 生成图判成「实拍照片」。
     static let projectRootNames: Set<String> = [
-        "中茶木兰姐", "01_公共资产库", "02_商业内容", "Codex工作区", "Codex客户储存", "木兰姐", "香万家木兰"
+        "中茶木兰姐", "01_公共资产库", "02_商业内容", "Codex工作区", "Codex客户储存", "木兰姐", "香万家木兰", "04-客户与拍摄"
+    ]
+
+    /// 资产类型的目录约定：公共资产库按 `01_人物 / 03_场景 / 04_产品 / 05_道具 / 07_风格 / 08_色卡 / 14_其他资产`
+    /// 编号存放，AI 资产按 `人物资产 / 场景资产 / 分镜图` 存放，品牌侧是 `香万家Logo / VIS手册`。
+    /// 长词与更具体的目录在前：VIS 手册页同时带 Logo 字样，必须先判成「VI规范」。
+    private static let assetTypeDirectories: [(key: String, value: String)] = [
+        ("VI视觉规范", "VI规范"), ("视觉规范", "VI规范"), ("VIS手册", "VI规范"), ("VI系统", "VI规范"),
+        ("规范图", "VI规范"), ("规范总览", "VI规范"),
+        ("01_人物", "人物角色"), ("人物资产", "人物角色"), ("角色资产", "人物角色"),
+        ("03_场景", "场景"), ("场景资产", "场景"),
+        ("05_道具", "道具"), ("道具资产", "道具"), ("茶杯资产", "道具"), ("茶叶资产", "道具"),
+        ("02_分镜", "分镜"), ("09_分镜", "分镜"), ("分镜图", "分镜"), ("抽帧", "分镜"), ("宫格", "分镜"),
+        ("07_风格", "参考图"), ("资料与参考", "参考图"), ("证据", "参考图"),
+        ("08_色卡", "色卡"),
+        ("06_文字资产", "文字资产"), ("上屏PNG", "文字资产"),
+        ("04_产品", "产品"),
+        ("主Logo", "品牌标识"), ("Logo", "品牌标识"), ("logo", "品牌标识"),
+        ("14_其他资产", "其他资产")
+    ]
+
+    /// 文件名兜底顺序：先判品牌与文字这类强特征，再判内容物，最后才是泛化的「产品／参考图」。
+    private static let assetTypePriority = [
+        "VI规范", "品牌标识", "文字资产", "人物角色", "场景", "道具", "分镜", "色卡",
+        "服装", "封面海报", "包装", "产品", "参考图", "特效", "示意层", "其他资产"
     ]
 
     /// 机位按此顺序优先匹配（长词在前），避免「高机位斜侧面」被判成「侧面」。
@@ -27,8 +52,10 @@ enum GalleryAutoClassifier {
     ]
 
     /// 图类型按此顺序优先匹配：越具体的越靠前，避免「透明PNG」被「包装」抢走。
+    /// AI生成图 在 实拍照片 之前：`AI资产`／`ai视频` 目录与 `ChatGPT Image …` 文件名是来源事实，
+    /// 不能让同一路径里偶尔出现的「照片」二字判成实拍。
     private static let assetKindPriority = [
-        "透明素材", "字体字样", "对比图", "平面设计稿", "包装设计稿", "视频抽帧", "PPT页面", "实拍照片"
+        "透明素材", "字体字样", "对比图", "平面设计稿", "包装设计稿", "视频抽帧", "PPT页面", "AI生成图", "实拍照片"
     ]
 
     /// 用途按此顺序优先匹配；都不命中时产品图记「设计素材」。
@@ -42,6 +69,10 @@ enum GalleryAutoClassifier {
     /// 规则没命中时写下的占位值：它不是判断结果，只是「暂归此类」，
     /// 后续规则升级后允许被真正的命中值替换（见 `GlobalMaterialStore.backfillGalleryClassification`）。
     static let placeholderTerms = ["设计素材"]
+
+    /// 旧版规则的已知误判值：这些值当年是规则自动写的（不是人工判断），
+    /// 规则升级后若给出**不同且非空**的命中值就替换掉；新规则无命中时保持原值，绝不清空。
+    static let correctableTerms: [String: [String]] = ["asset_kind": ["实拍照片"]]
 
     private struct LineRelation: Sendable {
         var brand: String?
@@ -140,6 +171,15 @@ enum GalleryAutoClassifier {
             ?? priorityHit(folder, order: assetKindPriority, dimension: "asset_kind") {
             result.values["asset_kind"] = [kind]
             result.evidence["asset_kind"] = "文件名/目录"
+        }
+
+        // 资产类型：所有图片都判。目录名是既有约定，优先于文件名关键词。
+        if let type = assetTypeDirectories.first(where: { folder.contains($0.key) })?.value {
+            result.values["asset_type"] = [type]
+            result.evidence["asset_type"] = "目录名"
+        } else if let type = priorityHit(name, order: assetTypePriority, dimension: "asset_type") {
+            result.values["asset_type"] = [type]
+            result.evidence["asset_type"] = "文件名"
         }
 
         // 比例：用像素尺寸判；SVG 记矢量，拿不到尺寸就不写

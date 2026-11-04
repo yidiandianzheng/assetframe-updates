@@ -69,8 +69,10 @@ struct MaterialTaggingState: Codable, Hashable, Sendable {
     var bindings: [Binding] = []
     var proposals: [Proposal] = []
     var jobs: [Job] = []
+    /// Per-project index-derived metadata; absent in older libraries.
+    var projectClassifications: [ProjectClassificationProfile]? = nil
 
-    var isEmpty: Bool { terms.isEmpty && sources.isEmpty && bindings.isEmpty && proposals.isEmpty && jobs.isEmpty }
+    var isEmpty: Bool { terms.isEmpty && sources.isEmpty && bindings.isEmpty && proposals.isEmpty && jobs.isEmpty && (projectClassifications?.isEmpty ?? true) }
     static func encodedDigest<T: Encodable>(_ value: T) -> String {
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
         return digest((try? encoder.encode(value)) ?? Data())

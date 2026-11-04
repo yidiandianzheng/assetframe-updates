@@ -1,5 +1,5 @@
 // 由 macos/Documentation/资产分类词表/生成词表Swift.py 生成，请勿手改。
-// 词表来源：macos/Documentation/资产分类词表/词表_v0.1.json（0.3）
+// 词表来源：macos/Documentation/资产分类词表/词表_v0.1.json（0.5）
 // 更新流程：替换 JSON → 运行 生成词表Swift.py → 构建 → 隔离库验证。
 import Foundation
 
@@ -25,9 +25,9 @@ struct ClassificationTerm: Identifiable, Hashable, Sendable {
 
 /// 内置受控分类词表。备注仍为自由文本，分类值只从这里取值。
 enum ClassificationVocabulary {
-    static let version = "0.3"
+    static let version = "0.5"
     static let dimensions: [ClassificationDimension] = [
-        .init(id: "asset_type", name: "资产类型", allowsMultiple: false, summary: "图片内容属于哪类资产"),
+        .init(id: "asset_type", name: "资产类型", allowsMultiple: false, summary: "图片属于哪类资产：人物/场景/道具等 AI 资产与品牌资产"),
         .init(id: "brand", name: "品牌", allowsMultiple: false, summary: "商品所属品牌"),
         .init(id: "tea_type", name: "茶类", allowsMultiple: false, summary: "六大茶类"),
         .init(id: "product_line", name: "产品线", allowsMultiple: false, summary: "具体商品/包装系列"),
@@ -49,13 +49,17 @@ enum ClassificationVocabulary {
     static let terms: [ClassificationTerm] = [
         .init(dimension: "asset_type", canonical: "人物角色", aliases: ["人物", "角色", "人物图", "人物资产"], status: "推荐", scope: "通用", note: "人物/角色立绘、设定图", promptDocFreq: 365, fileEvidence: 0),
         .init(dimension: "asset_type", canonical: "场景", aliases: ["场景", "场景图", "场景资产"], status: "推荐", scope: "通用", note: "建筑、环境、空镜底图", promptDocFreq: 292, fileEvidence: 0),
+        .init(dimension: "asset_type", canonical: "VI规范", aliases: ["VIS", "视觉规范", "VI视觉规范", "VI系统", "规范总览", "安全留白", "标准色", "元素释义", "应用版本", "标准组合"], status: "推荐", scope: "通用", note: "VI 手册页、规范总览、组合系统", promptDocFreq: 0, fileEvidence: 284),
+        .init(dimension: "asset_type", canonical: "品牌标识", aliases: ["logo", "Logo", "LOGO", "主标志", "标志", "标识"], status: "推荐", scope: "通用", note: "主标志、图形拆分、透明 PNG 调用包", promptDocFreq: 0, fileEvidence: 206),
         .init(dimension: "asset_type", canonical: "道具", aliases: ["道具", "道具图"], status: "推荐", scope: "通用", note: "剧情或产品道具", promptDocFreq: 203, fileEvidence: 0),
         .init(dimension: "asset_type", canonical: "分镜", aliases: ["分镜", "分镜图", "故事板"], status: "推荐", scope: "通用", note: "分镜图/故事板", promptDocFreq: 187, fileEvidence: 0),
         .init(dimension: "asset_type", canonical: "参考图", aliases: ["参考图", "参考图片", "参考板", "参考图板"], status: "推荐", scope: "通用", note: "身份/风格/构图参考", promptDocFreq: 176, fileEvidence: 0),
         .init(dimension: "asset_type", canonical: "服装", aliases: ["服装", "衣装", "服饰"], status: "推荐", scope: "通用", note: "服装设计与换装", promptDocFreq: 161, fileEvidence: 0),
         .init(dimension: "asset_type", canonical: "色卡", aliases: ["色卡", "色板", "光影色卡"], status: "推荐", scope: "通用", note: "色彩/光影参考卡", promptDocFreq: 99, fileEvidence: 0),
+        .init(dimension: "asset_type", canonical: "文字资产", aliases: ["文字", "上屏", "字幕", "口播条"], status: "推荐", scope: "通用", note: "上屏字幕与口播文字 PNG", promptDocFreq: 0, fileEvidence: 86),
         .init(dimension: "asset_type", canonical: "产品", aliases: ["产品", "商品"], status: "推荐", scope: "茶商业", note: "在售商品", promptDocFreq: 74, fileEvidence: 0),
         .init(dimension: "asset_type", canonical: "封面海报", aliases: ["封面", "海报"], status: "推荐", scope: "通用", note: "封面、海报、主视觉", promptDocFreq: 19, fileEvidence: 0),
+        .init(dimension: "asset_type", canonical: "其他资产", aliases: ["其他资产"], status: "推荐", scope: "通用", note: "未归入上述类型的公共资产", promptDocFreq: 0, fileEvidence: 2),
         .init(dimension: "asset_type", canonical: "包装", aliases: ["包装", "包装设计"], status: "候选", scope: "茶商业", note: "商品包装设计", promptDocFreq: 74, fileEvidence: 0),
         .init(dimension: "asset_type", canonical: "特效", aliases: ["特效"], status: "候选", scope: "通用", note: "光效、法术、转场特效", promptDocFreq: 63, fileEvidence: 0),
         .init(dimension: "asset_type", canonical: "示意层", aliases: ["解释层", "示意层", "图解"], status: "候选", scope: "茶商业", note: "视频内解释/示意图层", promptDocFreq: 50, fileEvidence: 0),
@@ -84,6 +88,7 @@ enum ClassificationVocabulary {
         .init(dimension: "acceptance", canonical: "已确认", aliases: ["01_已确认", "已确认"], status: "推荐", scope: "茶商业", note: "路径含已确认", promptDocFreq: 0, fileEvidence: 0),
         .init(dimension: "acceptance", canonical: "待核", aliases: [], status: "推荐", scope: "茶商业", note: "路径无验收结论", promptDocFreq: 0, fileEvidence: 0),
         .init(dimension: "acceptance", canonical: "待确认", aliases: ["02_待确认", "待确认"], status: "推荐", scope: "茶商业", note: "路径含待确认", promptDocFreq: 0, fileEvidence: 0),
+        .init(dimension: "asset_kind", canonical: "AI生成图", aliases: ["AI资产", "AI生成", "ai生成", "ai视频", "即梦", "豆包", "midjourney", "Midjourney", "文生图", "图生图", "2k修复", "4k修复", "高清修复", "ChatGPT", "Codex 图像"], status: "推荐", scope: "通用", note: "AI 生成的图片（含修复放大与聊天工具出图）", promptDocFreq: 0, fileEvidence: 85),
         .init(dimension: "asset_kind", canonical: "PPT页面", aliases: ["ppt", "PPT", "幻灯片"], status: "推荐", scope: "茶商业", note: "PPT 页面", promptDocFreq: 0, fileEvidence: 0),
         .init(dimension: "asset_kind", canonical: "包装设计稿", aliases: ["包装", "包裝", "礼盒", "禮盒", "泡袋", "罐身", "视觉参考"], status: "推荐", scope: "茶商业", note: "包装/礼盒设计稿", promptDocFreq: 0, fileEvidence: 0),
         .init(dimension: "asset_kind", canonical: "图片素材", aliases: [], status: "推荐", scope: "茶商业", note: "未细分的图片", promptDocFreq: 0, fileEvidence: 0),

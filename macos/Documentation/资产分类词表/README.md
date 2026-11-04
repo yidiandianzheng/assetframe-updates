@@ -1,6 +1,7 @@
 # 资产分类词表 v0.1（草案）
 
 状态：草案，供筛选与冻结 v0.2 使用；**已生成 App 内置词表并随 V261023.1 安装（2026-10-23）**；未修改生产库、未调用联网 AI。
+本文档描述的是 v0.1 草案的形成过程。`词表_v0.1.json` 是持续演进的**真源**（同一文件内 `version` 已到 0.5／263 词，经 `生成词表Swift.py` 生成 `ClassificationVocabulary.swift`），各版本改了什么以 [`macos/CHANGELOG.md`](../../CHANGELOG.md) 与 [`macos/FEATURE_STATUS.md`](../../FEATURE_STATUS.md) 为准。
 生成日期：2026-10-22。生成方式：本机提示词语料提取 + 人工归类。
 
 ## 0. 文件清单

@@ -2,7 +2,7 @@ import Foundation
 
 /// Per-row metadata patches keep candidate decisions and vocabulary edits in the same undo transaction.
 enum MaterialTaggingUndo {
-    enum Section: String, Codable, Sendable { case terms, sources, bindings, proposals, jobs }
+    enum Section: String, Codable, Sendable { case terms, sources, bindings, proposals, jobs, projectClassifications }
     struct Change: Codable, Hashable, Sendable {
         var section: Section
         var id: String
@@ -25,7 +25,8 @@ enum MaterialTaggingUndo {
     static func changes(before: MaterialTaggingState, after: MaterialTaggingState) throws -> [Change] {
         try diff(before.terms, after.terms, section: .terms) + diff(before.sources, after.sources, section: .sources) +
         diff(before.bindings, after.bindings, section: .bindings) + diff(before.proposals, after.proposals, section: .proposals) +
-        diff(before.jobs, after.jobs, section: .jobs)
+        diff(before.jobs, after.jobs, section: .jobs) +
+        diff(before.projectClassifications ?? [], after.projectClassifications ?? [], section: .projectClassifications)
     }
     private static func restore<T: Codable & Hashable & Identifiable & Sendable>(_ change: Change, in values: inout [T]) throws where T.ID == String {
         let current = try values.first { $0.id == change.id }.map(data)
@@ -42,6 +43,10 @@ enum MaterialTaggingUndo {
             case .bindings: try restore(change, in: &result.bindings)
             case .proposals: try restore(change, in: &result.proposals)
             case .jobs: try restore(change, in: &result.jobs)
+            case .projectClassifications:
+                var profiles = result.projectClassifications ?? []
+                try restore(change, in: &profiles)
+                result.projectClassifications = profiles.isEmpty ? nil : profiles
             }
         }
         return result

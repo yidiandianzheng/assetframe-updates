@@ -86,6 +86,8 @@ struct LibraryBrowseState: Codable {
     var display: LibraryDisplayOptions? = nil
     var sortOrder: MaterialSortOrder? = nil
     var regionMarkers: Bool? = false
+    var projectClassificationID: String? = nil
+    var globalClassificationExpanded: Bool? = nil
     var expandedFolderPaths: Set<String>? = nil
 }
 
