@@ -49,7 +49,17 @@ final class GlobalMaterialStore: ObservableObject {
     @Published private(set) var materials: [MaterialRecord] = []
     @Published private(set) var organization = LibraryOrganization()
     @Published private(set) var tagging = MaterialTaggingState()
+    /// 「待确认」分类建议的索引进度（已索引 x / y）与正在运行的任务。
+    @Published var suggestionIndexed = 0
+    @Published var suggestionIndexTotal = 0
+    @Published var isIndexingSuggestions = false
+    var suggestionIndexTask: Task<Void, Never>?
+    /// 进度读数的唯一状态机，上面三只 @Published 字段只是它的镜像。
+    /// 由 ClassificationSuggestionStore 扩展维护（跨文件，故不做 private）。
+    var suggestionProgress = SuggestionProgressState()
     private var sessionPaused = false
+    /// 只读暴露给同模块的分类建议扩展：建议箱在暂停会话时不写入。
+    var isSessionPaused: Bool { sessionPaused }
     var importProjectID: String?
     @Published private(set) var links: [ProjectMaterialLink] = []
     @Published private(set) var presets: [MaterialFilterPreset] = []
@@ -194,6 +204,7 @@ final class GlobalMaterialStore: ObservableObject {
             guard !Task.isCancelled, let self, !self.sessionPaused else { return }
             let timing = ImportTiming()
             defer { timing.report("material_background") }
+            var supplemented = false
             for chunkStart in stride(from: 0, to: candidates.count, by: 32) {
                 await Self.yieldToBrowsing()
                 guard !Task.isCancelled, !isImporting else { return }
@@ -212,6 +223,7 @@ final class GlobalMaterialStore: ObservableObject {
                 }
                 let updates = await withTaskCancellationHandler { await worker.value } onCancel: { worker.cancel() }
                 guard !Task.isCancelled, !isImporting else { return }
+                if !updates.isEmpty { supplemented = true }
                 await mutate { snapshot in
                     for (original, update) in updates {
                         guard let index = snapshot.materials.firstIndex(where: { $0.id == original.id }),
@@ -226,6 +238,8 @@ final class GlobalMaterialStore: ObservableObject {
                     }
                 }.value
             }
+            // 尺寸是晚到的：像素维度（比例等）只有元数据补齐后规则才判得出来，此时再增量进箱。
+            if supplemented, !Task.isCancelled, self.canWrite { await self.indexClassificationRules() }
         }
     }
     var canWrite: Bool { !isLoading && persistenceError == nil }
@@ -255,53 +269,6 @@ final class GlobalMaterialStore: ObservableObject {
         }.value
     }
 
-    /// 按当前命名规则补全图片分类：补「缺失的维度」，允许用规则结果替换「设计素材」这个占位默认值，
-    /// 并纠正 `GalleryAutoClassifier.correctableTerms` 里登记的旧版自动误判。
-    ///
-    /// 导入时已经自动分类，这个入口用于两种历史情况：改动前入库、还没有分类的素材；
-    /// 以及词表/规则升级后，给已有分类补上缺的那几维、或把占位值换成真正的命中值。
-    /// 手工选过的值不会被覆盖——只有空维度、恰好等于占位默认值的维度，或旧版规则自己写下的误判值才会被改写。走 `mutate`，进撤销栈、可回退。
-    @discardableResult
-    func backfillGalleryClassification() async -> Int {
-        var updates: [String: MaterialClassification] = [:]
-        var corrections = 0
-        for record in materials {
-            guard record.kind == .image, let path = record.sourcePath else { continue }
-            let auto = GalleryAutoClassifier.classify(
-                path: path,
-                filename: record.originalFilename,
-                pixelWidth: record.mediaMetadata?.pixelWidth ?? 0,
-                pixelHeight: record.mediaMetadata?.pixelHeight ?? 0
-            )
-            guard !auto.isEmpty else { continue }
-            var merged = record.classification ?? MaterialClassification()
-            var changed = false
-            for (dimension, terms) in auto.values {
-                let existing = merged.terms(for: dimension)
-                let isPlaceholder = existing == GalleryAutoClassifier.placeholderTerms
-                    && terms != GalleryAutoClassifier.placeholderTerms
-                let correctsKnownMislabel = existing == (GalleryAutoClassifier.correctableTerms[dimension] ?? [])
-                    && !terms.isEmpty && terms != existing
-                guard existing.isEmpty || isPlaceholder || correctsKnownMislabel else { continue }
-                if correctsKnownMislabel { corrections += 1 }
-                merged.set(terms, for: dimension)
-                changed = true
-            }
-            if changed { updates[record.id] = merged }
-        }
-        guard !updates.isEmpty else {
-            toast = "没有需要补分类的图片"
-            return 0
-        }
-        await mutate("已按命名补全 \(updates.count) 张图片的分类" + (corrections > 0 ? "，纠正 \(corrections) 处旧版误判" : "")) { snapshot in
-            for index in snapshot.materials.indices {
-                if let merged = updates[snapshot.materials[index].id] {
-                    snapshot.materials[index].classification = merged
-                }
-            }
-        }.value
-        return updates.count
-    }
     func committedLibrary() async throws -> MaterialSnapshot {
         let result = await saveNow(); try result.get(); return snapshot
     }
@@ -892,6 +859,9 @@ final class GlobalMaterialStore: ObservableObject {
                 return (Self.sourcePathSizeKey(path: path, fileSize: record.fileSize), modified)
             }, by: { $0.0 }).mapValues { $0.map { $0.1 } }
             let processingStarted = Date.now
+            // 与导入结束时的取数同源：提交态快照。mutate 在导入期间按 0.5s 节流发布 materials，
+            // 若从这里读发布态，导入前的 id 集合会偏小，结束时会把旧记录误判成新增。
+            let idsBeforeImport = Set((committedSnapshot?.materials ?? materials).map(\.id))
             while !Task.isCancelled && canWrite && !importScanCompleted {
                 await Self.yieldToBrowsing()
                 guard !Task.isCancelled else { break }
@@ -924,6 +894,16 @@ final class GlobalMaterialStore: ObservableObject {
                     knownSourceIdentities.formUnion(outcome.sourceIdentities)
                 }
                 firstBatch = false
+            }
+            // 新导入的图片不用手工再扫一遍：只对本次新增的记录跑命名规则，逐张增量进「待确认」箱。
+            if canWrite, !sessionPaused, importAdded > 0 {
+                // 两个 id 集合必须同源：importTask 的 defer 要到本任务结束才补发 apply，
+                // 此刻读发布态 materials 会过滤出空数组，增量规则索引整趟静默跳过
+                // （V261023.11 登记的 1507 张那一轮现象）。发布态只作为兜底。
+                let addedImages = SuggestionIndexScope.newlyAdded(
+                    committed: committedSnapshot?.materials ?? materials,
+                    published: materials, before: idsBeforeImport)
+                if !addedImages.isEmpty { await indexImportedImages(addedImages) }
             }
             if Task.isCancelled && importProcessed == importTotal {
                 appendImportResults([.init(path: "未扫描部分", message: "已取消", outcome: "cancelled")])
@@ -1299,12 +1279,8 @@ final class GlobalMaterialStore: ObservableObject {
             metadata = await mediaMetadata(for: url, type: type, kind: kind)
             if kind == .image { SSDPreviewCache.warmThumbnail(path: url.path, size: Int64(before.fileSize ?? 0), modified: before.contentModificationDate) }
         }
-        // 图库分类：导入即按命名规则归入品牌/茶类/产品线/机位/验收，人工可在检查器里改。
-        // 只对图片生效，避免给视频、音频、文档写入与画面无关的品牌标签。
-        let autoClassification = kind == .image
-            ? GalleryAutoClassifier.classification(path: url.path, filename: url.lastPathComponent,
-                                                   pixelWidth: metadata?.pixelWidth ?? 0, pixelHeight: metadata?.pixelHeight ?? 0)
-            : nil
+        // 图库分类：命名规则的判定结果不再直接写进正式分类，改成导入后汇入「待确认」箱。
+        // 这里保持 `classification` 为空，用户采纳前检查器、筛选与 CSV 都看不到未经确认的自动值。
         return MaterialRecord(
             id: UUID().uuidString,
             kind: kind,
@@ -1322,7 +1298,7 @@ final class GlobalMaterialStore: ObservableObject {
             tags: [],
             rating: 0,
             note: "",
-            classification: autoClassification
+            classification: nil
         )
     }
 

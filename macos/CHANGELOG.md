@@ -1,3 +1,31 @@
+## V261023.11（导入增量补逐张进度上报，累计第114版，候选未安装）
+
+任务书第 7 条要求「新导入的图片逐张增量处理，不全库重跑。导入时显示进度，例如「已索引 120 / 300」」。V261023.10 做到了前半句（`indexImportedImages` 只跑本次新增记录、只跑命名规则），但进度字段只在整库刷新时置位，导入路径一口气算完、界面看不到「已索引」。本版补齐，不改箱的其他行为：
+
+- **规则装箱改为可逐张驱动的累加器**：`ClassificationSuggestionEngine.ruleSuggestions(for:)` 里的桶循环抽成 `RuleAccumulator`（`mutating func add(_:)` + `func suggestions()`），桶键、占位「默认」排除、`allowsSuggestion` 门、依据与把握度口径全部原样搬过去；整库扫描与导入增量因此共用同一份装箱规则，同样的图两边结果一致。
+- **新增带进度的规则入口**：`ruleSuggestions(for:progress:)` 逐张 `add` 并按 24 张一档回报 `Progress(indexed:total:)`、每档 `Task.yield()` 让出主线程，且每档检查 `Task.isCancelled`（暂停导入或关掉窗口能立刻停下）。原无进度的同步版本保留，供整库 detached worker 与自测直接调用。
+- **导入路径复用箱面板已有的进度字段**：`indexImportedImages` 在跑规则前置 `isIndexingSuggestions = true`、`suggestionIndexTotal = 图片数`，逐张写 `suggestionIndexed`，跑完复位再走同一条 `commitClassificationSuggestions(unionWithExisting: true)` 提交；发布字段与整库刷新完全共用，界面不需要新增控件，用户的决定与永不覆盖门也不受影响。
+- **CLI `status` 的 `store` 节补三个只读字段** `suggestionIndexRunning`/`suggestionIndexed`/`suggestionIndexTotal`：规则跑得快，界面轮询容易错过「已索引」那一行，外部验收改用 CLI 取数才能证实进度确实逐张推进（与已有 `importPhase`/`importProcessed` 同一口径，不改命令协议）。
+- 规则计算仍在 nonisolated 上下文执行，不占导入循环与主线程，以免影响第 1 步刚测出的流畅度基线；不调 Vision、不读画面、不联网。
+
+验证：见 `macos/perf/待确认箱验收_V261023.11_20261104.md` §4.6（Release 构建、`--classification-only` 自测、隔离副本三轮导入实测与箱界面截图；生产库测前测后文件数与 `pragma quick_check` 一致）。**如实记两条**：实机测到的是「增量那一趟的范围」——`suggestionIndexTotal` 恰好等于本次导入的 307／1507 张而不是全库；**界面「已索引 x / y」那行文字与逐张中间值都没采到**（规则一趟在一个采样间隔内跑完、进度发布要 hop 回主线程，且本机 23:1x 之后不再提供辅助功能元素树），另有 1507 张那一轮增量整趟没跑的现象记录在同文件 §8 第 11 条。
+
+## V261023.10（「待确认」分类建议箱上线，自动结果不再直写正式分类，累计第113版，候选未安装）
+
+V261023.8/V261023.9 的「按命名补全」是一步把 1701（后为 79）张图的分类直接写进正式字段：能撤销，但库里看不出哪些值来自机器、哪些来自人工。本版把自动判定统一收进「待确认」箱 —— 先看建议、再决定采纳，且**复用已有的候选/采用/撤销框架**（`MaterialTaggingState.Proposal` 同级的 `Suggestion`/`Decision`、`MaterialTaggingUndo` 的按行补丁、`changeTagging` 的同一队列与乐观锁、`GlobalMaterialStore` 的撤销栈），没有另造一套候选系统。
+
+- **数据与持久化**：`MaterialTaggingState` 新增 `suggestions`/`decisions` 两节，均为可空数组（旧库缺键解码为 `nil`，不会解码失败）；SQLite 沿用 `tagging_project_classifications` 的「首次显式保存才建表」口径，新增 `tagging_suggestions`/`tagging_decisions`，只打开老库不会多出空表。分组的稳定指纹是 `groupKey = cls:引擎|维度|建议名`（不含成员列表与时间戳），用户的决定按它跨重跑对齐。
+- **三个自动写入入口全部改为只产候选**：① 导入建记录原先直接写 `classification`（且不进撤销栈）→ 现在 `classification: nil`，导入结束后自动跑一次命名规则索引入箱；② `backfillGalleryClassification()`（菜单／CLI `classification.backfill`／通知三处入口）整段删除 → 改为 `indexClassificationRules()`，CLI 返回 `updated: 0` 与 `suggestionGroups`/`pendingImages`，并带「本命令不再改写正式分类」说明；③ `supplementMetadata()` 补齐晚到的像素尺寸后不再回写分类，改为触发规则索引。用户显式操作（采纳候选标签、词条改名、检查器里手工选分类）保持不变。
+- **永不覆盖用户判断**：单一门函数 `ClassificationSuggestionEngine.allowsSuggestion` —— 只有该维度为空、等于 `placeholderTerms`（`设计素材`）、或等于 `correctableTerms` 登记的旧版误判值时才会提问；其余非空值一律视为人工结论。采纳写入时再校验一次。**产品后果需知悉**：现有生产库里 V261023.8/9 已经自动写入的 1658/79 张分类，本版起按「用户值」对待、不再进箱，因此升级后箱内对老库可能几乎为空（新导入的图与留空的维度才会出现建议）。
+- **箱内每条五项**：分类名（词表没有的加「新词·待确认」橙标）、涉及张数、最多 4 张样图（`MaterialThumbnailView`，不新写缩略图组件）、依据（目录名／文件名／识图内容／相似图，按固定口径排序）、把握程度用**文字**「高／中／低」显示而非只靠颜色。
+- **四个操作 + 整批采纳，都可撤销**：采纳、改名后采纳、忽略、拆分／合并，另有整批采纳（只算一步撤销）。每个动作都记 `Decision`；重跑时先按既有决定处理 —— 忽略的组仍在箱里标「已忽略」但不写分类，采纳／改名／合并的组按记录名直接补写并进撤销栈，拆分的组只把用户留下的那批重新提问（拆走的图片不再算回本组）。同一组做过多次决定按**最后一次**为准（先拆分、后采纳是正常路径）。回放与入箱两条规则都是 `ClassificationSuggestionEngine.replay`/`mergedBox` 纯函数，可脱离界面自测。
+- **空资产类型的相似图通道**：`asset_type` 允许提问的照片先与「已有资产类型」的参考图（每型最多 12 张）比 featurePrint，残差再用 leader 聚类（阈值沿用 0.35、簇上限 240、单轮输入上限 2000）互相聚组；命名字序为 本机 Vision 标签映射词表 → 目录众数（词表外标「新词·待确认」），全程只用 macOS 自带 Vision，**不调任何线上模型、照片不出本机**。
+- **进度与增量**：整库刷新逐张回报「已索引 120 / 300」，Vision 与比对全在 `Task.detached(priority: .utility)` 内、每 16 张检查取消，箱面板有「停止」按钮；新导入的图片走 `indexImportedImages` 只跑命名规则逐张增量入箱，不改导入内部循环以免影响吞吐与流畅度基线。增量入箱按 `unionWithExisting` **并回**箱内同组已有的待确认图片（否则一次增量会把整库扫描攒下的张数顶掉），全库扫描本身是完整集合、按替换处理；提示语报的是箱内真实待确认组数。
+- 箱条目自身的写入用 `undoable: false`（成员数组会让补丁逼近 10MB 撤销容量上限），**正式分类写入一律 `undoable: true`**；新词不注册进 `ClassificationVocabulary`，避免 `catalogKey` 变化把已有 AI 候选标成「已过期」。界面挂在「待确认」工作区的「分类建议／标签候选」分段开关下，面板不再钉死 1040×740 以便窄窗口使用。
+- **本轮自查修掉的四处小缺陷**（都在本轮新增代码里，实机前 review 发现）：① 已处理条目的文案拼成「已已忽略」；② 合并后按张数把目标组把握度从「高」降为「中／低」——并入图片只是接受同一个名字，目标组自己的文件名／目录依据仍然成立，改为保持原档位；③ 「按你之前的决定写入 N 张」每次重跑都在末尾重复追加，改为同组只保留一条；④ 入箱函数里一个只写不读的索引字典（已删）。
+
+验证（截至登记时）：新增 `ClassificationSuggestionSelfTest` 58 项断言实跑通过 —— 覆盖不覆盖门、规则分组与组键跨重跑稳定、依据与把握的文字口径、样图上限 4 张、Vision 标签映射只出词表内词、撤销补丁覆盖 suggestions/decisions 且漂移报冲突、旧库缺新键解码、SQLite 落盘往返与清箱后不回读成空数组。同时修好 `run-self-tests.sh` 的既有源清单缺陷：`ProjectClassificationProfile.swift`/`ProjectClassificationParser.swift` 从未登记，导致所有引用 `MaterialTaggingState` 的套件（含 V261023.9 记录里那条基线失败）编不过，现补入 `MODEL_SUPPORT_SOURCES`；`GalleryAutoClassifier.swift`/`ClassificationSuggestionEngine.swift` 补入 `COMMON_SOURCES`，`GlobalMaterialStore.swift` 与新增的 `ClassificationSuggestionStore.swift` 合并为 `GLOBAL_STORE_SOURCES`（17 处调用点）。`run-self-tests.sh --classification-only` 实跑通过（含 `MaterialClassificationSelfTest` 与新增套件）。Release 构建与隔离副本实机验收（三档窗口宽度截图、采纳前后对比、测前测后原库 `quick_check` 与文件数一致）见本轮验证记录。
+
 ## V261023.9（图类型补「AI生成图」并纠正上级目录误判，词表 0.5，已安装，累计第112版）
 
 资产类型上线后的只读复核发现两处既有缺陷，本版修规则并补词表，不新增维度：

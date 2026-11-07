@@ -85,8 +85,8 @@ struct AssetFrameApp: App {
                 Button("重做素材整理") { NotificationCenter.default.post(name: .redoMaterialEdit, object: nil) }
                     .keyboardShortcut("z", modifiers: [.command, .option, .shift])
                 Divider()
-                Button("按命名补全图片分类") {
-                    NotificationCenter.default.post(name: .backfillGalleryClassification, object: nil)
+                Button("按命名生成待确认分类") {
+                    NotificationCenter.default.post(name: .indexClassificationSuggestions, object: nil)
                 }
                 Divider()
                 Button("搜索当前页面") {
@@ -134,7 +134,7 @@ extension Notification.Name {
     static let manageStoryProjects = Notification.Name("manageStoryProjects")
     static let undoMaterialEdit = Notification.Name("undoMaterialEdit")
     static let redoMaterialEdit = Notification.Name("redoMaterialEdit")
-    static let backfillGalleryClassification = Notification.Name("backfillGalleryClassification")
+    static let indexClassificationSuggestions = Notification.Name("indexClassificationSuggestions")
     static let importAssetImages = Notification.Name("importAssetImages")
     static let recordOptimizationFeedback = Notification.Name("recordOptimizationFeedback")
     static let showOptimizationNotes = Notification.Name("showOptimizationNotes")

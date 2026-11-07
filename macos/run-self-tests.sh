@@ -84,6 +84,8 @@ MODEL_SUPPORT_SOURCES=(
     "$SOURCE_SNAPSHOT/MaterialTaggingUndo.swift"
     "$SOURCE_SNAPSHOT/MaterialClassification.swift"
     "$SOURCE_SNAPSHOT/ClassificationVocabulary.swift"
+    "$SOURCE_SNAPSHOT/ProjectClassificationProfile.swift"
+    "$SOURCE_SNAPSHOT/ProjectClassificationParser.swift"
     "${GENERATION_MODEL_SOURCES[@]}"
     "$SOURCE_SNAPSHOT/MaterialSearchField.swift"
     "$SOURCE_SNAPSHOT/MaterialSearchText.swift"
@@ -136,6 +138,8 @@ COMMON_SOURCES=(
     "$SOURCE_SNAPSHOT/PendingVisionClassificationProgressState.swift"
     "$SOURCE_SNAPSHOT/PendingAIClassificationProgressState.swift"
     "$SOURCE_SNAPSHOT/ProjectImageIndex.swift"
+    "$SOURCE_SNAPSHOT/GalleryAutoClassifier.swift"
+    "$SOURCE_SNAPSHOT/ClassificationSuggestionEngine.swift"
     "$SOURCE_SNAPSHOT/ScriptAssetMatchSortMode.swift"
     "$SOURCE_SNAPSHOT/ScriptAssetMatcher.swift"
     "$SOURCE_SNAPSHOT/AssetDecisionFilter.swift"
@@ -183,56 +187,63 @@ COMMON_SOURCES=(
     "$SOURCE_SNAPSHOT/AssetStore+WorkspaceActions.swift"
 )
 
+GLOBAL_STORE_SOURCES=(
+    "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift"
+    "$SOURCE_SNAPSHOT/ClassificationSuggestionStore.swift"
+)
+
 swiftc -parse-as-library "$SOURCE_SNAPSHOT/ImportDirectoryScanner.swift" "$SOURCE_SNAPSHOT/LinkedFolderUpdateDetector.swift" "$SELF_TEST_SNAPSHOT/LinkedFolderUpdateDetectorSelfTest.swift" -o "$TEST_DIR/folder-update-detector"
 "$TEST_DIR/folder-update-detector"
 
 if [[ "${1:-}" == "--maintenance-only" || -z "${1:-}" ]]; then
-    swiftc -D ASSETFRAME_SELF_TEST -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" "$SOURCE_SNAPSHOT/MaterialRelocationScan.swift" "$SOURCE_SNAPSHOT/MaterialSimilarityScan.swift" "$SOURCE_SNAPSHOT/MaterialDocumentPreview.swift" "$SELF_TEST_SNAPSHOT/MaterialMaintenanceSelfTest.swift" -o "$TEST_DIR/maintenance"
+    swiftc -D ASSETFRAME_SELF_TEST -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "${GLOBAL_STORE_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialRelocationScan.swift" "$SOURCE_SNAPSHOT/MaterialSimilarityScan.swift" "$SOURCE_SNAPSHOT/MaterialDocumentPreview.swift" "$SELF_TEST_SNAPSHOT/MaterialMaintenanceSelfTest.swift" -o "$TEST_DIR/maintenance"
     ASSETFRAME_QA_DATA_ROOT="$(mktemp -d /tmp/assetframe-qa.maintenance.XXXXXX)" "$TEST_DIR/maintenance"
     [[ "$SOURCE_FINGERPRINT_BEFORE" == "$(active_fingerprint)" ]] || { echo SOURCE_DRIFT; exit 3; }
     if [[ "${1:-}" == "--maintenance-only" ]]; then exit 0; fi
 fi
 
 if [[ "${1:-}" == "--linked-folders-only" ]]; then
-    swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" "$SELF_TEST_SNAPSHOT/LinkedFolderReadSelfTest.swift" -o "$TEST_DIR/linked-folders"
+    swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "${GLOBAL_STORE_SOURCES[@]}" "$SELF_TEST_SNAPSHOT/LinkedFolderReadSelfTest.swift" -o "$TEST_DIR/linked-folders"
     "$TEST_DIR/linked-folders"
     [[ "$SOURCE_FINGERPRINT_BEFORE" == "$(active_fingerprint)" ]] || { echo SOURCE_DRIFT; exit 3; }
     exit 0
 fi
 
 if [[ "${1:-}" == "--finish-only" ]]; then
-    swiftc -O -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" "$SOURCE_SNAPSHOT/SVGDocument.swift" "$SOURCE_SNAPSHOT/LinkedFolderEventMonitor.swift" "$SOURCE_SNAPSHOT/TiledOriginalImage.swift" "$SOURCE_SNAPSHOT/PreviewCacheInventory.swift" "$SELF_TEST_SNAPSHOT/OptimizationFinishSelfTest.swift" -o "$TEST_DIR/finish"
+    swiftc -O -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "${GLOBAL_STORE_SOURCES[@]}" "$SOURCE_SNAPSHOT/SVGDocument.swift" "$SOURCE_SNAPSHOT/LinkedFolderEventMonitor.swift" "$SOURCE_SNAPSHOT/TiledOriginalImage.swift" "$SOURCE_SNAPSHOT/PreviewCacheInventory.swift" "$SELF_TEST_SNAPSHOT/OptimizationFinishSelfTest.swift" -o "$TEST_DIR/finish"
     ASSETFRAME_QA_DATA_ROOT="$(mktemp -d /tmp/assetframe-qa.finish-selftest.XXXXXX)" "$TEST_DIR/finish"
     [[ "$SOURCE_FINGERPRINT_BEFORE" == "$(active_fingerprint)" ]] || { echo SOURCE_DRIFT; exit 3; }
     exit 0
 fi
 
 if [[ "${1:-}" == "--library-session-only" ]]; then
-    swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" "$SOURCE_SNAPSHOT/LibraryStorage.swift" "$SOURCE_SNAPSHOT/LibrarySession.swift" "$SOURCE_SNAPSHOT/PreviewDecodePolicy.swift" "$SOURCE_SNAPSHOT/PreviewImagePipeline.swift" "$SOURCE_SNAPSHOT/MaterialTrashService.swift" "$SOURCE_SNAPSHOT/MaterialPlaybackController.swift" "$SELF_TEST_SNAPSHOT/LibrarySessionSelfTest.swift" -o "$TEST_DIR/library-session"
+    swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "${GLOBAL_STORE_SOURCES[@]}" "$SOURCE_SNAPSHOT/LibraryStorage.swift" "$SOURCE_SNAPSHOT/LibrarySession.swift" "$SOURCE_SNAPSHOT/PreviewDecodePolicy.swift" "$SOURCE_SNAPSHOT/PreviewImagePipeline.swift" "$SOURCE_SNAPSHOT/MaterialTrashService.swift" "$SOURCE_SNAPSHOT/MaterialPlaybackController.swift" "$SELF_TEST_SNAPSHOT/LibrarySessionSelfTest.swift" -o "$TEST_DIR/library-session"
     ASSETFRAME_QA_DATA_ROOT="$(mktemp -d /tmp/assetframe-qa.session.XXXXXX)" "$TEST_DIR/library-session"
     [[ "$SOURCE_FINGERPRINT_BEFORE" == "$(active_fingerprint)" ]] || { echo SOURCE_DRIFT; exit 3; }
     exit 0
 fi
 
 if [[ "${1:-}" == "--search-index-only" ]]; then
-    swiftc -O -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" "$SELF_TEST_SNAPSHOT/MaterialTextSearchSelfTest.swift" -o "$TEST_DIR/material-text-search"
+    swiftc -O -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "${GLOBAL_STORE_SOURCES[@]}" "$SELF_TEST_SNAPSHOT/MaterialTextSearchSelfTest.swift" -o "$TEST_DIR/material-text-search"
     "$TEST_DIR/material-text-search"
-    swiftc -O -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" "$SELF_TEST_SNAPSHOT/MaterialFilterSelfTest.swift" -o "$TEST_DIR/material-filter"
+    swiftc -O -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "${GLOBAL_STORE_SOURCES[@]}" "$SELF_TEST_SNAPSHOT/MaterialFilterSelfTest.swift" -o "$TEST_DIR/material-filter"
     "$TEST_DIR/material-filter"
     [[ "$SOURCE_FINGERPRINT_BEFORE" == "$(active_fingerprint)" ]] || { echo SOURCE_DRIFT; exit 3; }
     exit 0
 fi
 
 if [[ "${1:-}" == "--material-filter-only" ]]; then
-    swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" "$SELF_TEST_SNAPSHOT/MaterialFilterSelfTest.swift" -o "$TEST_DIR/material-filter"
+    swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "${GLOBAL_STORE_SOURCES[@]}" "$SELF_TEST_SNAPSHOT/MaterialFilterSelfTest.swift" -o "$TEST_DIR/material-filter"
     "$TEST_DIR/material-filter"
     [[ "$SOURCE_FINGERPRINT_BEFORE" == "$(active_fingerprint)" ]] || { echo SOURCE_DRIFT; exit 3; }
     exit 0
 fi
 
 if [[ "${1:-}" == "--classification-only" ]]; then
-    swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" "$SELF_TEST_SNAPSHOT/MaterialClassificationSelfTest.swift" -o "$TEST_DIR/material-classification"
+    swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "${GLOBAL_STORE_SOURCES[@]}" "$SELF_TEST_SNAPSHOT/MaterialClassificationSelfTest.swift" -o "$TEST_DIR/material-classification"
     "$TEST_DIR/material-classification"
+    swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SELF_TEST_SNAPSHOT/ClassificationSuggestionSelfTest.swift" -o "$TEST_DIR/classification-suggestion"
+    "$TEST_DIR/classification-suggestion"
     [[ "$SOURCE_FINGERPRINT_BEFORE" == "$(active_fingerprint)" ]] || { echo SOURCE_DRIFT; exit 3; }
     exit 0
 fi
@@ -255,7 +266,7 @@ if [[ "${1:-}" == "--streaming-only" ]]; then
     swiftc -O -parse-as-library "${COMMON_SOURCES[@]}" \
         "$SOURCE_SNAPSHOT/MaterialDatabase.swift" \
         "$SOURCE_SNAPSHOT/MaterialImportController.swift" \
-        "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" \
+        "${GLOBAL_STORE_SOURCES[@]}" \
         "$SELF_TEST_SNAPSHOT/StreamingImportSelfTest.swift" -o "$TEST_DIR/streaming"
     "$TEST_DIR/streaming"
     [[ "$SOURCE_FINGERPRINT_BEFORE" == "$(active_fingerprint)" ]] || { echo SOURCE_DRIFT; exit 3; }
@@ -337,7 +348,7 @@ fi
 swiftc -parse-as-library "${COMMON_SOURCES[@]}" \
     "$SOURCE_SNAPSHOT/MaterialDatabase.swift" \
     "$SOURCE_SNAPSHOT/MaterialImportController.swift" \
-    "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" \
+    "${GLOBAL_STORE_SOURCES[@]}" \
     "$SELF_TEST_SNAPSHOT/StreamingImportSelfTest.swift" -o "$TEST_DIR/streaming"
 "$TEST_DIR/streaming"
 
@@ -697,7 +708,7 @@ swiftc -parse-as-library \
     "$SOURCE_SNAPSHOT/ImportDirectoryScanner.swift" \
     "$SOURCE_SNAPSHOT/ImportResumeRecord.swift" \
     "$SOURCE_SNAPSHOT/MaterialImportController.swift" \
-    "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" \
+    "${GLOBAL_STORE_SOURCES[@]}" \
     "$SOURCE_SNAPSHOT/OriginalImageClipboard.swift" \
     "$SELF_TEST_SNAPSHOT/GlobalMaterialStoreSelfTest.swift" \
     -o "$TEST_DIR/global-material-store"
@@ -714,7 +725,7 @@ swiftc -O -parse-as-library \
     "$SOURCE_SNAPSHOT/ImportDirectoryScanner.swift" \
     "$SOURCE_SNAPSHOT/ImportResumeRecord.swift" \
     "$SOURCE_SNAPSHOT/MaterialImportController.swift" \
-    "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" \
+    "${GLOBAL_STORE_SOURCES[@]}" \
     "$SOURCE_SNAPSHOT/OriginalImageClipboard.swift" \
     "$SOURCE_SNAPSHOT/MaterialDelivery.swift" \
     "$SOURCE_SNAPSHOT/MaterialProductionActions.swift" \
@@ -737,7 +748,7 @@ swiftc -O -parse-as-library \
     "$SOURCE_SNAPSHOT/ImportDirectoryScanner.swift" \
     "$SOURCE_SNAPSHOT/ImportResumeRecord.swift" \
     "$SOURCE_SNAPSHOT/MaterialImportController.swift" \
-    "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" \
+    "${GLOBAL_STORE_SOURCES[@]}" \
     "$SOURCE_SNAPSHOT/OriginalImageClipboard.swift" \
     "$SELF_TEST_SNAPSHOT/MaterialImportPerformanceSelfTest.swift" \
     -o "$TEST_DIR/material-import-performance"
@@ -808,16 +819,18 @@ swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDataba
 "$TEST_DIR/unified-library"
 [[ "$SOURCE_FINGERPRINT_BEFORE" == "$(active_fingerprint)" ]] || { echo SOURCE_DRIFT; exit 3; }
 
-swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" "$SOURCE_SNAPSHOT/LibraryStorage.swift" "$SOURCE_SNAPSHOT/LibrarySession.swift" "$SOURCE_SNAPSHOT/PreviewDecodePolicy.swift" "$SOURCE_SNAPSHOT/PreviewImagePipeline.swift" "$SOURCE_SNAPSHOT/MaterialTrashService.swift" "$SOURCE_SNAPSHOT/MaterialPlaybackController.swift" "$SELF_TEST_SNAPSHOT/LibrarySessionSelfTest.swift" -o "$TEST_DIR/library-session"
+swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "${GLOBAL_STORE_SOURCES[@]}" "$SOURCE_SNAPSHOT/LibraryStorage.swift" "$SOURCE_SNAPSHOT/LibrarySession.swift" "$SOURCE_SNAPSHOT/PreviewDecodePolicy.swift" "$SOURCE_SNAPSHOT/PreviewImagePipeline.swift" "$SOURCE_SNAPSHOT/MaterialTrashService.swift" "$SOURCE_SNAPSHOT/MaterialPlaybackController.swift" "$SELF_TEST_SNAPSHOT/LibrarySessionSelfTest.swift" -o "$TEST_DIR/library-session"
 ASSETFRAME_QA_DATA_ROOT="$(mktemp -d /tmp/assetframe-qa.session.XXXXXX)" "$TEST_DIR/library-session"
 [[ "$SOURCE_FINGERPRINT_BEFORE" == "$(active_fingerprint)" ]] || { echo SOURCE_DRIFT; exit 3; }
 
-    swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" "$SELF_TEST_SNAPSHOT/MaterialFilterSelfTest.swift" -o "$TEST_DIR/material-filter"
+    swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "${GLOBAL_STORE_SOURCES[@]}" "$SELF_TEST_SNAPSHOT/MaterialFilterSelfTest.swift" -o "$TEST_DIR/material-filter"
     "$TEST_DIR/material-filter"
-swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" "$SELF_TEST_SNAPSHOT/MaterialClassificationSelfTest.swift" -o "$TEST_DIR/material-classification"
+swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "${GLOBAL_STORE_SOURCES[@]}" "$SELF_TEST_SNAPSHOT/MaterialClassificationSelfTest.swift" -o "$TEST_DIR/material-classification"
 "$TEST_DIR/material-classification"
+swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SELF_TEST_SNAPSHOT/ClassificationSuggestionSelfTest.swift" -o "$TEST_DIR/classification-suggestion"
+"$TEST_DIR/classification-suggestion"
 swiftc -parse-as-library "$SOURCE_SNAPSHOT/MaterialSourceAvailability.swift" "$SELF_TEST_SNAPSHOT/MaterialSourceAvailabilitySelfTest.swift" -o "$TEST_DIR/material-source-availability"
 "$TEST_DIR/material-source-availability"
-swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "$SOURCE_SNAPSHOT/GlobalMaterialStore.swift" "$SELF_TEST_SNAPSHOT/LinkedFolderReadSelfTest.swift" -o "$TEST_DIR/linked-folders"
+swiftc -parse-as-library "${COMMON_SOURCES[@]}" "$SOURCE_SNAPSHOT/MaterialDatabase.swift" "$SOURCE_SNAPSHOT/MaterialImportController.swift" "${GLOBAL_STORE_SOURCES[@]}" "$SELF_TEST_SNAPSHOT/LinkedFolderReadSelfTest.swift" -o "$TEST_DIR/linked-folders"
 "$TEST_DIR/linked-folders"
 echo "All AssetFrame self-tests passed"

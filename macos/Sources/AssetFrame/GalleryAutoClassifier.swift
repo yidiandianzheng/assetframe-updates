@@ -1,9 +1,10 @@
 import Foundation
 
-/// 图库自动分类：导入图片时按「文件名 > 产品线 > 目录名」把素材归入品牌 / 茶类 / 产品线 / 机位 / 验收。
+/// 命名规则分类：按「文件名 > 产品线 > 目录名」给出素材的品牌 / 茶类 / 产品线 / 机位 / 验收判断。
 ///
-/// 纯本地规则，不调用模型、不联网；判定结果写进 `MaterialRecord.classification`，
-/// 与手工分类共用同一套词表与筛选，因此检查器、筛选、CSV、CLI、撤销都能直接看到。
+/// 纯本地规则，不调用模型、不联网。判定结果不再直接写进 `MaterialRecord.classification`，
+/// 而是经 `ClassificationSuggestionEngine` 变成「待确认」建议，用户采纳后由 `GlobalMaterialStore` 写入；
+/// 写入后与手工分类共用同一套词表与筛选，因此检查器、筛选、CSV、CLI、撤销都能直接看到。
 ///
 /// 规则说明见 `图库分类/分类规则.md`，取值与别名见
 /// `macos/Documentation/资产分类词表/词表_v0.1.json`（由 `生成词表Swift.py` 生成到 `ClassificationVocabulary`）。
@@ -67,7 +68,7 @@ enum GalleryAutoClassifier {
     ]
 
     /// 规则没命中时写下的占位值：它不是判断结果，只是「暂归此类」，
-    /// 后续规则升级后允许被真正的命中值替换（见 `GlobalMaterialStore.backfillGalleryClassification`）。
+    /// 后续规则升级后允许被真正的命中值替换（见 `ClassificationSuggestionEngine.allowsSuggestion`）。
     static let placeholderTerms = ["设计素材"]
 
     /// 旧版规则的已知误判值：这些值当年是规则自动写的（不是人工判断），
@@ -211,12 +212,6 @@ enum GalleryAutoClassifier {
         }
 
         return result
-    }
-
-    /// 导入时写入的分类；没有任何命中就不写，保持「未分类」。
-    nonisolated static func classification(path: String, filename: String? = nil, pixelWidth: Int = 0, pixelHeight: Int = 0) -> MaterialClassification? {
-        let result = classify(path: path, filename: filename, pixelWidth: pixelWidth, pixelHeight: pixelHeight)
-        return result.isEmpty ? nil : MaterialClassification(values: result.values)
     }
 
     // MARK: - 匹配

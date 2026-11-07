@@ -64,6 +64,42 @@ struct MaterialTaggingState: Codable, Hashable, Sendable {
         var forceRetry: Bool? = nil
         var createdAt: Date = .now
     }
+    /// 一条待确认的分类建议：规则引擎或本机视觉给的名字，采纳前不写进正式分类。
+    struct Suggestion: Codable, Hashable, Identifiable, Sendable {
+        var id: String = UUID().uuidString
+        /// 分组指纹，用户决定靠它跨重跑对齐（同规则、同词、同来源即为同一组）。
+        var groupKey: String
+        var dimension: String
+        var name: String
+        /// 词表里没有这个名字；界面要显示「新词·待确认」。
+        var isNewTerm: Bool = false
+        var materialIDs: [String] = []
+        /// 依据来源，取值：目录名 / 文件名 / 识图内容 / 相似图。
+        var basis: [String] = []
+        /// 把握程度用文字，不能只靠颜色区分：高 / 中 / 低。
+        var confidence: String = "中"
+        /// 生成者：规则 / 本机视觉 / 相似图。
+        var engine: String = "规则"
+        var status: String = "待确认"
+        var detail: String = ""
+        var createdAt: Date = .now
+        var decidedAt: Date? = nil
+        /// 合并去向（本条被并入哪条建议）。
+        var mergedInto: String? = nil
+        var sampleIDs: [String] { Array(materialIDs.prefix(4)) }
+        var itemCount: Int { materialIDs.count }
+    }
+    /// 用户对建议做过的决定，单独存一份；重跑分类时先按它处理，不再重复问同一个问题。
+    struct Decision: Codable, Hashable, Identifiable, Sendable {
+        var id: String = UUID().uuidString
+        var groupKey: String
+        var dimension: String
+        /// 采纳 / 改名后采纳 / 忽略 / 合并 / 拆分
+        var action: String
+        var name: String
+        var materialIDs: [String] = []
+        var decidedAt: Date = .now
+    }
     var terms: [Term] = []
     var sources: [Source] = []
     var bindings: [Binding] = []
@@ -71,8 +107,17 @@ struct MaterialTaggingState: Codable, Hashable, Sendable {
     var jobs: [Job] = []
     /// Per-project index-derived metadata; absent in older libraries.
     var projectClassifications: [ProjectClassificationProfile]? = nil
+    /// 分类建议箱与用户决定；旧库里这两个键不存在，保持可空以免解码失败。
+    var suggestions: [Suggestion]? = nil
+    var decisions: [Decision]? = nil
 
-    var isEmpty: Bool { terms.isEmpty && sources.isEmpty && bindings.isEmpty && proposals.isEmpty && jobs.isEmpty && (projectClassifications?.isEmpty ?? true) }
+    var pendingSuggestions: [Suggestion] { (suggestions ?? []).filter { $0.status == "待确认" } }
+    var isEmpty: Bool { terms.isEmpty && sources.isEmpty && bindings.isEmpty && proposals.isEmpty && jobs.isEmpty
+        && (projectClassifications?.isEmpty ?? true) && (suggestions?.isEmpty ?? true) && (decisions?.isEmpty ?? true) }
+
+    /// 某个分组最近一次的用户决定；同一组被反复处理时以最后一次为准（例如先拆分、后采纳）。
+    func decision(for groupKey: String) -> Decision? { decisions?.last { $0.groupKey == groupKey } }
+
     static func encodedDigest<T: Encodable>(_ value: T) -> String {
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
         return digest((try? encoder.encode(value)) ?? Data())

@@ -9,6 +9,7 @@ struct MaterialTaggingWorkspace: View {
     let onClose: () -> Void
     @StateObject private var controller: MaterialTaggingController
     @State private var tab = "整理图片"
+    @State private var reviewSection = "分类建议"
     @State private var scope = "所选图片"
     @State private var status = "待确认"
     @State private var search = ""
@@ -97,8 +98,9 @@ struct MaterialTaggingWorkspace: View {
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
-        .padding(20).frame(minWidth: 880, idealWidth: 1040, minHeight: 620, idealHeight: 740)
-        .frame(width: 1040, height: 740)
+        .padding(20)
+        // 三档窗口宽度都要能截到「待确认」箱，所以不再钉死 1040×740，改成可伸缩的框架。
+        .frame(minWidth: 880, idealWidth: 1040, maxWidth: .infinity, minHeight: 560, idealHeight: 740, maxHeight: .infinity)
         .interactiveDismissDisabled(saving)
         .onDisappear { controller.pause() }
         .onChange(of: tab) { _, _ in search = ""; page = 0 }
@@ -205,7 +207,20 @@ struct MaterialTaggingWorkspace: View {
             Spacer()
         }
     }
+    /// 统一的「待确认」箱：分类建议与标签候选共用这一页、同一套确认与撤销流程。
     private var reviewPanel: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Picker("箱内类型", selection: $reviewSection) {
+                ForEach(["分类建议", "标签候选"], id: \.self) { Text($0).tag($0) }
+            }.pickerStyle(.segmented).frame(width: 240)
+            if reviewSection == "分类建议" {
+                ClassificationSuggestionPanel(store: store, busy: controller.busy || saving)
+            } else {
+                proposalReviewPanel
+            }
+        }
+    }
+    private var proposalReviewPanel: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Picker("状态", selection: $status) {

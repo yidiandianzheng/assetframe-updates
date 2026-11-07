@@ -1,3 +1,30 @@
+## V261023.11（导入增量补逐张进度上报，累计第114版，2026-11-04 候选未安装）
+
+任务书第 7 条要求「新导入的图片逐张增量处理，不全库重跑。导入时显示进度，例如「已索引 120 / 300」」。V261023.10 做到了前半句，但进度字段只在整库刷新时置位，导入那一趟算完就结束，界面看不到「已索引」。本版只补上报与可观测性，不动箱的其他行为：规则装箱抽成 `RuleAccumulator`（整库扫描与导入增量共用同一份口径），新增带进度的 `ruleSuggestions(for:progress:)`（每 24 张回报一档、每档 `Task.yield()`、每档检查取消），`indexImportedImages` 复用箱面板已有的 `isIndexingSuggestions`／`suggestionIndexed`／`suggestionIndexTotal` 三个字段，CLI `status.store` 另加这三只只读计数器（规则跑得快，界面那行容易错过，外部验收要靠 CLI 取数）。规则计算仍在 nonisolated 上下文，不占导入循环与主线程，以免影响第 1 步刚测出的流畅度基线；不调 Vision、不读画面、不联网。
+
+验证：`run-self-tests.sh --classification-only` 退出码 0（含 `rule per-image progress` 断言）；Release 构建通过。隔离副本实跑三轮导入（恢复记录喂图 + CLI `import.resume` 启动，与界面「继续此任务」同一个 `store.resumeImport()`）实测到**增量范围**：`suggestionIndexTotal` 恰好等于本次导入的图片数（307／1507），不是副本库全量；三轮新增 3321 条记录里 `asset_type` 非空 0 条，箱内 `道具／人物角色／色卡` 三组并回涨到 12／8／8 张（成员含此前诊断轮的图，说明是并回而不是顶掉）。生产库测前测后 9 字段逐字节一致（`all_equal: true`）。见[「待确认」箱验收记录](perf/待确认箱验收_V261023.11_20261104.md) §4.6。
+
+**未做／未验**：界面「已索引 x / y」那一行的文字**没实机采到**——本机 23:1x 之后不再给任何 App 提供辅助功能元素树（锁屏），且规则那一趟在一个采样间隔内就跑完、进度发布还要 hop 回主线程，外部只看到最终值；逐张推进目前只有自测断言覆盖。另登记一条现象：1507 张那一轮的增量索引整趟没跑（计数器全程 0），另两轮跑通，疑点在 `GlobalMaterialStore.swift:894` 的 `if canWrite, !sessionPaused, importAdded > 0` 静默跳过，待负责人裁决是否补提示或重试。未装机、未替换 `/Applications`、未写生产库、未发布、未推送；界面手工验收未做。
+
+
+## 2026-11-07 修复（同一 V261023.11 候选内，未改版本号、未打包、未安装）
+
+承接上条「疑点在 `GlobalMaterialStore.swift:894`」的登记，回读源码后**纠正归因**：那个 `if` 不是跳过原因。`mutate` 在导入期间按 0.5s 节流发布 `materials`，而 `importTask` 的 `defer` 要到任务结束才补发 `apply`，所以 `materials.filter { !idsBeforeImport.contains($0.id) }` 得空数组，`indexImportedImages` 的 `guard !images.isEmpty` 静默 return，三只计数器一个都没置位。现改为「导入前 id 集合」与「导入结束取数」两端同源读 `committedSnapshot`，口径抽成 `SuggestionIndexScope.newlyAdded`（发布态只作兜底），并加回归断言。
+
+同时修「进度不显示」：`indexClassificationRules()` 原本调无 progress 的同步版且完全不置三只计数器，菜单／CLI `classification.backfill`／元数据补齐／箱面板「扫描命名规则」这 4 个入口都看不到「已索引 x / y」。三个索引入口统一到 `runSuggestionIndex`：开始即置位计数器、规则一律放进 detached 后台任务、共用 `suggestionIndexTask` 句柄可取消、进度 hop 按 `SuggestionProgressState` 的 epoch 有序采纳（乱序不回退、旧任务回写丢弃、结束后迟到回写丢弃）、job 返回前补齐终值供 CLI `status.store` 取数、正常收尾保留最终读数约 0.7 秒。进度条从 sheet 内的箱面板补到主工作区常驻（导入发生在主画册）；两处「停止」按钮只 cancel 任务，不再直接改 `isIndexingSuggestions` 绕过状态机。
+
+验证：`run-self-tests.sh --classification-only` 退出码 0（新增 `progress state`、`incremental import scope` 两组断言，`ClassificationSuggestionSelfTest passed`）；SDK 26.5 `--disable-sandbox` Release 构建 `Build complete! (96.35秒)`，无 error，仅有既有的 Keychain deprecated 与 ld 搜索路径警告。**未做／未验**：未启动 App、未做界面实机采样、未在隔离副本重跑 1507 张那一轮导入、未打包／未安装／未写生产库／未提交／未推送。上一版登记的「界面文字没实机采到」仍未验；`run-self-tests.sh` 全量套件仍在第 10 项 `maintenance` 因 SwiftUIMacros 宏插件编译失败（既有问题，本轮未改）。
+
+## V261023.10（「待确认」分类建议箱上线，自动结果不再直写正式分类，累计第113版，2026-11-04 候选未安装）
+
+任务书第 2 步：V261023.8／V261023.9 的「按命名补全」是一条命令把 1701（后为 79）张图的分类直接写进正式字段——能撤销，但库里看不出哪些值来自机器、哪些来自人工。本版把自动判定统一收进「待确认」箱，先看建议再决定采纳，且**复用工程里已有的候选／采用／撤销框架**：`MaterialTaggingState` 的 `Suggestion`／`Decision` 两节（可空数组，旧库缺键解码为 `nil`）、`tagging_suggestions`／`tagging_decisions` 分节 BLOB 表（首次显式保存才建）、`MaterialTaggingUndo` 的按行补丁、`GlobalMaterialStore.changeTagging(_:undoable:)` 这唯一写入口、`ClassificationVocabulary` 词表、`GalleryAutoClassifier` 规则、`LocalImageClassifier`（macOS 自带 Vision）、`ProjectImageIndexer.featurePrintData` ＋阈值 0.35 的相似判定、`MaterialThumbnailView` 缩略图——没有另造第二套候选系统。会直接写正式分类的入口逐个改成写候选并列出（5 个）：导入建记录（`GlobalMaterialStore.swift:895`）、元数据补齐后的自动补分类（`GlobalMaterialStore.swift:239`，`backfillGalleryClassification()` 整体删除）、菜单「按命名生成待确认分类」、箱面板「扫描命名规则」按钮、CLI `classification.backfill`。箱内每条给五项：分类名（词表外标「新词·待确认」）／涉及张数／最多 4 张样图／依据／把握程度用**文字**「高·中·低」；操作给采纳、改名后采纳、忽略、拆分或合并，外加整批采纳，都可撤销；组键 `groupKey = cls:引擎|维度|建议名` 稳定，用户决定按它跨重跑沿用；`ClassificationSuggestionEngine.allowsSuggestion` 是唯一的「永不覆盖人工值」门。**产品后果需知悉**：V261023.8/9 已自动写进生产库的那些值，本版起按「用户值」对待、不再进箱，所以升级后箱内对老库可能几乎为空。
+
+验证：新增 `ClassificationSuggestionSelfTest` 实跑通过（不覆盖门、规则分组与组键跨重跑稳定、依据与把握的文字口径、样图上限 4 张、Vision 标签映射只出词表内词、撤销补丁覆盖 suggestions/decisions 且漂移报冲突、旧库缺新键解码、SQLite 落盘往返、清箱后不回读成空数组）；`run-self-tests.sh` 的既有源清单缺陷（`ProjectClassificationProfile/Parser` 从未登记导致所有引用 `MaterialTaggingState` 的套件编不过）一并补齐。隔离副本（生产库「香万家木兰」的只读素材符号链接副本）第 3 轮实跑 `issues` 为空：箱 32 组／28 待确认，界面读到 `12 张 · 来源：相似图 · 依据：相似图、目录名`、`把握：中`、`新词·待确认` ×7；采纳写正式分类 1667→1680 并可撤销，改名后采纳点亮 `自测改名-224103`，忽略／合并记决定，整批采纳 1667→1802、待确认 28→0、决定 4→32 且撤销逐组复原；扫描前后 `asset_type` 等九维计数逐项不变，只有建议行增加；退出重开决定仍在、重跑沿用不重复提问。三档窗口宽度（1100／1440／1920）与采纳前后截图齐备。见[「待确认」箱验收记录](perf/待确认箱验收_V261023.11_20261104.md)。
+
+**未做／未验**：拆分断言依赖「卡片序号↔面板排序」映射不可靠，改成整表差集后**尚未重跑**（本机 23:1x 后不再提供辅助功能元素树；11-05 00:03 又起一轮，新加的 `ax_alive()` 前置门 90 秒读不到控件即收尾，约 2 分钟结束、生产库测前测后仍逐字节一致，但界面项全部按「不作判定」记录）；「用户手工值永不被覆盖」只有自测断言，隔离副本里没有可区分的手工值样本；`run-self-tests.sh` 全量套件在第 10 项 `maintenance` 编译失败（`MaterialDocumentPreview.swift` 需要 SwiftUIMacros 插件，纯 swiftc 编不过，属既有问题、本轮未修）；未装机、未替换 `/Applications`、未写生产库、未发布、未推送；界面手工验收与剧坊侧同类流程未做。
+
+
+
 ## V261023.9（图类型补 AI生成图 + 纠正上级目录误判，2026-11-03 已安装并启动核验）
 
 承接 V261023.8 装机后的只读复核，修两处既有缺陷，不新增维度：词表升到 **0.5**（263 词），`asset_kind` 补 **AI生成图**（别名 `AI资产`／`ai视频`／`文生图`／`图生图`／`2k修复`／`4k修复`／`高清修复`／`即梦`／`豆包`／`midjourney`／`ChatGPT`／`Codex 图像`，本机证据 85）；`GalleryAutoClassifier.projectRootNames` 增补 `04-客户与拍摄`——该客户级目录名里的「拍摄」二字此前对整棵客户树生效，把 AI 生成图判成「实拍照片」，这与既有的「中茶木兰姐会让整库命中中茶」是同一条排除机制。`backfill` 新增 `correctableTerms`（当前只登记 `asset_kind: 实拍照片`）：旧版规则自己写下的值，在新规则给出**不同且非空**结果时替换，无命中保持原值、绝不清空，仍走 `mutate` 进撤销栈。`图库分类/` 离线引擎同步（`产品名称映射表.json` 升 1.1，同一份排除名单与图类型表），避免两处规则漂移。

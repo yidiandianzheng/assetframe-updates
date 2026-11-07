@@ -79,7 +79,7 @@ final class LocalCLIService: ObservableObject {
             ]
             if let navigation { state["workspace"] = try navigation("browse.status", [:]) }
             if let store = session.store {
-                state["store"] = .object([
+                var storeState: [String: CLIValue] = [
                     "recordCount": .number(Double(store.materials.count)), "loading": .bool(store.isLoading),
                     "importing": .bool(store.isImporting), "managedCopyJobs": .number(Double(store.managedCopyJobs)),
                     "persistenceError": .optional(store.persistenceError),
@@ -89,7 +89,13 @@ final class LocalCLIService: ObservableObject {
                     "importAdded": .number(Double(store.importAdded)), "resumableImport": .bool(store.resumableImport != nil),
                     "queryRevision": .number(Double(store.queryRevision)), "usageRevision": .number(Double(store.usageRevision)),
                     "persistenceCommitCount": .number(Double(store.persistenceCommitCount))
-                ])
+                ]
+                // 待确认箱的逐张索引进度（导入增量与整库扫描共用）：规则整趟很快，界面那行容易错过，
+                // 外部验收靠这三只计数器才能证实进度确实逐张推进。
+                storeState["suggestionIndexRunning"] = .bool(store.isIndexingSuggestions)
+                storeState["suggestionIndexed"] = .number(Double(store.suggestionIndexed))
+                storeState["suggestionIndexTotal"] = .number(Double(store.suggestionIndexTotal))
+                state["store"] = .object(storeState)
             }
             if command == "diagnostics" {
                 state["systemVersion"] = .string(ProcessInfo.processInfo.operatingSystemVersionString)
@@ -104,8 +110,12 @@ final class LocalCLIService: ObservableObject {
         if command == "playback.pause" { MaterialPlaybackController.shared.pause(); return playbackState() }
         let store = try readyStore(session)
         if command == "classification.backfill" {
-            let updated = await store.backfillGalleryClassification()
-            return .object(["updated": .number(Double(updated)), "canUndo": .bool(store.canUndoEdit)])
+            // 从 V261023.10 起此命令不再改写正式分类：结果进「待确认」箱，需用户在箱里采纳。
+            let groups = await store.indexClassificationRules()
+            return .object(["updated": .number(0), "suggestionGroups": .number(Double(groups)),
+                            "pendingImages": .number(Double(Set(store.tagging.pendingSuggestions.flatMap(\.materialIDs)).count)),
+                            "canUndo": .bool(store.canUndoEdit),
+                            "note": .string("本命令改为生成待确认建议，未写入正式分类；采纳请在应用内「待确认」箱操作")])
         }
         if command == "cache.status" {
             guard let id = session.descriptor?.id else { throw CLIError(code: "library_not_ready", message: "资源库尚未就绪") }

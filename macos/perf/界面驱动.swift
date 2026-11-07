@@ -4,7 +4,12 @@
 //   界面驱动 raise --pid <pid> --window <id>  激活并把窗口提到最前
 //   界面驱动 scroll --window <id> --dy <像素> --steps <次> --interval <秒>
 //   界面驱动 key --pid <pid> --code <键码> --count <次> --interval <秒>
+//   界面驱动 key --pid <pid> --code 5 --flags 4608   带修饰键（cmd=4096 shift=512，即 ⌘⇧G）
+//   界面驱动 type --pid <pid> --text <文本>          往当前焦点输入 Unicode 文本（中文路径可用）
 //   界面驱动 press --pid <pid> --text <按钮标题片段>   后台按 AXPress 点按钮
+//   界面驱动 press --pid <pid> --text <标题> --role AXMenuItem --index -1   换控件类型/选第几个同名控件
+//   界面驱动 settext --pid <pid> --index -1 --value <文本>   给输入框赋值并回读
+//   界面驱动 texts --pid <pid> [--contains <片段>]   列出窗口里的静态文本（界面文字证据）
 //
 // 滚动用 CGEvent 投到窗口中心点，因此测量前窗口必须可见且在最前（先跑 raise）。
 import ApplicationServices
@@ -200,27 +205,70 @@ case "axselect":
     jsonLine(["selected_row": index, "row_title": title, "set_error": error.rawValue, "rows_total": rows.count])
 
 case "press":
-    // 后台点按钮：按标题/描述/标识找到 AXButton 并 AXPress，不依赖屏幕坐标，也不抢焦点。
+    // 后台点按钮：按标题/描述/标识找到控件并 AXPress，不依赖屏幕坐标，也不抢焦点。
     guard let raw = argument("pid", rest), let pid = Int32(raw) else { die("需要 --pid") }
     guard let target = argument("text", rest) else { die("需要 --text") }
-    let window = biggestWindow(pid) ?? (AXUIElementCreateApplication(pid) as AXUIElement)
-    let buttons = axFindAll(window, role: "AXButton", maxDepth: intArgument("depth", rest, fallback: 40))
-    let labelled = buttons.map { ($0, axLabel($0)) }
-    // 优先标题字段完全相等或以「目标、」开头（文件夹行的标题是「名称、数量」），
-    // 否则退回包含匹配——包含会先撞上「展开 xx」这类箭头按钮。
+    let role = argument("role", rest) ?? "AXButton"
+    let depth = intArgument("depth", rest, fallback: 40)
+    let appRoot = AXUIElementCreateApplication(pid) as AXUIElement
+    // 菜单项/复选框不是 AXButton，用 --role 换一类控件（如 AXMenuItem、AXCheckBox）。
+    // 先扫最大窗口，找不到再扫整个 App：「待确认」箱与弹层菜单是另一个窗口，只查主窗口会一个都点不到。
     func head(_ label: String) -> String { label.split(separator: "|").first.map(String.init) ?? "" }
-    let exact = labelled.filter { head($0.1) == target || head($0.1).hasPrefix(target + "、") }
-    let matches = exact.isEmpty ? labelled.filter { $0.1.contains(target) } : exact
-    guard let first = matches.first else {
-        jsonLine(["pressed": false, "text": target, "buttons": buttons.count,
-                  "sample": labelled.prefix(12).map { $0.1 }])
+    var matches: [(AXUIElement, String)] = []
+    var scanned = 0
+    for root in [biggestWindow(pid) ?? appRoot, appRoot] where matches.isEmpty {
+        let found = axFindAll(root, role: role, maxDepth: depth)
+        scanned = found.count
+        let labelled = found.map { ($0, axLabel($0)) }
+        // 优先标题字段完全相等或以「目标、」开头（文件夹行的标题是「名称、数量」），
+        // 否则退回包含匹配——包含会先撞上「展开 xx」这类箭头按钮。
+        let exact = labelled.filter { head($0.1) == target || head($0.1).hasPrefix(target + "、") }
+        matches = exact.isEmpty ? labelled.filter { $0.1.contains(target) } : exact
+    }
+    // 同名控件并存时（卡片上的「改名后采纳」和弹层里的默认按钮）用 --index 选第几个，-1 表示最后一个。
+    let wanted = intArgument("index", rest, fallback: 0)
+    let chosenIndex = wanted < 0 ? matches.count + wanted : wanted
+    guard matches.indices.contains(chosenIndex) else {
+        jsonLine(["pressed": false, "text": target, "reason": "index_out_of_range", "matches": matches.count,
+                  "wanted": wanted, "buttons": scanned,
+                  "sample": matches.prefix(12).map { $0.1 }])
         exit(2)
     }
-    let error = AXUIElementPerformAction(first.0, kAXPressAction as CFString)
-    jsonLine(["pressed": error == .success, "code": error.rawValue, "text": target,
-              "label": first.1, "matches": matches.count, "buttons": buttons.count,
+    let chosen = matches[chosenIndex].0
+    // 把「为什么点不动」写清楚：SwiftUI 里 .disabled(true) 的按钮 AXPress 会回 -25204，
+    // 光看 code 分不清是控件不存在、被禁用，还是 App 没响应，所以顺手读 AXEnabled。
+    var enabledValue: CFTypeRef?
+    let enabledError = AXUIElementCopyAttributeValue(chosen, kAXEnabledAttribute as CFString, &enabledValue)
+    let enabled = (enabledValue as? Bool).map { ["read": true, "value": $0, "error": enabledError.rawValue] }
+        ?? ["read": false, "error": enabledError.rawValue]
+    let error = AXUIElementPerformAction(chosen, kAXPressAction as CFString)
+    jsonLine(["pressed": error == .success, "code": error.rawValue, "text": target, "index": chosenIndex,
+              "label": matches[chosenIndex].1, "matches": matches.count, "buttons": scanned,
+              "enabled": enabled,
               "matchedLabels": matches.prefix(6).map { $0.1 },
-              "mode": exact.isEmpty ? "contains" : "exact"])
+              "mode": matches.allSatisfy { head($0.1) == target || head($0.1).hasPrefix(target + "、") } ? "exact" : "contains"])
+
+case "settext":
+    // 给输入框赋值：SwiftUI 的 TextField 在 AX 里是 AXTextField，值就是文本。
+    // 从 App 根节点找，弹层（sheet）里的输入框才不会被主窗口尺寸过滤掉；--index -1 取最后一个。
+    guard let raw = argument("pid", rest), let pid = Int32(raw) else { die("需要 --pid") }
+    guard let value = argument("value", rest) else { die("需要 --value") }
+    let app = AXUIElementCreateApplication(pid) as AXUIElement
+    let fields = axFindAll(app, role: "AXTextField", maxDepth: intArgument("depth", rest, fallback: 40))
+        + axFindAll(app, role: "AXTextArea", maxDepth: intArgument("depth", rest, fallback: 40))
+    let wanted = intArgument("index", rest, fallback: -1)
+    let chosenIndex = wanted < 0 ? fields.count + wanted : wanted
+    guard fields.indices.contains(chosenIndex) else {
+        jsonLine(["set": false, "reason": "index_out_of_range", "fields": fields.count, "wanted": wanted])
+        exit(2)
+    }
+    // 赋值前把每个框的原值带出来，便于确认改到的是弹层里那个框而不是工具栏搜索框。
+    let before = fields.map { (axString($0, kAXValueAttribute)) }
+    let error = AXUIElementSetAttributeValue(fields[chosenIndex], kAXValueAttribute as CFString, value as CFString)
+    var readBack: CFTypeRef?
+    AXUIElementCopyAttributeValue(fields[chosenIndex], kAXValueAttribute as CFString, &readBack)
+    jsonLine(["set": error == .success, "code": error.rawValue, "index": chosenIndex, "fields": fields.count,
+              "values_before": before, "wanted_value": value, "read_back": (readBack as? String) ?? ""])
 
 case "windows":
     guard let raw = argument("pid", rest), let pid = Int32(raw) else { die("需要 --pid") }
@@ -314,12 +362,33 @@ case "scroll":
               "start_wall": start.timeIntervalSince1970, "end_wall": Date().timeIntervalSince1970])
 
 case "buttons":
-    // 列出窗口里所有 AXButton 的可访问标签，供脚本挑要点的行。
+    // 列出窗口里某类控件的可访问标签（默认 AXButton，可用 --role 换 AXMenuButton／AXPopUpButton），供脚本挑要点的行。
     guard let raw = argument("pid", rest), let pid = Int32(raw) else { die("需要 --pid") }
-    guard let window = biggestWindow(pid) else { die("读不到 AX 窗口") }
-    for (_, label) in axFindAll(window, role: "AXButton", maxDepth: 40).map({ ($0, axLabel($0)) }) where !label.isEmpty {
-        jsonLine(["label": label])
+    let role = argument("role", rest) ?? "AXButton"
+    let appRoot = AXUIElementCreateApplication(pid) as AXUIElement
+    var seen: Set<String> = []
+    for root in [biggestWindow(pid) ?? appRoot, appRoot] {
+        for (_, label) in axFindAll(root, role: role, maxDepth: 40).map({ ($0, axLabel($0)) })
+        where !label.isEmpty && !seen.contains(label) {
+            seen.insert(label)
+            jsonLine(["label": label])
+        }
     }
+
+case "texts":
+    // 列出窗口里所有静态文本：用来证明界面显示的是文字（「把握：高」「已索引 120 / 300」），不只靠颜色。
+    guard let raw = argument("pid", rest), let pid = Int32(raw) else { die("需要 --pid") }
+    let filter = argument("contains", rest) ?? ""
+    var count = 0
+    for window in axAllWindows(pid) where axWidth(window) > 400 {
+        for element in axFindAll(window, role: "AXStaticText", maxDepth: intArgument("depth", rest, fallback: 60)) {
+            let value = axString(element, kAXValueAttribute)
+            guard !value.isEmpty, filter.isEmpty || value.contains(filter) else { continue }
+            jsonLine(["text": value, "window_width": axWidth(window)])
+            count += 1
+        }
+    }
+    jsonLine(["texts": count, "filter": filter, "windows": axAllWindows(pid).count])
 
 case "display":
     _ = NSApplication.shared
@@ -403,10 +472,15 @@ case "key":
     let count = intArgument("count", rest, fallback: 1)
     let interval = doubleArgument("interval", rest, fallback: 0.5)
     let pid = argument("pid", rest).flatMap(Int32.init)
+    // --flags 为 CGEventFlags 原始掩码（cmd=4096、shift=512 → 「前往文件夹」是 4096+512+5=G）。
+    // 不带修饰键时与旧行为一致，纯键码事件。
+    let flags = CGEventFlags(rawValue: UInt64(intArgument("flags", rest, fallback: 0)))
     let start = Date()
     for _ in 0..<count {
         let down = CGEvent(keyboardEventSource: nil, virtualKey: code, keyDown: true)
         let up = CGEvent(keyboardEventSource: nil, virtualKey: code, keyDown: false)
+        down?.flags = flags
+        up?.flags = flags
         if let pid {
             down?.postToPid(pid); up?.postToPid(pid)
         } else {
@@ -414,9 +488,27 @@ case "key":
         }
         if interval > 0 { usleep(UInt32(interval * 1_000_000)) }
     }
-    jsonLine(["posted_keys": count, "keycode": code,
+    jsonLine(["posted_keys": count, "keycode": code, "flags": Int(flags.rawValue),
               "start_wall": start.timeIntervalSince1970, "end_wall": Date().timeIntervalSince1970])
 
+case "type":
+    // 往当前焦点输入 Unicode 文本：中文路径用键码打不出来。只用于自动化自己的面板输入框。
+    guard let text = argument("text", rest) else { die("需要 --text") }
+    guard let pid = argument("pid", rest).flatMap(Int32.init) else { die("需要 --pid") }
+    let units = Array(text.utf16)
+    var chunks = 0
+    for start in stride(from: 0, to: units.count, by: 20) {
+        let slice = Array(units[start..<min(start + 20, units.count)])
+        let down = CGEvent(keyboardEventSource: nil, virtualKey: 0, keyDown: true)
+        let up = CGEvent(keyboardEventSource: nil, virtualKey: 0, keyDown: false)
+        down?.keyboardSetUnicodeString(stringLength: slice.count, unicodeString: slice)
+        up?.keyboardSetUnicodeString(stringLength: slice.count, unicodeString: slice)
+        down?.postToPid(pid); up?.postToPid(pid)
+        chunks += 1
+        usleep(30_000)
+    }
+    jsonLine(["typed": true, "characters": text.count, "chunks": chunks, "pid": Int(pid)])
+
 default:
-    die("用法: 界面驱动 windows|raise|scroll|key …")
+    die("用法: 界面驱动 windows|raise|scroll|key|type …")
 }

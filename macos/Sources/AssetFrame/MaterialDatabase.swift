@@ -151,6 +151,14 @@ final class MaterialDatabase: @unchecked Sendable {
         if try tableExists("tagging_project_classifications", db: db) {
             value.projectClassifications = try rows("tagging_project_classifications", db: db)
         }
+        if try tableExists("tagging_suggestions", db: db) {
+            let suggestions: [MaterialTaggingState.Suggestion] = try rows("tagging_suggestions", db: db)
+            if !suggestions.isEmpty { value.suggestions = suggestions }
+        }
+        if try tableExists("tagging_decisions", db: db) {
+            let decisions: [MaterialTaggingState.Decision] = try rows("tagging_decisions", db: db)
+            if !decisions.isEmpty { value.decisions = decisions }
+        }
         return value.isEmpty ? nil : value
     }
 
@@ -201,6 +209,17 @@ final class MaterialDatabase: @unchecked Sendable {
             if !(nextTags.projectClassifications ?? []).isEmpty || !(oldTags.projectClassifications ?? []).isEmpty || hasProjectProfiles {
                 try execute("CREATE TABLE IF NOT EXISTS tagging_project_classifications(id TEXT PRIMARY KEY, payload BLOB NOT NULL)", db: db)
                 try sync(nextTags.projectClassifications ?? [], old: oldTags.projectClassifications ?? [], table: "tagging_project_classifications", db: db)
+            }
+            // 待确认箱的建议与用户决定同样按需建表：老库仅打开时不会多出空表。
+            let hasSuggestions = try tableExists("tagging_suggestions", db: db)
+            if !(nextTags.suggestions ?? []).isEmpty || !(oldTags.suggestions ?? []).isEmpty || hasSuggestions {
+                try execute("CREATE TABLE IF NOT EXISTS tagging_suggestions(id TEXT PRIMARY KEY, payload BLOB NOT NULL)", db: db)
+                try sync(nextTags.suggestions ?? [], old: oldTags.suggestions ?? [], table: "tagging_suggestions", db: db)
+            }
+            let hasDecisions = try tableExists("tagging_decisions", db: db)
+            if !(nextTags.decisions ?? []).isEmpty || !(oldTags.decisions ?? []).isEmpty || hasDecisions {
+                try execute("CREATE TABLE IF NOT EXISTS tagging_decisions(id TEXT PRIMARY KEY, payload BLOB NOT NULL)", db: db)
+                try sync(nextTags.decisions ?? [], old: oldTags.decisions ?? [], table: "tagging_decisions", db: db)
             }
             try execute("COMMIT", db: db)
             #if ASSETFRAME_SELF_TEST

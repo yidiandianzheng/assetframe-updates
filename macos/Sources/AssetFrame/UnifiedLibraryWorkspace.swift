@@ -292,7 +292,7 @@ struct UnifiedMaterialBrowser: View {
         loadingContent
         .onReceive(NotificationCenter.default.publisher(for: .toggleAssetSidebar)) { _ in displayBinding.showSidebar.wrappedValue.toggle() }
         .onReceive(NotificationCenter.default.publisher(for: .undoMaterialEdit)) { _ in editGuard.request { Task { _ = await store.undoEdit() } } }
-        .onReceive(NotificationCenter.default.publisher(for: .backfillGalleryClassification)) { _ in editGuard.request { Task { _ = await store.backfillGalleryClassification() } } }
+        .onReceive(NotificationCenter.default.publisher(for: .indexClassificationSuggestions)) { _ in editGuard.request { Task { _ = await store.indexClassificationRules() } } }
         .onReceive(NotificationCenter.default.publisher(for: .redoMaterialEdit)) { _ in editGuard.request { Task { _ = await store.undoEdit(redo: true) } } }
         .onReceive(NotificationCenter.default.publisher(for: .toggleAssetInspector)) { _ in displayBinding.showInspector.wrappedValue.toggle() }
         .onReceive(NotificationCenter.default.publisher(for: .previewSelectedAsset)) { _ in if focused != nil { preview.toggle() } }
@@ -575,6 +575,20 @@ struct UnifiedMaterialBrowser: View {
             MaterialFilterToolbar(filter: guarded($session.browse.filter), materials: store.materials, revision: store.revision, resultCount: records.count, formatCounts: formatCounts,
                                   folders: store.organization.folders, showsMore: filters, onMore: { filters.toggle() }, tagging: store.tagging)
             if filters { filterBar }
+            // 导入发生在主画册，而箱面板在 sheet 里；进度条必须常驻主工作区才看得到。
+            if store.isIndexingSuggestions {
+                HStack(spacing: 8) {
+                    ProgressView().controlSize(.small)
+                    Text("分类建议：已索引 \(store.suggestionIndexed) / \(store.suggestionIndexTotal) 张")
+                        .monospacedDigit()
+                    Spacer()
+                    Button("停止") { store.suggestionIndexTask?.cancel() }
+                }
+                .font(.callout)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                Divider()
+            }
             Divider()
             ProjectClassificationBar(store: store, profileID: classificationProfileID,
                 globalExpanded: classificationExpanded, counts: classificationCounts,

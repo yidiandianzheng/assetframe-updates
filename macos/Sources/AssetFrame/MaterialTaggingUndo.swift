@@ -2,7 +2,7 @@ import Foundation
 
 /// Per-row metadata patches keep candidate decisions and vocabulary edits in the same undo transaction.
 enum MaterialTaggingUndo {
-    enum Section: String, Codable, Sendable { case terms, sources, bindings, proposals, jobs, projectClassifications }
+    enum Section: String, Codable, Sendable { case terms, sources, bindings, proposals, jobs, projectClassifications, suggestions, decisions }
     struct Change: Codable, Hashable, Sendable {
         var section: Section
         var id: String
@@ -26,7 +26,9 @@ enum MaterialTaggingUndo {
         try diff(before.terms, after.terms, section: .terms) + diff(before.sources, after.sources, section: .sources) +
         diff(before.bindings, after.bindings, section: .bindings) + diff(before.proposals, after.proposals, section: .proposals) +
         diff(before.jobs, after.jobs, section: .jobs) +
-        diff(before.projectClassifications ?? [], after.projectClassifications ?? [], section: .projectClassifications)
+        diff(before.projectClassifications ?? [], after.projectClassifications ?? [], section: .projectClassifications) +
+        diff(before.suggestions ?? [], after.suggestions ?? [], section: .suggestions) +
+        diff(before.decisions ?? [], after.decisions ?? [], section: .decisions)
     }
     private static func restore<T: Codable & Hashable & Identifiable & Sendable>(_ change: Change, in values: inout [T]) throws where T.ID == String {
         let current = try values.first { $0.id == change.id }.map(data)
@@ -47,6 +49,14 @@ enum MaterialTaggingUndo {
                 var profiles = result.projectClassifications ?? []
                 try restore(change, in: &profiles)
                 result.projectClassifications = profiles.isEmpty ? nil : profiles
+            case .suggestions:
+                var values = result.suggestions ?? []
+                try restore(change, in: &values)
+                result.suggestions = values.isEmpty ? nil : values
+            case .decisions:
+                var values = result.decisions ?? []
+                try restore(change, in: &values)
+                result.decisions = values.isEmpty ? nil : values
             }
         }
         return result
