@@ -28,7 +28,6 @@ struct MaterialIntelligenceView: View {
     @State private var pendingQuery = ""
     @State private var confirmation = false
     @State private var versionConfirmation = false
-    @State private var showTagging = false
     private enum Sending { case query, tags, comparison }
 
     private var scope: [MaterialRecord] { store.materials.filter { scopeIDs.contains($0.id) && $0.deletedAt == nil } }
@@ -38,14 +37,14 @@ struct MaterialIntelligenceView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Label("智能整理", systemImage: "sparkles").font(.title2)
+                Label(AppProduct.current == .assets ? "找素材与版本" : "智能整理", systemImage: "sparkles").font(.title2)
                 Spacer()
                 Text("当前浏览范围 \(scope.count) 项 · 已选图片 \(targets.count) 张").font(.caption).foregroundStyle(.secondary)
                 Button("完成", action: onClose).keyboardShortcut(.cancelAction).disabled(saving)
             }
             Picker("功能", selection: $tab) {
                 Text("一句话找素材").tag(0)
-                Text(AppProduct.current == .assets ? "标签与分类" : "自动标签测试").tag(1)
+                if AppProduct.current != .assets { Text("自动标签测试").tag(1) }
                 Text("相似素材与版本差异").tag(2)
             }.pickerStyle(.segmented).disabled(busy)
             if busy {
@@ -53,15 +52,7 @@ struct MaterialIntelligenceView: View {
             }
             if let issue { Text(issue).font(.caption).foregroundStyle(.orange).textSelection(.enabled) }
             switch tab {
-            case 1:
-                if AppProduct.current == .assets {
-                    VStack(alignment: .leading, spacing: 16) {
-                        Label("自动标签已整合到“标签与分类”", systemImage: "tag").font(.headline)
-                        Text("本机提取文案与识图后，按需 AI 校正，并保存候选供你批量确认。").foregroundStyle(.secondary)
-                        Button("打开标签与分类…", systemImage: "tag") { showTagging = true }.buttonStyle(.borderedProminent)
-                        Spacer()
-                    }
-                } else { tagsPanel }
+            case 1: tagsPanel
             case 2: similarityPanel
             default: searchPanel
             }
@@ -78,9 +69,6 @@ struct MaterialIntelligenceView: View {
             Button("关联版本") { linkPair() }
         } message: { Text("此操作将合并两项已有的版本组。原文件、审核状态和镜头固定选用保持不变；可通过撤销素材整理恢复。") }
         .onChange(of: pair) { _, _ in visualDifference = nil; comparisonSources = [] }
-        .sheet(isPresented: $showTagging) {
-            MaterialTaggingWorkspace(store: store, scopeIDs: scopeIDs, selectedIDs: selectedIDs) { showTagging = false }
-        }
     }
 
     private var searchPanel: some View {

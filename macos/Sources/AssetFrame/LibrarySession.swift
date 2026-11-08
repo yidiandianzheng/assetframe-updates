@@ -82,7 +82,6 @@ struct LibraryBrowseState: Codable {
     var focused: String?
     var scrollY: Double = 0
     var scrollAnchor: LibraryScrollAnchor? = nil
-    var table = false
     var display: LibraryDisplayOptions? = nil
     var sortOrder: MaterialSortOrder? = nil
     var regionMarkers: Bool? = false

@@ -204,6 +204,7 @@ struct UnifiedMaterialBrowser: View {
     @State private var missingSourceCount = 0
     @State private var checkingSources = false
     @State private var searchScopePopover = false
+    @State private var quickPickCounts = QuickPickCounts()
     private var display: LibraryDisplayOptions { session.browse.display ?? LibraryDisplayOptions() }
     private var displayBinding: Binding<LibraryDisplayOptions> {
         Binding(get: { display }, set: { value in editGuard.request { session.browse.display = value } })
@@ -232,6 +233,32 @@ struct UnifiedMaterialBrowser: View {
         let order = session.browse.sortOrder ?? MaterialSortOrder()
         let dataRevision = store.browseQueryRevision(scope: session.browse.scope, sortField: order.field)
         return "formats:\(session.browse.filter.formats.sorted())|pcat:\(session.browse.projectClassificationID ?? "")|\(store.tagging.projectClassifications?.hashValue ?? 0)|sources:\(sourceStatusRevision)|\(dataRevision)|\(session.browse.scope)|\(session.browse.search)|\(String(describing: facet))|\(display.includeSubfolders)"
+    }
+    /// 桶计数跟着模式口径和库内容变化重算；口径变了必须重算，否则「今天 1632」会配着文件生成时间的桶显示。
+    private var quickPickCountKey: String {
+        "\(String(describing: session.browse.filter.quickPick))|\(store.revision)"
+    }
+    private func enterQuickPick() {
+        editGuard.request {
+            session.browse.filter.quickPick = QuickPickScope()
+            session.browse.filter.kinds = [.image]
+            session.browse.sortOrder = MaterialSortOrder(field: .created, ascending: false)
+            session.browse.selected = []
+            session.browse.focused = nil
+        }
+    }
+    private func exitQuickPick() {
+        editGuard.request {
+            session.browse.filter.quickPick = nil
+            session.browse.filter.kinds = []
+            session.browse.selected = []
+        }
+    }
+    /// 挑的结果只写颜色标签：走既有的 batchUpdate，因此进撤销栈，也不碰正式分类字段。
+    private func markQuickPick(_ color: String) {
+        let ids = session.browse.selected
+        guard !ids.isEmpty else { return }
+        store.batchUpdate(ids) { $0.colorLabel = color }
     }
     /// User navigation changes start at the first matching item. Store revisions
     /// stay out of this key so imports and background metadata do not jump the gallery.
@@ -364,6 +391,19 @@ struct UnifiedMaterialBrowser: View {
         .task {
             if let root = session.root { notes = (try? JSONDecoder().decode([String].self, from: Data(contentsOf: root.appendingPathComponent("optimization-notes-v2.json")))) ?? [] }
         }
+        // 桶计数只在轻量模式里算；导入期间每次 revision 都重排任务，落到最后一次才算完。
+        .task(id: quickPickCountKey) {
+            guard let scope = session.browse.filter.quickPick else { return }
+            try? await Task.sleep(for: .milliseconds(300))
+            guard !Task.isCancelled else { return }
+            let key = quickPickCountKey
+            let materials = store.materials
+            let counts = await Task.detached(priority: .utility) {
+                QuickPickCounts.counting(materials, scope: scope)
+            }.value
+            guard !Task.isCancelled, key == quickPickCountKey, session.browse.filter.quickPick == scope else { return }
+            quickPickCounts = counts
+        }
     }
     private func acceptDrop(_ providers: [NSItemProvider]) -> Bool {
         let token = session.switchToken
@@ -387,7 +427,6 @@ struct UnifiedMaterialBrowser: View {
                         .lineLimit(1).truncationMode(.middle)
                 }.help(session.root?.path ?? "打开资源库").frame(maxWidth: 190)
 
-                Picker("浏览方式", selection: guarded($session.browse.table)) { Text("画册").tag(false); Text("表格").tag(true) }.pickerStyle(.segmented).labelsHidden().frame(width: 120)
                 HStack(spacing: 5) {
                     Button("搜索范围", systemImage: "magnifyingglass") { searchScopePopover.toggle() }
                         .labelStyle(.iconOnly)
@@ -408,9 +447,19 @@ struct UnifiedMaterialBrowser: View {
                 .frame(maxWidth: .infinity)
                 .background(.quaternary, in: RoundedRectangle(cornerRadius: 7))
                 if session.product == .assets {
-                    Button("标签与分类", systemImage: "tag") { editGuard.request { showTagging = true } }.disabled(session.busy || session.browse.scope == "trash")
+                    Button("标签与分类", systemImage: "tag") { editGuard.request { showTagging = true } }
+                        .disabled(session.busy || session.browse.scope == "trash")
+                        .help("本机提取文案与识图，生成分类／标签候选后批量确认；只追加标签，可撤销。")
+                    // 进入轻量模式后这条按钮收起，退出改由上方那条栏负责，避免工具栏越来越挤。
+                    if session.browse.filter.quickPick == nil {
+                        Button("轻量挑图", systemImage: "hare") { enterQuickPick() }
+                            .disabled(session.busy || session.browse.scope == "trash")
+                            .help("只看今天／昨天／前天或指定日期生成的图片，用「要／待定／不要」三个按钮挑；挑过的可以只看没挑过的")
+                    }
                 }
-                Button("智能整理", systemImage: "sparkles") { editGuard.request { showIntelligence = true } }.disabled(session.busy || session.browse.scope == "trash")
+                Button(session.product == .assets ? "找素材与版本" : "智能整理", systemImage: "sparkles") { editGuard.request { showIntelligence = true } }
+                    .disabled(session.busy || session.browse.scope == "trash")
+                    .help(session.product == .assets ? "一句话检索全库、查找相似素材、比较两个版本并关联；这里不改标签。" : "一句话检索、自动标签测试、相似素材与版本差异。")
                 Button("导入", systemImage: "plus", action: session.chooseImport).buttonStyle(.borderedProminent).disabled(store.isImporting || session.busy)
                 Menu("更多", systemImage: "ellipsis.circle") {
                     fileButtons
@@ -572,6 +621,21 @@ struct UnifiedMaterialBrowser: View {
     }
     private var center: some View {
         VStack(spacing: 0) {
+            if let scope = session.browse.filter.quickPick {
+                QuickPickBar(scope: scope, counts: quickPickCounts, selectedCount: session.browse.selected.count,
+                             canWrite: store.canWrite, canEdit: !session.busy,
+                             onScope: { value in
+                                 editGuard.request {
+                                     session.browse.filter.quickPick = value
+                                     // 排序跟着口径走，否则「按入库时间」的桶里仍按文件生成时间排，看起来不像一批。
+                                     session.browse.sortOrder = MaterialSortOrder(
+                                         field: value.basis == .imported ? .imported : .created, ascending: false)
+                                 }
+                             },
+                             onMark: { color in markQuickPick(color) },
+                             onExit: { exitQuickPick() })
+                Divider()
+            }
             MaterialFilterToolbar(filter: guarded($session.browse.filter), materials: store.materials, revision: store.revision, resultCount: records.count, formatCounts: formatCounts,
                                   folders: store.organization.folders, showsMore: filters, onMore: { filters.toggle() }, tagging: store.tagging)
             if filters { filterBar }
@@ -640,29 +704,10 @@ struct UnifiedMaterialBrowser: View {
                 Spacer(minLength: 0)
             }.font(.caption).foregroundStyle(.secondary).padding(.horizontal, 10).padding(.bottom, 6)
             ZStack {
-                if session.browse.table {
-                    Table(records, selection: guarded($session.browse.selected)) {
-                        TableColumn("名称", value: \.name)
-                        TableColumn("媒体") { Text($0.kind.rawValue) }
-                        TableColumn("评分") { Text(String($0.rating)) }
-                        TableColumn("标签") { Text($0.tags.joined(separator: "、")) }
-                    }.contextMenu(forSelectionType: String.self) { ids in
-                        if let material = records.first(where: { ids.contains($0.id) }) {
-                            Button("复制原图", systemImage: "photo.on.rectangle") { store.copyOriginalImage(material) }
-                                .disabled(material.kind != .image || material.fileLocation?.exists != true)
-                            Divider()
-                        }
-                        trashActions(ids)
-                        Button("预览素材") { if focused != nil { preview = true } }
-                    } primaryAction: { ids in
-                        if let id = ids.first, let material = records.first(where: { $0.id == id }) { select(material, openPreview: true) }
-                    }.onChange(of: session.browse.selected) { _, value in session.browse.focused = value.sorted().first }
-                } else {
-                    NativeMaterialGallery(records: records, selectedIDs: session.browse.selected, actionContext: galleryCardContextIdentity, contentRevision: recordsRevision, navigationIdentity: renderedNavigationIdentity, scrollPosition: $session.browse.scrollY, scrollAnchor: $session.browse.scrollAnchor, isBrowsing: !preview, proportional: display.proportional, thumbnailSize: display.imageHeight, captionHeight: display.captionHeight, onClick: { material, modifiers, doubleClick in
-                        if doubleClick && modifiers.intersection([.command, .shift]).isEmpty { select(material, openPreview: true) }
-                        else { selectFromGallery(material, modifiers: modifiers) }
-                    }) { material in card(material) }.allowsHitTesting(!preview).accessibilityHidden(preview)
-                }
+                NativeMaterialGallery(records: records, selectedIDs: session.browse.selected, actionContext: galleryCardContextIdentity, contentRevision: recordsRevision, navigationIdentity: renderedNavigationIdentity, scrollPosition: $session.browse.scrollY, scrollAnchor: $session.browse.scrollAnchor, isBrowsing: !preview, proportional: display.proportional, thumbnailSize: display.imageHeight, captionHeight: display.captionHeight, onClick: { material, modifiers, doubleClick in
+                    if doubleClick && modifiers.intersection([.command, .shift]).isEmpty { select(material, openPreview: true) }
+                    else { selectFromGallery(material, modifiers: modifiers) }
+                }) { material in card(material) }.allowsHitTesting(!preview).accessibilityHidden(preview)
                 if records.isEmpty { emptyResults }
                 if preview, let material = focused {
                     VStack(spacing: 0) {
@@ -789,7 +834,7 @@ struct UnifiedMaterialBrowser: View {
             Button("放大缩略图", systemImage: "plus") {
                 displayBinding.thumbnailSize.wrappedValue = min(LibraryDisplayOptions.maximumThumbnailSize, display.imageHeight + 24)
             }.labelStyle(.iconOnly)
-        }.buttonStyle(.borderless).disabled(session.browse.table).help("调整画册缩略图大小")
+        }.buttonStyle(.borderless).help("调整画册缩略图大小")
     }
     private var displaySettingsButton: some View {
         Button { displayPopover.toggle() } label: { Label("显示设置", systemImage: "slider.horizontal.3") }

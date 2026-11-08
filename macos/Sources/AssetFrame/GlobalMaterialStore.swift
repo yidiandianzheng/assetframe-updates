@@ -693,6 +693,9 @@ final class GlobalMaterialStore: ObservableObject {
         let selectedFields = filter.searchFields ?? Set(MaterialSearchField.allCases)
         let usableIndex = searchIndex?.fields == selectedFields && searchIndex?.localeIdentifier == Locale.current.identifier ? searchIndex : nil
         let textContext = MaterialSearchText.Context(fields: words.isEmpty ? [] : selectedFields, links: links, folders: folders, tagging: tagging)
+        // 桶边界一次算好，逐张只做日期比较。
+        let quickPick = filter.quickPick
+        let quickPickNow = Date()
         let matchesFilter: (MaterialRecord) -> Bool = { m in
             guard m.deletedAt == nil, !filter.projectOnly || linked.contains(m.id),
                   filter.kinds.isEmpty || filter.kinds.contains(m.kind),
@@ -700,6 +703,8 @@ final class GlobalMaterialStore: ObservableObject {
                   m.rating >= filter.minimumRating,
                   !filter.commonOnly || m.production?.isCommon == true,
                   filter.purpose == "全部" || m.production?.purpose == filter.purpose else { return false }
+            if let quickPick, !quickPick.includes(m, now: quickPickNow) { return false }
+            if quickPick?.unpickedOnly == true, m.colorLabel != nil { return false }
             if let tags = filter.requiredTags, !tags.isSubset(of: Set(m.tags)) { return false }
             if let colors = filter.colorLabels, !colors.isEmpty, !colors.contains(m.colorLabel ?? "未标记") { return false }
             if let classificationFilters = filter.classificationFilters, !classificationFilters.isEmpty {

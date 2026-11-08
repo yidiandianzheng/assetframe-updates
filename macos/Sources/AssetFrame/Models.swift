@@ -722,6 +722,118 @@ struct MaterialProductionMetadata: Codable, Hashable, Sendable {
     var managedCopies: [String] = []
 }
 
+/// 轻量挑图的时间桶。边界按当前日历日（不是 24 小时滚动），跨午夜自动滚动。
+enum QuickPickBucket: String, CaseIterable, Identifiable, Sendable, Codable {
+    case today = "今天", yesterday = "昨天", dayBefore = "前天", last7 = "近7天"
+    var id: String { rawValue }
+    /// 往前推几个日历日；近7天含今天，即从 6 天前零点到现在。
+    private var dayOffset: Int {
+        switch self {
+        case .today: 0
+        case .yesterday: 1
+        case .dayBefore: 2
+        case .last7: 6
+        }
+    }
+    nonisolated static func interval(_ bucket: QuickPickBucket, now: Date, calendar: Calendar = .current) -> DateInterval {
+        let startOfToday = calendar.startOfDay(for: now)
+        let lower = calendar.date(byAdding: .day, value: -bucket.dayOffset, to: startOfToday) ?? startOfToday
+        // 近7天是「6 天前零点 → 今天结束」的区间；其余桶只覆盖自己那一个日历日。
+        let upperAnchor = bucket == .last7 ? startOfToday : lower
+        let upper = calendar.date(byAdding: .day, value: 1, to: upperAnchor) ?? now
+        return DateInterval(start: lower, end: upper)
+    }
+    /// 指定日期用的单日区间：取该日期所在本地日历日的零点到次日零点。
+    nonisolated static func dayInterval(containing date: Date, calendar: Calendar = .current) -> DateInterval {
+        let lower = calendar.startOfDay(for: date)
+        let upper = calendar.date(byAdding: .day, value: 1, to: lower) ?? lower
+        return DateInterval(start: lower, end: upper)
+    }
+}
+
+/// 分桶按哪个时间。库里两个口径的量差别很大：一次性补导入的历史图，入库时间全落在今天。
+enum QuickPickBasis: String, CaseIterable, Identifiable, Sendable, Codable {
+    case fileDate = "按文件生成时间", imported = "按入库时间"
+    var id: String { rawValue }
+    nonisolated func date(of material: MaterialRecord) -> Date {
+        switch self {
+        case .fileDate: material.sourceCreatedAt ?? material.sourceModifiedAt ?? material.createdAt
+        case .imported: material.createdAt
+        }
+    }
+}
+
+struct QuickPickScope: Codable, Hashable, Sendable {
+    var bucket: QuickPickBucket = .today
+    var basis: QuickPickBasis = .fileDate
+    /// 只看还没挑过的：颜色标签为空即未挑过。这是真正减少工作量的开关，比截断条数安全。
+    var unpickedOnly = false
+    /// 指定日期：非空时只看这一天（本地日历日），四个预置桶让位。
+    var day: Date? = nil
+
+    init(bucket: QuickPickBucket = .today, basis: QuickPickBasis = .fileDate, unpickedOnly: Bool = false, day: Date? = nil) {
+        self.bucket = bucket
+        self.basis = basis
+        self.unpickedOnly = unpickedOnly
+        self.day = day
+    }
+
+    private enum CodingKeys: CodingKey { case bucket, basis, unpickedOnly, day }
+    init(from decoder: Decoder) throws {
+        // 逐键 decodeIfPresent：将来再加字段时旧的筛选组合/浏览状态不会整份解码失败。
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        bucket = try container.decodeIfPresent(QuickPickBucket.self, forKey: .bucket) ?? .today
+        basis = try container.decodeIfPresent(QuickPickBasis.self, forKey: .basis) ?? .fileDate
+        unpickedOnly = try container.decodeIfPresent(Bool.self, forKey: .unpickedOnly) ?? false
+        day = try container.decodeIfPresent(Date.self, forKey: .day)
+    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(bucket, forKey: .bucket)
+        try container.encode(basis, forKey: .basis)
+        try container.encode(unpickedOnly, forKey: .unpickedOnly)
+        try container.encodeIfPresent(day, forKey: .day)
+    }
+
+    nonisolated func interval(now: Date, calendar: Calendar = .current) -> DateInterval {
+        if let day { return QuickPickBucket.dayInterval(containing: day, calendar: calendar) }
+        return QuickPickBucket.interval(bucket, now: now, calendar: calendar)
+    }
+    func includes(_ material: MaterialRecord, now: Date, calendar: Calendar = .current) -> Bool {
+        interval(now: now, calendar: calendar).contains(basis.date(of: material))
+    }
+}
+
+/// 轻量挑图的桶计数。一次遍历算出四个桶和当前桶的已挑／未挑，只供那条栏显示；
+/// 不在视图 body 里逐张算，也不参与画册取数。
+struct QuickPickCounts: Equatable, Sendable {
+    var buckets: [QuickPickBucket: Int] = [:]
+    var bucketTotal = 0
+    var unpicked = 0
+    var picked = 0
+
+    nonisolated static func counting(
+        _ materials: [MaterialRecord], scope: QuickPickScope, now: Date = .now
+    ) -> QuickPickCounts {
+        let calendar = Calendar.current
+        let intervals = Dictionary(uniqueKeysWithValues: QuickPickBucket.allCases.map {
+            ($0, QuickPickBucket.interval($0, now: now, calendar: calendar))
+        })
+        let current = scope.interval(now: now, calendar: calendar)
+        var counts = QuickPickCounts(buckets: intervals.mapValues { _ in 0 })
+        for material in materials where material.deletedAt == nil && material.kind == .image {
+            let date = scope.basis.date(of: material)
+            for (bucket, interval) in intervals where interval.contains(date) {
+                counts.buckets[bucket, default: 0] += 1
+            }
+            guard current.contains(date) else { continue }
+            counts.bucketTotal += 1
+            if material.colorLabel == nil { counts.unpicked += 1 } else { counts.picked += 1 }
+        }
+        return counts
+    }
+}
+
 struct MaterialSearchFilter: Codable, Hashable, Sendable {
     var search = ""
     /// `nil` means every field, preserving old saved filters.
@@ -742,6 +854,8 @@ struct MaterialSearchFilter: Codable, Hashable, Sendable {
     var exactRating: Int? = nil
     /// 维度 → 要命中的受控分类词；维度之间是「且」，同维度多选是「或」。
     var classificationFilters: [String: Set<String>]? = nil
+    /// 轻量挑图模式；`nil` 即完整库。旧库与旧筛选组合缺该键解码为 `nil`。
+    var quickPick: QuickPickScope? = nil
 
     /// Count dimensions, not selected values. Search text and its field scope
     /// belong to the search control, not to the facet reset action.
@@ -758,9 +872,12 @@ struct MaterialSearchFilter: Codable, Hashable, Sendable {
     mutating func resetFacets() {
         let query = search
         let fields = searchFields
+        let pick = quickPick
         self = MaterialSearchFilter()
         search = query
         searchFields = fields
+        // 退出轻量模式是那条栏上的显式按钮，不跟着「清除筛选」一起发生。
+        quickPick = pick
     }
 
     mutating func selectOnly(kind: MaterialKind?) {
